@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>A Page with a Canvas</title>
+</head>
+
+<body onload="main ()">
+
+<canvas id = "glcanvas" width = 800 height = 600>
+your browser does not support HTML5
+</canvas>
+
+<p id = "para_cam_pos">
+Some text below the canvas.
+</p>
+
+<p id = "para_fps">
+Some text below the canvas.
+</p>
+
+</body>
+
+</html>
+
+<!-- Google tools for making starting webgl easier -->
+<script src="js/webgl-utils.js"></script>
+<!-- some common tasks in gl like "load shaders from these files" -->
+<script src="js/gl_utils.js"></script>
+<!-- functions for doing 3d maths; vectors, matrices, etc. -->
+<script src="js/antons_maths.js"></script>
+<!-- a JS object for a virtual camera (projection and view matrices) -->
+<script src="js/camera.js"></script>
+<!-- loads a CAD model in XML format into GL vertex buffers -->
+<script src="js/load_xml_building.js"></script>
+<!-- the entry-point to the programme -->
+<script src="js/main.js"></script>
+<!-- the ray tracing for point and click-->
+<script src="js/ray-plane-pick.js"></script>
