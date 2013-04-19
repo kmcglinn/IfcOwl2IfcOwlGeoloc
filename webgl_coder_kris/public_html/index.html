@@ -2,26 +2,54 @@
 <html>
 
 <head>
-<title>A Page with a Canvas</title>
+<title>Activity Modeler</title>
+
+<link rel="stylesheet" type="text/css" href="css/kris-css.css">
+
 </head>
 
 <body onload="main ()">
+    <div id="main-content">
+        
+        <div id="webgl-div">
+            <canvas id = "glcanvas">
+                Your browser does not support HTML5
+            </canvas>
+            
+            <p id = "para_cam_pos">
+                Some text below the canvas.
+            </p>
 
-<canvas id = "glcanvas" width = 800 height = 600>
-your browser does not support HTML5
-</canvas>
+            <p id = "para_fps">
+                Some text below the canvas.
+            </p>
+        </div>  <!-- End webgl-->
+        
+        <div id="config-window">
+            
+            <div id="config-tabs">
+                <h3>Configuration Window</h3>
+                <ul>
+                    <li><a href="#" onclick="toggleVisibility('activity-console');">Activity Modeler</a></li>
+                    <li><a href="">Energy Visualiser</a></li>              
+                </ul>
+            </div>
+            <div id="config-content">
+                <div id="activity-console" class="section">  
+                    <button onclick="_gaq.push(['_trackEvent', 'button3', 'clicked'])" name="load">Load Activity Zones</button>Load
+                    <br></br>
+                    <button onclick="_gaq.push(['_trackEvent', 'button3', 'clicked'])" name="save">Save Zones</button>Save Zone
+                </div>
 
-<p id = "para_cam_pos">
-Some text below the canvas.
-</p>
+                <div id="energyvis-console" class="section">          
 
-<p id = "para_fps">
-Some text below the canvas.
-</p>
+                </div>
+            </div>
+        </div> <!-- End config-window-->
+        
+    </div> <!-- End main content-->
 
-</body>
 
-</html>
 
 <!-- Google tools for making starting webgl easier -->
 <script src="js/webgl-utils.js"></script>
@@ -37,3 +65,12 @@ Some text below the canvas.
 <script src="js/main.js"></script>
 <!-- the ray tracing for point and click-->
 <script src="js/ray-plane-pick.js"></script>
+
+<!-- for controlling the page display -->
+<script src="js/jquery/jquery.js"></script>
+<script src="js/html-controls.js"></script>
+
+</body>
+
+</html>
+
