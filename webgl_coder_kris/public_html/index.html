@@ -12,9 +12,11 @@
     <div id="main-content">
         
         <div id="webgl-div">
-            <canvas id = "glcanvas">
+            
+            <canvas id = "glcanvas" width="800" height="600">
                 Your browser does not support HTML5
             </canvas>
+        <div id="webgl-div-info">
             
             <p id = "para_cam_pos">
                 Some text below the canvas.
@@ -23,7 +25,10 @@
             <p id = "para_fps">
                 Some text below the canvas.
             </p>
+            
+        </div>
         </div>  <!-- End webgl-->
+
         
         <div id="config-window">
             
@@ -36,9 +41,9 @@
             </div>
             <div id="config-content">
                 <div id="activity-console" class="section">  
-                    <button onclick="_gaq.push(['_trackEvent', 'button3', 'clicked'])" name="load">Load Activity Zones</button>Load
+                    <button onclick="alert('Hello world!')" name="load_activity">Load Activity Zones</button>Load
                     <br></br>
-                    <button onclick="_gaq.push(['_trackEvent', 'button3', 'clicked'])" name="save">Save Zones</button>Save Zone
+                    <button onclick="save_zone()" name="save_activity">Save Zones</button>Save Zone
                 </div>
 
                 <div id="energyvis-console" class="section">          
@@ -65,6 +70,9 @@
 <script src="js/main.js"></script>
 <!-- the ray tracing for point and click-->
 <script src="js/ray-plane-pick.js"></script>
+
+<!-- load data objects -->
+<script src="js/objects/zones.js"></script>
 
 <!-- for controlling the page display -->
 <script src="js/jquery/jquery.js"></script>

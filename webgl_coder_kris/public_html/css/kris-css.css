@@ -71,8 +71,20 @@ h1 {
 }
 #webgl-div{
 
-	width: 600px;
-	height: 400px;
+	width: 800px;
+	height: 600px;
+	float: left;
+	padding-left: 10px;
+        padding-top: 20px;
+	border-width: 0px;
+	border-style: solid;
+	background-color:white
+	
+}
+#webgl-div-info{
+
+	width: 300px;
+	height: 0px;
 	float: left;
 	padding-left: 10px;
         padding-top: 20px;
@@ -82,13 +94,13 @@ h1 {
 	
 }
 #glcanvas{
-	width: 600px;
-	height: 400px;	
+	width: 800px;
+	height: 600px;	
 }
 #config-window{
 
-	width: 400px;
-	height: 400px;
+	width: 300px;
+	height: 600px;
 	float: left;
 	padding-left: 10px;
 	border-width: 0px;
