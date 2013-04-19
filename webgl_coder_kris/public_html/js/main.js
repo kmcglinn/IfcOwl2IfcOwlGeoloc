@@ -1,3 +1,5 @@
+
+
 var normals_vs_url = "shaders/basic_vs.glsl";
 var normals_fs_url = "shaders/basic_fs.glsl";
 var walls_xml_url = "cad_xml/smart_homes_cad.xml";
@@ -24,9 +26,11 @@ var g_cam;
 
 var g_ground_plane_vp_vbo, g_ground_plane_vn_vbo;
 
+var can_create_zone = false;
+
 
 var g_zone_is_being_built = false;
-
+var zone_points = new Array(); //stores all the vertices of the zones
 //Stuff for zone
 var can_draw_activity_zones = true;
 var zone_vp_vbo_idx = undefined;
@@ -109,7 +113,7 @@ var blur_phong_texture_loc;
 
 /*
  * 
- * @Kris Code
+ * @Kris-Code
  * "Zone" class
  */
 /*
@@ -151,6 +155,7 @@ Zone.prototype.getInfo = function(){
  * Function to load in zones from ontology
  */
 var zone_activity_array = new Array();
+var current_activity_zone = new Zone('Activity', 12345, 1,1,1,  1,1,1);
 
 function load_zones(){
     
@@ -164,7 +169,7 @@ function createTestZone(){
     zone_activity_array[0] = new Zone('Activity', 12345, 1,1,1,  1,1,  true,  1);
     
 }
-
+// @end-Kris-Code
 function init () {
     
 
@@ -366,35 +371,142 @@ function init () {
 	g_canvas.onmousedown = function (event) {
                 //alert("Mouse down...MOUSE DOWN!")
 		// if mouse held don't keep restarting this
-		if (g_zone_is_being_built) {
-			return;
+                if(can_create_zone){
+                    
+                    if (g_zone_is_being_built) {
+                            return;
+                    }
+                    // note that the following are offset by the page - so the top-left pixel has value
+                    // of around 8,8. so next we will subtract document, window, etc. offset (grr...)
+
+                    // recursively get location within parent(s)
+                    var element = g_canvas;
+                    var top = 0;
+                    var left = 0;
+                    while (element && element.tagName != 'BODY') {
+                            top += element.offsetTop;
+                            left += element.offsetLeft;
+                            element = element.offsetParent;
+                    }
+                    // adjust for scrolling
+                    left += window.pageXOffset;
+                    top -= window.pageYOffset;
+                    var mouse_x = event.clientX - left;
+                    var mouse_y = (event.clientY - top);
+                    // sometimes range is a few pixels too big
+                    if (mouse_x >= gl.viewportWidth) {
+                            return;
+                    }
+                    if (mouse_y >= gl.viewportHeight) {
+                            return;
+                    }
+
+                    //alert('mouse down: ' + mouse_x + ', ' + mouse_y);
+                    var ray = get_mouse_ray_wor (mouse_x, mouse_y);
+                    // plane intersection
+                    if (ray_plane (ray, g_cam.mWC_Pos, [0, 1, 0], 0)) {
+                        //console.log ("ray hit");
+                    } else {
+                        //console.log ("ray missed somehow");
+                    }
+                    //alert ("zone start point = " + intersection_point_wor);
+    //                g_zone_model_mat = translate_mat4 (identity_mat4 (), intersection_point_wor);
+    //                g_zone_pos = intersection_point_wor;
+    //                alert(g_zone_pos[0]);
+                    current_activity_zone.p1X = intersection_point_wor[0];
+                    current_activity_zone.p1Y = intersection_point_wor[2];
+                    current_activity_zone.p1Z = intersection_point_wor[1];
+                    //alert(current_activity_zone.getInfo());
+
+                    current_activity_zone.p2X = intersection_point_wor[0];
+                    current_activity_zone.p2Y = intersection_point_wor[2];
+                    current_activity_zone.p2Z = intersection_point_wor[1];
+                    //g_zone_shader.use (gl);
+                    //g_zone_shader.setUniformMat4ByLocation (gl, zone_model_mat_loc, transpose_mat4 (g_zone_model_mat));
+                    g_zone_is_being_built = true;
+    /*
+                    // do ray-sphere intersection test
+                    var width = -11.0110 - -11.578;
+                    var length = 1.4870 - 0.0774;
+                    var sphere_origin = [-11.578 + width / 2, 0.3, 0.0774 + length / 2];
+                    if (ray_sphere (ray, g_cam.mWC_Pos, sphere_origin, length / 2)) {
+                            // when in loop of several zones; deslect previous and select new
+
+                            // change colour of monkey!
+                            g_zone_shader.use (gl);
+                            g_zone_shader.setUniformVec3ByLocation (gl, g_zone_colour_loc, [1.0, 0.5, 0.0]);
+                            room001_selected ();
+                            $('#chartViz').show();
+
+                    } else {
+                            g_zone_shader.use (gl);
+                            g_zone_shader.setUniformVec3ByLocation (gl, g_zone_colour_loc, [0.0, 0.5, 1.0]);
+                            room001_deselected ();
+                            $('#chartViz').hide();
+
+                    }
+                */
+                }
+        }
+
+	g_canvas.onmousemove = function (event) {
+            if(can_create_zone){
+                
+        	if (g_zone_is_being_built) {
+                    
+                    var element = g_canvas;
+                    var top = 0;
+                    var left = 0;
+                    while (element && element.tagName != 'BODY') {
+                            top += element.offsetTop;
+                            left += element.offsetLeft;
+                            element = element.offsetParent;
+                    }
+                    // adjust for scrolling
+                    left += window.pageXOffset;
+                    top -= window.pageYOffset;
+                    g_mouse_x = event.clientX - left;
+                    g_mouse_y = (event.clientY - top);
+                    // sometimes range is a few pixels too big
+                    if (g_mouse_x >= gl.viewportWidth) {
+                            return;
+                    }
+                    if (g_mouse_y >= gl.viewportHeight) {
+                            return;
+                    }
+                    console.log ("move move: " + g_mouse_x + " " + g_mouse_y);
 		}
-		// note that the following are offset by the page - so the top-left pixel has value
-		// of around 8,8. so next we will subtract document, window, etc. offset (grr...)
-    
+            }
+	}
+        // do at document level so if dragging and mouse goes out window, can still let go of box
+	document.onmouseup = function (event) {
+            
+            // note that the following are offset by the page - so the top-left pixel has value
+            // of around 8,8. so next we will subtract document, window, etc. offset (grr...)
+            if(can_create_zone){
                 // recursively get location within parent(s)
-		var element = g_canvas;
-		var top = 0;
-		var left = 0;
-		while (element && element.tagName != 'BODY') {
-			top += element.offsetTop;
-			left += element.offsetLeft;
-			element = element.offsetParent;
-		}
-		// adjust for scrolling
-		left += window.pageXOffset;
-		top -= window.pageYOffset;
-		var mouse_x = event.clientX - left;
-		var mouse_y = (event.clientY - top);
-		// sometimes range is a few pixels too big
-		if (mouse_x >= gl.viewportWidth) {
-			return;
-		}
-		if (mouse_y >= gl.viewportHeight) {
-			return;
-		}
-    
-                //console.log ('mouse down: ' + mouse_x + ', ' + mouse_y);
+                var element = g_canvas;
+                var top = 0;
+                var left = 0;
+                while (element && element.tagName != 'BODY') {
+                        top += element.offsetTop;
+                        left += element.offsetLeft;
+                        element = element.offsetParent;
+                }
+                // adjust for scrolling
+                left += window.pageXOffset;
+                top -= window.pageYOffset;
+                var mouse_x = event.clientX - left;
+                var mouse_y = (event.clientY - top);
+                // sometimes range is a few pixels too big
+                if (mouse_x >= gl.viewportWidth) {
+                        return;
+                }
+                if (mouse_y >= gl.viewportHeight) {
+                        return;
+                }
+
+                console.log ('mouse down: ' + mouse_x + ', ' + mouse_y);
                 var ray = get_mouse_ray_wor (mouse_x, mouse_y);
                 // plane intersection
                 if (ray_plane (ray, g_cam.mWC_Pos, [0, 1, 0], 0)) {
@@ -402,112 +514,14 @@ function init () {
                 } else {
                     //console.log ("ray missed somehow");
                 }
-                //alert ("zone start point = " + intersection_point_wor);
-//                g_zone_model_mat = translate_mat4 (identity_mat4 (), intersection_point_wor);
-//                g_zone_pos = intersection_point_wor;
-//                alert(g_zone_pos[0]);
-                zone_activity_array[0].p1X = intersection_point_wor[0];
-                zone_activity_array[0].p1Y = intersection_point_wor[2];
-                zone_activity_array[0].p1Z = intersection_point_wor[1];
-                
-                zone_activity_array[0].p2X = intersection_point_wor[0];
-                zone_activity_array[0].p2Y = intersection_point_wor[2];
-                zone_activity_array[0].p2Z = intersection_point_wor[1];
-                //g_zone_shader.use (gl);
-                //g_zone_shader.setUniformMat4ByLocation (gl, zone_model_mat_loc, transpose_mat4 (g_zone_model_mat));
-                g_zone_is_being_built = true;
-/*
-                // do ray-sphere intersection test
-                var width = -11.0110 - -11.578;
-                var length = 1.4870 - 0.0774;
-                var sphere_origin = [-11.578 + width / 2, 0.3, 0.0774 + length / 2];
-                if (ray_sphere (ray, g_cam.mWC_Pos, sphere_origin, length / 2)) {
-                        // when in loop of several zones; deslect previous and select new
 
-                        // change colour of monkey!
-                        g_zone_shader.use (gl);
-                        g_zone_shader.setUniformVec3ByLocation (gl, g_zone_colour_loc, [1.0, 0.5, 0.0]);
-                        room001_selected ();
-                        $('#chartViz').show();
-
-                } else {
-                        g_zone_shader.use (gl);
-                        g_zone_shader.setUniformVec3ByLocation (gl, g_zone_colour_loc, [0.0, 0.5, 1.0]);
-                        room001_deselected ();
-                        $('#chartViz').hide();
-
-                }
-            */
-        }
-
-	g_canvas.onmousemove = function (event) {
-		if (g_zone_is_being_built) {
-			var element = g_canvas;
-			var top = 0;
-			var left = 0;
-			while (element && element.tagName != 'BODY') {
-				top += element.offsetTop;
-				left += element.offsetLeft;
-				element = element.offsetParent;
-			}
-			// adjust for scrolling
-			left += window.pageXOffset;
-			top -= window.pageYOffset;
-			g_mouse_x = event.clientX - left;
-			g_mouse_y = (event.clientY - top);
-			// sometimes range is a few pixels too big
-			if (g_mouse_x >= gl.viewportWidth) {
-				return;
-			}
-			if (g_mouse_y >= gl.viewportHeight) {
-				return;
-			}
-			console.log ("move move: " + g_mouse_x + " " + g_mouse_y);
-		}
-	}
-        // do at document level so if dragging and mouse goes out window, can still let go of box
-	document.onmouseup = function (event) {
-            
-            // note that the following are offset by the page - so the top-left pixel has value
-            // of around 8,8. so next we will subtract document, window, etc. offset (grr...)
-
-            // recursively get location within parent(s)
-            var element = g_canvas;
-            var top = 0;
-            var left = 0;
-            while (element && element.tagName != 'BODY') {
-                    top += element.offsetTop;
-                    left += element.offsetLeft;
-                    element = element.offsetParent;
+                current_activity_zone.p2X = intersection_point_wor[0];
+                current_activity_zone.p2Y = intersection_point_wor[2];
+                current_activity_zone.p2Z = intersection_point_wor[1];
+                g_zone_is_being_built = false;
+                //alert(zone_activity_array[0].getInfo())
+                //console.log ("zone end = " + last_intersection_point);
             }
-            // adjust for scrolling
-            left += window.pageXOffset;
-            top -= window.pageYOffset;
-            var mouse_x = event.clientX - left;
-            var mouse_y = (event.clientY - top);
-            // sometimes range is a few pixels too big
-            if (mouse_x >= gl.viewportWidth) {
-                    return;
-            }
-            if (mouse_y >= gl.viewportHeight) {
-                    return;
-            }
-
-            //console.log ('mouse down: ' + mouse_x + ', ' + mouse_y);
-            var ray = get_mouse_ray_wor (mouse_x, mouse_y);
-            // plane intersection
-            if (ray_plane (ray, g_cam.mWC_Pos, [0, 1, 0], 0)) {
-                //console.log ("ray hit");
-            } else {
-                //console.log ("ray missed somehow");
-            }
-
-            zone_activity_array[0].p2X = intersection_point_wor[0];
-            zone_activity_array[0].p2Y = intersection_point_wor[2];
-            zone_activity_array[0].p2Z = intersection_point_wor[1];
-            g_zone_is_being_built = false;
-            //alert(zone_activity_array[0].getInfo())
-            //console.log ("zone end = " + last_intersection_point);
 	}
                
         //init_zones();
@@ -515,7 +529,7 @@ function init () {
 	return true;
 }
 
-function render () {
+function render() {
 
 	if (enable_phong) {
 		if (enable_only_phong) {
@@ -650,11 +664,23 @@ function render () {
 }
 function init_zones () {
     
-        createTestZone();
-	zone_shader = load_shaders (zone_vs_url, zone_fs_url);
-	zone_P_loc = gl.getUniformLocation (zone_shader, "P");
-	zone_V_loc = gl.getUniformLocation (zone_shader, "V");
+    createTestZone();
+    zone_shader = load_shaders (zone_vs_url, zone_fs_url);
+    zone_P_loc = gl.getUniformLocation (zone_shader, "P");
+    zone_V_loc = gl.getUniformLocation (zone_shader, "V");
         
+}
+
+function save_zone(){
+    
+    zone_activity_array.push(current_activity_zone);
+    alert(zone_activity_array.length);
+    alert(zone_points.length);
+    for(var i = 0;  i< zone_activity_array.length; i++){
+        
+        alert(zone_activity_array[i].getInfo());
+  
+    }
 }
 function draw_activity_zones(){
     
@@ -662,15 +688,45 @@ function draw_activity_zones(){
 //        zone_activity_array[0].p1Y= -1000;
 //        zone_activity_array[0].p2X = 1000;
 //        zone_activity_array[0].p2Y = 1000;      
-    
-        var zone_points = [
-            zone_activity_array[0].p1X,0.1,zone_activity_array[0].p1Y,
-            zone_activity_array[0].p2X,0.1,zone_activity_array[0].p1Y,
-            zone_activity_array[0].p2X,0.1,zone_activity_array[0].p2Y,
-            zone_activity_array[0].p1X,0.1,zone_activity_array[0].p1Y,
-            zone_activity_array[0].p2X,0.1,zone_activity_array[0].p2Y,
-            zone_activity_array[0].p1X,0.1,zone_activity_array[0].p2Y
-        ];
+    //FUCK ARRAYS AND REFERNCES!!!!
+    var zone_points = [
+        current_activity_zone.p1X,0.1,current_activity_zone.p1Y,
+        current_activity_zone.p2X,0.1,current_activity_zone.p1Y,
+        current_activity_zone.p2X,0.1,current_activity_zone.p2Y,
+        current_activity_zone.p1X,0.1,current_activity_zone.p1Y,
+        current_activity_zone.p2X,0.1,current_activity_zone.p2Y,
+        current_activity_zone.p1X,0.1,current_activity_zone.p2Y
+    ];
+    //console.log(zone_activity_array.length);
+    //var temp_zone = clone.zone_activity_array[0];
+    var set_z = 0.1;
+    for(var i = 18;  i< zone_activity_array.length*18; i=i+18){
+        a_z_count = i/18;
+        zone_points[i] = zone_activity_array[a_z_count].p1X;
+        zone_points[i+1] = set_z;
+        zone_points[i+2] = zone_activity_array[a_z_count].p1Y;
+        
+        zone_points[i+3] = zone_activity_array[a_z_count].p2X;
+        zone_points[i+4] = set_z;
+        zone_points[i+5] = zone_activity_array[a_z_count].p1Y;
+        
+        zone_points[i+6] = zone_activity_array[a_z_count].p2X;
+        zone_points[i+7] = set_z;
+        zone_points[i+8] = zone_activity_array[a_z_count].p2Y;
+        
+        zone_points[i+9] = zone_activity_array[a_z_count].p1X;
+        zone_points[i+10] = set_z
+        zone_points[i+11] = zone_activity_array[a_z_count].p1Y;
+        
+        zone_points[i+12] = zone_activity_array[a_z_count].p2X;
+        zone_points[i+13] = set_z
+        zone_points[i+14] = zone_activity_array[a_z_count].p2Y;
+        
+        zone_points[i+15] = zone_activity_array[a_z_count].p1X;
+        zone_points[i+16] = set_z
+        zone_points[i+17] = zone_activity_array[a_z_count].p2Y;
+    }
+//    console.log(zone_points.length);
 //        console.log(zone_activity_array[0].getInfo());
 //        var zone_points = [
 //            -1000,0.1,-1000,
@@ -703,6 +759,15 @@ function draw_activity_zones(){
 	gl.enable (gl.CULL_FACE); // enable culling
 
 }
+Object.prototype.clone = function() {
+  var newObj = (this instanceof Array) ? [] : {};
+  for (i in this) {
+    if (i == 'clone') continue;
+    if (this[i] && typeof this[i] == "object") {
+      newObj[i] = this[i].clone();
+    } else newObj[i] = this[i]
+  } return newObj;
+};
 
 function update () {
 	// timer
@@ -721,13 +786,27 @@ function update () {
 		fps_accum = 0.0;
 		document.getElementById('para_fps').innerHTML = fps.toFixed(2);
 	}
+        var count = 0;
 	// compute time steps
+        //console.log();
 	while (g_step_time_accum > step_size) {
 		g_step_time_accum -= step_size;
 		var camMove = [0, 0, 0];
 		var camspeed = 20.0;
 		// keys listed by code: http://stackoverflow.com/questions/1465374/javascript-event-keycode-constants
-		if (currentlyPressedKeys[87] == true) { // w
+
+        	if (currentlyPressedKeys[90] == true) { // w
+			can_create_zone = true;
+		}
+                else {
+                    can_create_zone = false;
+                }
+//                if (currentlyPressedKeys[88] == true) { // w
+//
+//                    save_zone();
+//  
+//                }
+                if (currentlyPressedKeys[87] == true) { // w
 			camMove[2] = -1.0 * camspeed * step_size;
 			g_cam.moveBy (camMove);
 			updateMove = true;
@@ -796,9 +875,9 @@ function update () {
                             //g_zone_shader.setUniformMat4ByLocation (gl, zone_model_mat_loc, transpose_mat4 (m));
                     }
                     
-                    zone_activity_array[0].p2X = intersection_point_wor[0];
-                    zone_activity_array[0].p2Y = intersection_point_wor[2];
-                    zone_activity_array[0].p2Z = intersection_point_wor[1];
+                    current_activity_zone.p2X = intersection_point_wor[0];
+                    current_activity_zone.p2Y = intersection_point_wor[2];
+                    current_activity_zone.p2Z = intersection_point_wor[1];
                 }
      
 	}
@@ -812,6 +891,8 @@ function update () {
 	return true;
 }
 
+
+
 function main () {
 	if (!init ()) {
 		console.error ("error initialising");
@@ -823,3 +904,5 @@ function main () {
 		console.error ("error updating scene");
 	}
 }
+
+
