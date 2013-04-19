@@ -10,6 +10,9 @@ var blur_fs_url = "shaders/blur_fs.glsl";
 var phong_vs_url = "shaders/phong_vs.glsl";
 var phong_fs_url = "shaders/phong_fs.glsl";
 
+var zone_vs_url = "shaders/zone_vs.glsl";
+var zone_fs_url = "shaders/zone_fs.glsl";
+
 var enable_only_phong = false;
 var enable_phong = true;
 var enable_ssao = true;
@@ -25,7 +28,7 @@ var g_ground_plane_vp_vbo, g_ground_plane_vn_vbo;
 var g_zone_is_being_built = false;
 
 //Stuff for zone
-var draw_activity_zones = true;
+var can_draw_activity_zones = true;
 var zone_vp_vbo_idx = undefined;
 var g_zone_pos = [0,0,0];
 var g_zone_model_mat = identity_mat4 ();
@@ -50,6 +53,22 @@ var phong_vp_loc;
 var phong_vn_loc;
 var phong_fb;
 var phong_fb_texture;
+
+var zone_shader;
+var zone_vp_loc;
+var zone_vn_loc;
+var zone_P_loc;
+var zone_V_loc;
+var zone_M_loc;
+var zone_colour_loc;
+
+var zone_vp_vbo = 0;
+var zone_vn_vbo = 0;
+var zone_v_count = 0;
+var zone_a_M = translate_mat4 (identity_mat4 (), [-47.65, 4.0, 3.52]);
+var zone_c_M = translate_mat4 (identity_mat4 (), [-47.65, 4.0, 5.52]);
+var zone_b_M = translate_mat4 (identity_mat4 (), [-56.24, 4.0, 5.92]);
+var zone_d_M = translate_mat4 (identity_mat4 (), [-54.24, 4.0, 5.92]);
 
 // shader programme index
 var normals_shader = undefined;
@@ -132,6 +151,7 @@ Zone.prototype.getInfo = function(){
  * Function to load in zones from ontology
  */
 var zone_activity_array = new Array();
+
 function load_zones(){
     
     //This code needs to be written
@@ -147,7 +167,7 @@ function createTestZone(){
 
 function init () {
     
-        createTestZone();
+
 //        alert(zone_activity_array[0].getInfo());
 
 	g_canvas = document.getElementById ("glcanvas");
@@ -332,7 +352,7 @@ function init () {
 	if (!create_walls_from_xml (walls_xml_url)) {
 		console.error ("error creating walls from xml, url: " + walls_xml_url);
 	}
-	//init_zone ();
+	init_zones ();
 	// BOM callbacks
 	// add keyboard handling callbacks
 	document.onkeydown = function (event) {
@@ -387,8 +407,12 @@ function init () {
 //                g_zone_pos = intersection_point_wor;
 //                alert(g_zone_pos[0]);
                 zone_activity_array[0].p1X = intersection_point_wor[0];
-                zone_activity_array[0].p1Y = intersection_point_wor[1];
-                zone_activity_array[0].p1Z = intersection_point_wor[2];
+                zone_activity_array[0].p1Y = intersection_point_wor[2];
+                zone_activity_array[0].p1Z = intersection_point_wor[1];
+                
+                zone_activity_array[0].p2X = intersection_point_wor[0];
+                zone_activity_array[0].p2Y = intersection_point_wor[2];
+                zone_activity_array[0].p2Z = intersection_point_wor[1];
                 //g_zone_shader.use (gl);
                 //g_zone_shader.setUniformMat4ByLocation (gl, zone_model_mat_loc, transpose_mat4 (g_zone_model_mat));
                 g_zone_is_being_built = true;
@@ -398,17 +422,17 @@ function init () {
                 var length = 1.4870 - 0.0774;
                 var sphere_origin = [-11.578 + width / 2, 0.3, 0.0774 + length / 2];
                 if (ray_sphere (ray, g_cam.mWC_Pos, sphere_origin, length / 2)) {
-                        // when in loop of several sensors; deslect previous and select new
+                        // when in loop of several zones; deslect previous and select new
 
                         // change colour of monkey!
-                        g_sensor_shader.use (gl);
-                        g_sensor_shader.setUniformVec3ByLocation (gl, g_sensor_colour_loc, [1.0, 0.5, 0.0]);
+                        g_zone_shader.use (gl);
+                        g_zone_shader.setUniformVec3ByLocation (gl, g_zone_colour_loc, [1.0, 0.5, 0.0]);
                         room001_selected ();
                         $('#chartViz').show();
 
                 } else {
-                        g_sensor_shader.use (gl);
-                        g_sensor_shader.setUniformVec3ByLocation (gl, g_sensor_colour_loc, [0.0, 0.5, 1.0]);
+                        g_zone_shader.use (gl);
+                        g_zone_shader.setUniformVec3ByLocation (gl, g_zone_colour_loc, [0.0, 0.5, 1.0]);
                         room001_deselected ();
                         $('#chartViz').hide();
 
@@ -479,12 +503,14 @@ function init () {
             }
 
             zone_activity_array[0].p2X = intersection_point_wor[0];
-            zone_activity_array[0].p2Y = intersection_point_wor[1];
-            zone_activity_array[0].p2Z = intersection_point_wor[2];
+            zone_activity_array[0].p2Y = intersection_point_wor[2];
+            zone_activity_array[0].p2Z = intersection_point_wor[1];
             g_zone_is_being_built = false;
-            alert(zone_activity_array[0].getInfo())
+            //alert(zone_activity_array[0].getInfo())
             //console.log ("zone end = " + last_intersection_point);
 	}
+               
+        //init_zones();
 	console.log ("initialisation done");
 	return true;
 }
@@ -512,8 +538,9 @@ function render () {
 		gl.vertexAttribPointer (phong_vn_loc, 3, gl.FLOAT, false, 0, 0);
 		gl.drawArrays (gl.TRIANGLES, 0, g_walls_point_count);
                 
-                if (draw_activity_zones){
-            
+                if (can_draw_activity_zones){
+                    draw_activity_zones();
+                    
                     //gl.clearColor(0.0, 0.0, 0.0, 1.0);
                     //gl.enable(gl.DEPTH_TEST);
                     // draw activity zones
@@ -621,21 +648,61 @@ function render () {
 	
 	return true;
 }
-
-function bind_zone (arrayPos) {
-	zone_vp_vbo_idx = gl.createBuffer ();
-	gl.bindBuffer (gl.ARRAY_BUFFER, zone_vp_vbo_idx);
-	var zone_points = [
-		1,0.1,0,
-		0,0.1,0,
-		0,0.1,1,
-		0,0.1,1,
-		1,0.1,1,
-		1,0.1,0
-	];
-	gl.bufferData (gl.ARRAY_BUFFER, new Float32Array (zone_points), gl.STATIC_DRAW);
+function init_zones () {
+    
+        createTestZone();
+	zone_shader = load_shaders (zone_vs_url, zone_fs_url);
+	zone_P_loc = gl.getUniformLocation (zone_shader, "P");
+	zone_V_loc = gl.getUniformLocation (zone_shader, "V");
+        
 }
+function draw_activity_zones(){
+    
+//        zone_activity_array[0].p1X = -1000;
+//        zone_activity_array[0].p1Y= -1000;
+//        zone_activity_array[0].p2X = 1000;
+//        zone_activity_array[0].p2Y = 1000;      
+    
+        var zone_points = [
+            zone_activity_array[0].p1X,0.1,zone_activity_array[0].p1Y,
+            zone_activity_array[0].p2X,0.1,zone_activity_array[0].p1Y,
+            zone_activity_array[0].p2X,0.1,zone_activity_array[0].p2Y,
+            zone_activity_array[0].p1X,0.1,zone_activity_array[0].p1Y,
+            zone_activity_array[0].p2X,0.1,zone_activity_array[0].p2Y,
+            zone_activity_array[0].p1X,0.1,zone_activity_array[0].p2Y
+        ];
+//        console.log(zone_activity_array[0].getInfo());
+//        var zone_points = [
+//            -1000,0.1,-1000,
+//            -1000,0.1,1000,
+//            1000,0.1,-1000,
+//            1000,0.1,-1000,
+//            -1000,0.1,1000,
+//            1000,0.1,1000
+//        ];
+        zone_vp_vbo = create_vbo(zone_points);
+	zone_v_count = 6;
+        
+    	gl.disable (gl.CULL_FACE); // enable culling
+    	gl.useProgram (zone_shader);
+	
+	gl.enableVertexAttribArray (0);
+	gl.disableVertexAttribArray (1);
+	
+	gl.bindBuffer (gl.ARRAY_BUFFER, zone_vp_vbo);
+	gl.vertexAttribPointer (0, 3, gl.FLOAT, false, 0, 0);
+	//@todo-for each zone...
+	// render one zone for the minute
+	//gl.uniformMatrix4fv (zone_M_loc, false, transpose_mat4 (zone_a_M));
+	gl.uniformMatrix4fv (zone_V_loc, false, transpose_mat4 (g_cam.mViewMat));
+	gl.uniformMatrix4fv (zone_P_loc, false, transpose_mat4 (g_cam.mProjMat));
 
+        //gl.uniform4f (zone_colour_loc, 0.2, 0.2, 0.2, 1.0);
+        gl.drawArrays (gl.TRIANGLES, 0, zone_v_count);
+
+	gl.enable (gl.CULL_FACE); // enable culling
+
+}
 
 function update () {
 	// timer
@@ -714,7 +781,7 @@ function update () {
 				+ g_cam.mWC_Pos[1].toFixed(2) + ", " + g_cam.mWC_Pos[2].toFixed(2);
 			updateMove = false;
 		}
-        /*              
+                   
                 // show dragging-out of zone with mouse is still held
                 if (g_zone_is_being_built) {
                 //if(true){
@@ -728,8 +795,12 @@ function update () {
                       //g_zone_shader.use (gl);
                             //g_zone_shader.setUniformMat4ByLocation (gl, zone_model_mat_loc, transpose_mat4 (m));
                     }
+                    
+                    zone_activity_array[0].p2X = intersection_point_wor[0];
+                    zone_activity_array[0].p2Y = intersection_point_wor[2];
+                    zone_activity_array[0].p2Z = intersection_point_wor[1];
                 }
-        */
+     
 	}
 	
 	// render once and request re-draw of canvas

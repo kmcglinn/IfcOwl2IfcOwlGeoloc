@@ -1,0 +1,116 @@
+/* 
+    Document   : kris-css
+    Created on : 19-Apr-2013, 10:31:06
+    Author     : KnoHolEM
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#config-window ul {
+	list-style: none;
+	padding:0;
+	margin:0;
+}
+
+#config-window li {
+	display: inline;
+	border: solid;
+	border-width: 1px 1px 0 1px;
+	margin: 0 0.5em 0 0;
+}
+
+#config-window li a {
+	padding: 0 1em;
+}
+
+#content {
+	border: 1px solid;
+}
+
+#config-window #selected {
+	padding-bottom: 1px; 
+	background: white;
+}
+
+#config-window li {
+	float: left;
+	border: 1px solid;
+	border-bottom-width: 0;
+	margin: 0 0.5em 0 0;
+}
+
+#content {
+	border: 1px solid;
+	clear: both;
+}
+
+h1 {
+	margin: 0;
+	padding: 0 0 1em 0;
+} 
+
+#config-window #selected {
+	position: relative;
+	top: 1px;
+	background: white;
+}
+
+
+#main-content{
+    	width: 1220px;
+	height: 500px;
+	float: left;
+	padding-left: 10px;
+	border-width: 0px;
+	border-style: solid;
+	background-color:white
+}
+#webgl-div{
+
+	width: 600px;
+	height: 400px;
+	float: left;
+	padding-left: 10px;
+        padding-top: 20px;
+	border-width: 0px;
+	border-style: solid;
+	background-color:white
+	
+}
+#glcanvas{
+	width: 600px;
+	height: 400px;	
+}
+#config-window{
+
+	width: 400px;
+	height: 400px;
+	float: left;
+	padding-left: 10px;
+	border-width: 0px;
+	border-style: solid;
+	background-color:white
+	
+}
+#config-tags{
+    width: 400px;
+    float: left;
+}
+#config-content{
+    padding-top: 30px;
+    width: 400px;
+    float: left;
+}
+
+#activity-console{
+    visibility:hidden;
+    energyvis-console:hidden;
+}
+
+/*.section {
+    display: none;
+}*/
