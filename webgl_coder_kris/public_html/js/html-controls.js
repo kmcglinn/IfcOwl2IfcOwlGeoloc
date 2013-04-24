@@ -10,7 +10,7 @@
 //}
 
 
-    function toggleVisibility(divid) {
+function toggleVisibility(divid) {
     if (divid="activity-console"){
         document.getElementById("activity-console").style.visibility = "visible";
         document.getElementById("energyvis-console").style.visibility = "hidden";
@@ -20,5 +20,7 @@
         document.getElementById("energyvis-console").style.visibility = "visible";
         document.getElementById("activity-console").style.visibility = "hidden";
     }
-    }
+}
+
+
 

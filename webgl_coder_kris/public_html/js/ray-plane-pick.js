@@ -1,5 +1,8 @@
 // these suckers store results of successful intersection tests
 var intersection_point_wor = undefined;
+var intersection_point_wor_x = undefined;
+var intersection_point_wor_z = undefined;
+var intersection_point_wor_y = undefined;
 var intersection_distance = undefined;
 
 /* takes mouse cursor position in pixels,
@@ -63,6 +66,9 @@ function ray_plane (ray_direction, ray_origin, plane_normal, plane_offset) {
 	ray_origin[1] + ray_direction[1] * t,
 	ray_origin[2] + ray_direction[2] * t
 	];
+        intersection_point_wor_x = ray_origin[0] + ray_direction[0] * t;
+        intersection_point_wor_z = ray_origin[1] + ray_direction[1] * t;
+        intersection_point_wor_y = ray_origin[2] + ray_direction[2] * t;
 	return true;
 }
 

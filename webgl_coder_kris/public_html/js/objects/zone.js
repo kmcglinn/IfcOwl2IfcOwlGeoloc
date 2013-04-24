@@ -3,6 +3,26 @@
  * and open the template in the editor.
  */
 
+/*
+ * 
+ * @Kris-Code
+ * "Zone" class
+ */
+/*
+function Zone(type, id, originX, originY, originZ, width, length, isSquare, height){
+    
+    this.type = type;
+    this.originX = originX;
+    this.originY = originY;
+    this.originZ = originZ;
+    this.id = id;
+    this.width = width;
+    this.length = length;
+    this.height = height;
+    this.isSquare = isSquare;
+        
+}
+*/
 function Zone(type, id, p1X, p1Y, p1Z, p2X, p2Y, p2Z){
     
     this.type = type;

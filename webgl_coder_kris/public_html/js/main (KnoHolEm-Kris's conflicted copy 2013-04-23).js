@@ -105,22 +105,6 @@ var blur_vt_loc;
 var blur_ssao_texture_loc;
 var blur_phong_texture_loc;
 
-
-/*
- * 
- * @Kris Code
- * Function to load in zones from ontology
- */
-var can_create_zone = false; //This must be set to true to draw a new zone.
-var can_select_zone = false;
-
-var g_zone_is_being_built = false; //
-var zone_points = new Array(); //stores all the vertices of the zones
-
-var zone_activity_array = new Array();
-var current_activity_zone = new Zone('Activity', 12345, 1,1,1,  1,1,1); //Create an empty zone for the current zone
-zone_activity_array.push(current_activity_zone); //The first object in the array stores a reference to the (current) zone which is currently being drawn.
-
 /*
  * 
  * @Kris-Code
@@ -159,6 +143,27 @@ Zone.prototype.getInfo = function(){
         return 'Zone type: ' + this.type + '. Zone id: ' + this.id + 'Position 1 x, y, z: ' + this.p1X + ' : ' + this.p1Y + ' : ' + this.p1Z + '...Position 2 x, y, z: ' + this.p2X + ' : ' + this.p2Y + ' : ' + this.p2Z;
         
 }
+/*
+ * 
+ * @Kris Code
+ * Function to load in zones from ontology
+ */
+var can_create_zone = false; //This must be set to true to draw a new zone.
+var can_select_zone = false;
+
+var g_zone_is_being_built = false; //
+var zone_points = new Array(); //stores all the vertices of the zones
+
+var zone_activity_array = new Array();
+var current_activity_zone = new Zone('Activity', 12345, 1,1,1,  1,1,1); //Create an empty zone for the current zone
+zone_activity_array.push(current_activity_zone); //The first object in the array stores a reference to the (current) zone which is currently being drawn.
+
+function load_zones(){
+    
+    //This code needs to be written
+    
+}
+
 
 function createTestZone(){
     //type, id, originX, originY, originZ, width, length, isSquare, height
@@ -367,55 +372,18 @@ function init () {
 	g_canvas.onmousedown = function (event) {
                 //alert("Mouse down...MOUSE DOWN!")
 		// if mouse held don't keep restarting this
-                if(can_select_zone){
+                if(select_zone){
                     
-                    var element = g_canvas;
-                    var top = 0;
-                    var left = 0;
-                    while (element && element.tagName != 'BODY') {
-                            top += element.offsetTop;
-                            left += element.offsetLeft;
-                            element = element.offsetParent;
-                    }
-                    // adjust for scrolling
-                    left += window.pageXOffset;
-                    top -= window.pageYOffset;
-                    var mouse_x = event.clientX - left;
-                    var mouse_y = (event.clientY - top);
-                    // sometimes range is a few pixels too big
-                    if (mouse_x >= gl.viewportWidth) {
-                            return;
-                    }
-                    if (mouse_y >= gl.viewportHeight) {
-                            return;
-                    }
-
-                    //alert('mouse down: ' + mouse_x + ', ' + mouse_y);
-                    var ray = get_mouse_ray_wor (mouse_x, mouse_y);
-                    // plane intersection
-                    if (ray_plane (ray, g_cam.mWC_Pos, [0, 1, 0], 0)) {
-                        //console.log ("ray hit");
-                    } else {
-                        //console.log ("ray missed somehow");
-                    }
-                    
-                    for(var i = 1; i<zone_activity_array.length;i++)
-                    {
-//                        alert(intersection_point_wor_x);
-//                        alert(zone_activity_array[i].p1X);
-                        if(((intersection_point_wor_x>zone_activity_array[i].p1X)&&(intersection_point_wor_y>zone_activity_array[i].p1Y))
-                            &&((intersection_point_wor_x<zone_activity_array[i].p2X)&&(intersection_point_wor_y<zone_activity_array[i].p2Y)))
-                        {
+                    // do ray-sphere intersection test
+                    var width = -11.0110 - -11.578;
+                    var length = 1.4870 - 0.0774;
+                    var sphere_origin = [-11.578 + width / 2, 0.3, 0.0774 + length / 2];
+                    if (ray_sphere (ray, g_cam.mWC_Pos, sphere_origin, length / 2)) {
                             // when in loop of several sensors; deslect previous and select new
-                            //alert('zone_selected()');
-                            current_activity_zone = zone_activity_array[i];
-z
-    
-                        } 
-                        else                     
-                        {
-                            //alert('zone_deselected()');
-                        }
+                            zone_selected ();
+                            
+                    } else {
+                            zone_deselected ();
                     }
 
                 }
@@ -465,7 +433,7 @@ z
 //                    current_activity_zone.p1Y = intersection_point_wor[2];
 //                    current_activity_zone.p1Z = intersection_point_wor[1];
 //                    
-                    current_activity_zone.id = guid();
+                
                     current_activity_zone.p1X = intersection_point_wor_x;
                     current_activity_zone.p1Y = intersection_point_wor_y;
                     current_activity_zone.p1Z = intersection_point_wor_z;
@@ -731,29 +699,12 @@ function init_zones () {
     zone_V_loc = gl.getUniformLocation (zone_shader, "V");
         
 }
-function delete_zone(){
-    
-    //alert(zone_activity_array.length);
-    
-    for(var i = 0;  i< zone_activity_array.length; i++){
-        
-        if(zone_activity_array[i].id==current_activity_zone.id){
-            //alert('Popping! ' + zone_activity_array[i].id + " - Length:" +zone_activity_array.length);
-            zone_activity_array.splice(i,1);
-            delete_zone_sparql(current_activity_zone.id);
-            current_activity_zone = new Zone('Activity', 12345, 1,1,1,  1,1,1);
-            //alert('Popped!' + zone_activity_array.length);
-        }
-  
-    }
-    
-//    alert("Number of Zone Points: " + zone_points.length);
-}
+
 function save_zone(){
     
     var temp_zone = new Zone(current_activity_zone.type, current_activity_zone.id, current_activity_zone.p1X, current_activity_zone.p1Y, current_activity_zone.p1Z, current_activity_zone.p2X, current_activity_zone.p2Y, current_activity_zone.p2Z);
     zone_activity_array.push(temp_zone);
-    update_zone(temp_zone);
+    
     //alert(zone_activity_array.length);
     
     for(var i = 0;  i< zone_activity_array.length; i++){
@@ -808,7 +759,7 @@ function draw_activity_zones(){
         zone_points[i+16] = set_z
         zone_points[i+17] = zone_activity_array[a_z_count].p2Y;
     }
-//    console.log(zone_points[18]);
+    console.log(zone_points[18]);
     //console.log(zone_points.length);
 //        console.log(zone_activity_array[0].getInfo());
 //        var zone_points = [
@@ -869,21 +820,17 @@ function update () {
 		fps_accum = 0.0;
 		document.getElementById('para_fps').innerHTML = fps.toFixed(2);
 	}
-        
-        set_zone_form_values();
+        var count = 0;
 	// compute time steps
         //console.log();
 	while (g_step_time_accum > step_size) {
-            
-
-                
 		g_step_time_accum -= step_size;
 		var camMove = [0, 0, 0];
 		var camspeed = 20.0;
 		// keys listed by code: http://stackoverflow.com/questions/1465374/javascript-event-keycode-constants
 
         	if (currentlyPressedKeys[90] == true) { // w
-			can_create_zone = true;                     
+			can_create_zone = true;
 		}
                 else {
                     can_create_zone = false;
@@ -987,42 +934,8 @@ function update () {
 	window.requestAnimFrame(update, g_canvas);
 	return true;
 }
-/*
- * @Kris Code - Controls display of zone form values
- */
-function set_zone_form_values(){
-    
-    document.forms["zone_form"]["zone_id_name"].value = current_activity_zone.id;
-    
-    document.forms["zone_form"]["zone_x1"].value = current_activity_zone.p1X;
-    document.forms["zone_form"]["zone_y1"].value = current_activity_zone.p1Y;
-    document.forms["zone_form"]["zone_z1"].value = current_activity_zone.p1Z;
-    
-    document.forms["zone_form"]["zone_x2"].value = current_activity_zone.p2X;
-    document.forms["zone_form"]["zone_y2"].value = current_activity_zone.p2Y;
-    document.forms["zone_form"]["zone_z2"].value = current_activity_zone.p2Z;
-    
-}
 
 
-/*
- * @Kris Code - Generates randon UUID (this needs to be improved)
- */
-function s4() {
-  return Math.floor((1 + Math.random()) * 0x10000)
-             .toString(16)
-             .substring(1);
-};
-
-//function guid() {
-//  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-//         s4() + '-' + s4() + s4() + s4();
-//}
-
-function guid() {
-  return s4() + s4() + '' + s4() + '' + s4() + '' +
-         s4() + '' + s4() + s4() + s4();
-}
 
 function main () {
 	if (!init ()) {

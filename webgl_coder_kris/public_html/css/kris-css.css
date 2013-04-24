@@ -123,6 +123,22 @@ h1 {
     energyvis-console:hidden;
 }
 
-/*.section {
-    display: none;
-}*/
+.section {
+
+}
+
+/*
+zone form
+*/
+#zone_id{
+    
+    width:240px;
+    
+}
+
+.coord{
+    
+    width:30px;
+    
+    
+}
