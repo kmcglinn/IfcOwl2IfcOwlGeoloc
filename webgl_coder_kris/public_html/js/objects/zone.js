@@ -1,12 +1,9 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 /*
  * 
  * @Kris-Code
- * "Zone" class
+ * "Zone" class This wont work as an external file for some reason...
  */
 /*
 function Zone(type, id, originX, originY, originZ, width, length, isSquare, height){

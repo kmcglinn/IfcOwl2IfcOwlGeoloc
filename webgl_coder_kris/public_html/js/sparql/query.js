@@ -6,8 +6,12 @@
 
 //var end_point = "http://phaedrus.scss.tcd.ie/fuseki/ds/query"; //End point for queris
 //var end_point_update = "http://phaedrus.scss.tcd.ie/fuseki/ds/update"; //End point for updates
-var end_point = "http://kdeg-vm-46.scss.tcd.ie:3031/ds/query";
-var end_point_update = "http://kdeg-vm-46.scss.tcd.ie:3031/ds/update"; //End point for updates
+//var end_point = "http://kdeg-vm-46.scss.tcd.ie:3031/ds/query";
+//var end_point_update = "http://kdeg-vm-46.scss.tcd.ie:3031/ds/update"; //End point for updates
+
+var end_point = "http://localhost:3031/ds/query";
+var end_point_update = "http://localhost:3031/ds/update"; 
+
 //var end_point = "http://localhost:3030/ds/query";
 function sparql_query (query_str) {
 	g_query_result_string = undefined;
@@ -23,7 +27,7 @@ function sparql_query (query_str) {
 		if (xmlhttp.readyState == 4) {
 			if (xmlhttp.status == 200) {
 		 		// results are in a string in xmlhttp.responseText but we can't return it from this sub-function
-				console.log (xmlhttp.responseText);
+				//console.log (xmlhttp.responseText);
 			} else {
 				// Some kind of error occurred.
 				alert("Sparql query error: " + xmlhttp.status + " " + xmlhttp.responseText);
@@ -58,7 +62,7 @@ function sparql_update (query_str) {
 		if (xmlhttp.readyState == 4) {
 			if (xmlhttp.status == 200) {
 		 		// results are in a string in xmlhttp.responseText but we can't return it from this sub-function
-				console.log (xmlhttp.responseText);
+				//console.log (xmlhttp.responseText);
 				//alert(xmlhttp.responseText);
 			} else {
 				// Some kind of error occurred.

@@ -41,6 +41,8 @@
             </div>
             <div id="config-content">
                 <div id="activity-console" class="section">  
+                    <button onclick="query_zones()" name="load_activity">Load Activity Zones</button>
+                    <br></br>
                     <form name="zone_form">
                         Zone I.D.: <input type="text" name="zone_id_name" id="zone_id">
                         </br>
@@ -53,10 +55,8 @@
                         X- <input type="text" name="zone_x2" class="coord">Y- <input type="text" name="zone_y2" class="coord">Z- <input type="text" name="zone_z2" class="coord">
 <!--                        <input type="submit" value="Submit">-->
                     </form>
-                    <button onclick="query_zones()" name="load_activity">Load Activity Zones</button>
-                    <br></br>
+
                     <button onclick="save_zone()" name="save_activity">Save Activity Zone</button>
-                    <br></br>
                     <button onclick="delete_zone()" name="delete_activity">Delete Activity Zone</button>
                 </div>
 
@@ -87,6 +87,9 @@
 
 <!-- load data objects -->
 <script src="js/objects/zone.js"></script>
+
+<!-- draws different objects -->
+<script src="js/draw/drawZones.js"></script>
 
 <!-- for controlling the page display -->
 <script src="js/jquery/jquery.js"></script>

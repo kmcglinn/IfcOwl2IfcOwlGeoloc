@@ -13,6 +13,9 @@ var phong_fs_url = "shaders/phong_fs.glsl";
 var zone_vs_url = "shaders/zone_vs.glsl";
 var zone_fs_url = "shaders/zone_fs.glsl";
 
+var path_vs_url = "shaders/zone_vs.glsl";
+var path_fs_url = "shaders/zone_fs.glsl";
+
 var enable_only_phong = false;
 var enable_phong = true;
 var enable_ssao = true;
@@ -24,6 +27,8 @@ var g_cam;
 
 var g_ground_plane_vp_vbo, g_ground_plane_vn_vbo;
 
+var mouse_x;
+var mouse_y;
 
 //Stuff for zone
 var can_draw_activity_zones = true;
@@ -67,6 +72,18 @@ var zone_a_M = translate_mat4 (identity_mat4 (), [-47.65, 4.0, 3.52]);
 var zone_c_M = translate_mat4 (identity_mat4 (), [-47.65, 4.0, 5.52]);
 var zone_b_M = translate_mat4 (identity_mat4 (), [-56.24, 4.0, 5.92]);
 var zone_d_M = translate_mat4 (identity_mat4 (), [-54.24, 4.0, 5.92]);
+
+var path_shader;
+var path_vp_loc;
+var path_vn_loc;
+var path_P_loc;
+var path_V_loc;
+var path_M_loc;
+var path_colour_loc;
+
+var path_vp_vbo = 0;
+var path_vn_vbo = 0;
+var path_v_count = 0;
 
 // shader programme index
 var normals_shader = undefined;
@@ -113,13 +130,22 @@ var blur_phong_texture_loc;
  */
 var can_create_zone = false; //This must be set to true to draw a new zone.
 var can_select_zone = false;
+var can_create_path = false;
+var zone_selected = false;
 
 var g_zone_is_being_built = false; //
 var zone_points = new Array(); //stores all the vertices of the zones
+var current_path_node_points = new Array(); //stores all the vertices of the path nodes
+var path_node_points = new Array();
 
 var zone_activity_array = new Array();
-var current_activity_zone = new Zone('Activity', 12345, 1,1,1,  1,1,1); //Create an empty zone for the current zone
+var current_activity_zone = new Zone('Activity', 0, 0,0,0,  0,0,0); //Create an empty zone for the current zone
 zone_activity_array.push(current_activity_zone); //The first object in the array stores a reference to the (current) zone which is currently being drawn.
+
+var current_path_node_array = new Array();
+var path_node_array = new Array();
+var previous_path_node = new PathNode();
+var current_path_node = new PathNode();
 
 /*
  * 
@@ -159,10 +185,24 @@ Zone.prototype.getInfo = function(){
         return 'Zone type: ' + this.type + '. Zone id: ' + this.id + 'Position 1 x, y, z: ' + this.p1X + ' : ' + this.p1Y + ' : ' + this.p1Z + '...Position 2 x, y, z: ' + this.p2X + ' : ' + this.p2Y + ' : ' + this.p2Z;
         
 }
+function PathNode(id, p1X, p1Y, p1Z){
+    
+    this.id = id;
+    this.p1X = p1X;
+    this.p1Y = p1Y;
+    this.p1Z = p1Z;
+        
+}
+
+PathNode.prototype.getInfo = function(){
+    
+        return 'Zone type: ' + this.type + '. Zone id: ' + this.id + 'Position 1 x, y, z: ' + this.p1X + ' : ' + this.p1Y + ' : ' + this.p1Z ;
+        
+}
 
 function createTestZone(){
     //type, id, originX, originY, originZ, width, length, isSquare, height
-    zone_activity_array[0] = new Zone('Activity', 12345, 1,1,1,  1,1,1 );
+    zone_activity_array[0] = new Zone('Activity', 0, 0,0,0,  0,0,0);
     
 }
 // @end-Kris-Code
@@ -353,7 +393,8 @@ function init () {
 	if (!create_walls_from_xml (walls_xml_url)) {
 		console.error ("error creating walls from xml, url: " + walls_xml_url);
 	}
-	init_zones ();
+	init_zones();
+        init_paths();
 	// BOM callbacks
 	// add keyboard handling callbacks
 	document.onkeydown = function (event) {
@@ -366,29 +407,11 @@ function init () {
         	// add mouse clicks - but only when inside canvas area
 	g_canvas.onmousedown = function (event) {
                 //alert("Mouse down...MOUSE DOWN!")
+                
 		// if mouse held don't keep restarting this
                 if(can_select_zone){
                     
-                    var element = g_canvas;
-                    var top = 0;
-                    var left = 0;
-                    while (element && element.tagName != 'BODY') {
-                            top += element.offsetTop;
-                            left += element.offsetLeft;
-                            element = element.offsetParent;
-                    }
-                    // adjust for scrolling
-                    left += window.pageXOffset;
-                    top -= window.pageYOffset;
-                    var mouse_x = event.clientX - left;
-                    var mouse_y = (event.clientY - top);
-                    // sometimes range is a few pixels too big
-                    if (mouse_x >= gl.viewportWidth) {
-                            return;
-                    }
-                    if (mouse_y >= gl.viewportHeight) {
-                            return;
-                    }
+                    get_mouse_coords(event);
 
                     //alert('mouse down: ' + mouse_x + ', ' + mouse_y);
                     var ray = get_mouse_ray_wor (mouse_x, mouse_y);
@@ -409,7 +432,7 @@ function init () {
                             // when in loop of several sensors; deslect previous and select new
                             //alert('zone_selected()');
                             current_activity_zone = zone_activity_array[i];
-z
+                            zone_selected = true;
     
                         } 
                         else                     
@@ -428,26 +451,7 @@ z
                     // of around 8,8. so next we will subtract document, window, etc. offset (grr...)
 
                     // recursively get location within parent(s)
-                    var element = g_canvas;
-                    var top = 0;
-                    var left = 0;
-                    while (element && element.tagName != 'BODY') {
-                            top += element.offsetTop;
-                            left += element.offsetLeft;
-                            element = element.offsetParent;
-                    }
-                    // adjust for scrolling
-                    left += window.pageXOffset;
-                    top -= window.pageYOffset;
-                    var mouse_x = event.clientX - left;
-                    var mouse_y = (event.clientY - top);
-                    // sometimes range is a few pixels too big
-                    if (mouse_x >= gl.viewportWidth) {
-                            return;
-                    }
-                    if (mouse_y >= gl.viewportHeight) {
-                            return;
-                    }
+                    get_mouse_coords(event);
 
                     //alert('mouse down: ' + mouse_x + ', ' + mouse_y);
                     var ray = get_mouse_ray_wor (mouse_x, mouse_y);
@@ -457,60 +461,43 @@ z
                     } else {
                         //console.log ("ray missed somehow");
                     }
-                    //alert ("zone start point = " + intersection_point_wor);
-    //                g_zone_model_mat = translate_mat4 (identity_mat4 (), intersection_point_wor);
-    //                g_zone_pos = intersection_point_wor;
-    //                alert(g_zone_pos[0]);
-//                    current_activity_zone.p1X = intersection_point_wor[0];
-//                    current_activity_zone.p1Y = intersection_point_wor[2];
-//                    current_activity_zone.p1Z = intersection_point_wor[1];
-//                    
+                 
                     current_activity_zone.id = guid();
                     current_activity_zone.p1X = intersection_point_wor_x;
                     current_activity_zone.p1Y = intersection_point_wor_y;
                     current_activity_zone.p1Z = intersection_point_wor_z;
-                    //alert(current_activity_zone.getInfo());
-
-//                    current_activity_zone.p2X = intersection_point_wor[0];
-//                    current_activity_zone.p2Y = intersection_point_wor[2];
-//                    current_activity_zone.p2Z = intersection_point_wor[1];
-//                    
+ 
                     current_activity_zone.p2X = intersection_point_wor_x;
                     current_activity_zone.p2Y = intersection_point_wor_y;
                     current_activity_zone.p2Z = intersection_point_wor_z;
-                    //g_zone_shader.use (gl);
-                    //g_zone_shader.setUniformMat4ByLocation (gl, zone_model_mat_loc, transpose_mat4 (g_zone_model_mat));
+
                     g_zone_is_being_built = true;
-    /*
-                    // do ray-sphere intersection test
-                    var width = -11.0110 - -11.578;
-                    var length = 1.4870 - 0.0774;
-                    var sphere_origin = [-11.578 + width / 2, 0.3, 0.0774 + length / 2];
-                    if (ray_sphere (ray, g_cam.mWC_Pos, sphere_origin, length / 2)) {
-                            // when in loop of several zones; deslect previous and select new
 
-                            // change colour of monkey!
-                            g_zone_shader.use (gl);
-                            g_zone_shader.setUniformVec3ByLocation (gl, g_zone_colour_loc, [1.0, 0.5, 0.0]);
-                            room001_selected ();
-                            $('#chartViz').show();
+                }
+                if(event.which===3)
+                    
+                {
+                    
+                    if(can_create_path)
+                    {
+                        save_path();
 
-                    } else {
-                            g_zone_shader.use (gl);
-                            g_zone_shader.setUniformVec3ByLocation (gl, g_zone_colour_loc, [0.0, 0.5, 1.0]);
-                            room001_deselected ();
-                            $('#chartViz').hide();
-
+                    } 
+                    
+                    if(can_create_zone)
+                    {
+                        
+                        
                     }
-                */
+                    
                 }
         }
 
 	g_canvas.onmousemove = function (event) {
-            if(can_create_zone){
+            if(can_create_zone||can_create_path){
                 
-        	if (g_zone_is_being_built) {
-                    
+        	if (g_zone_is_being_built||can_create_path) {
+                    //console.log(can_create_path);
                     var element = g_canvas;
                     var top = 0;
                     var left = 0;
@@ -531,7 +518,7 @@ z
                     if (g_mouse_y >= gl.viewportHeight) {
                             return;
                     }
-                    console.log ("move move: " + g_mouse_x + " " + g_mouse_y);
+                    //console.log ("move move: " + g_mouse_x + " " + g_mouse_y);
 		}
             }
 	}
@@ -540,56 +527,74 @@ z
             
             // note that the following are offset by the page - so the top-left pixel has value
             // of around 8,8. so next we will subtract document, window, etc. offset (grr...)
-            if(can_create_zone){
+            if(can_create_zone)
+            {
                 // recursively get location within parent(s)
-                var element = g_canvas;
-                var top = 0;
-                var left = 0;
-                while (element && element.tagName != 'BODY') {
-                        top += element.offsetTop;
-                        left += element.offsetLeft;
-                        element = element.offsetParent;
-                }
-                // adjust for scrolling
-                left += window.pageXOffset;
-                top -= window.pageYOffset;
-                var mouse_x = event.clientX - left;
-                var mouse_y = (event.clientY - top);
-                // sometimes range is a few pixels too big
-                if (mouse_x >= gl.viewportWidth) {
-                        return;
-                }
-                if (mouse_y >= gl.viewportHeight) {
-                        return;
-                }
+                get_mouse_coords(event);
 
                 console.log ('mouse down: ' + mouse_x + ', ' + mouse_y);
-                var ray = get_mouse_ray_wor (mouse_x, mouse_y);
-                // plane intersection
-                if (ray_plane (ray, g_cam.mWC_Pos, [0, 1, 0], 0)) {
-                    //console.log ("ray hit");
-                } else {
-                    //console.log ("ray missed somehow");
-                }
-//
-//                current_activity_zone.p2X = intersection_point_wor[0];
-//                current_activity_zone.p2Y = intersection_point_wor[2];
-//                current_activity_zone.p2Z = intersection_point_wor[1];
-                
+                get_mouse_ray_wor (mouse_x, mouse_y);
+                // plane intersection 
                 current_activity_zone.p2X = intersection_point_wor_x;
                 current_activity_zone.p2Y = intersection_point_wor_y;
                 current_activity_zone.p2Z = intersection_point_wor_z;
                 g_zone_is_being_built = false;
+                zone_selected = true;
                 //alert(zone_activity_array[0].getInfo())
                 //console.log ("zone end = " + last_intersection_point);
             }
+            if(can_create_path)
+            {
+                // recursively get location within parent(s)
+                get_mouse_coords(event);
+                get_mouse_ray_wor (mouse_x, mouse_y);
+
+                // plane intersection 
+                current_path_node_array[current_path_node_array.length-1] = new PathNode(current_path_node.id, current_path_node.p1X, current_path_node.p1Y, current_path_node.p1Z);
+                current_path_node_array.push(current_path_node);
+                console.log("CURRENT PATH NODE ARRAY LENGTH" + current_path_node_array.length);
+//                previous_path_node.p1X = intersection_point_wor_x;
+//                previous_path_node.p1X = intersection_point_wor_y;
+//                previous_path_node.p1X = intersection_point_wor_z;
+                
+                g_zone_is_being_built = false;
+                //alert(zone_activity_array[0].getInfo())
+                //console.log ("zone end = " + last_intersection_point);
+            }
+            
 	}
                
         //init_zones();
 	console.log ("initialisation done");
 	return true;
 }
-
+function get_mouse_coords(event){
+    
+    var element = g_canvas;
+    var top = 0;
+    var left = 0;
+    while (element && element.tagName != 'BODY')
+    {
+            top += element.offsetTop;
+            left += element.offsetLeft;
+            element = element.offsetParent;
+    }
+    // adjust for scrolling
+    left += window.pageXOffset;
+    top -= window.pageYOffset;
+    mouse_x = event.clientX - left;
+    mouse_y = (event.clientY - top);
+    // sometimes range is a few pixels too big
+    if (mouse_x >= gl.viewportWidth) 
+    {
+            return;
+    }
+    if (mouse_y >= gl.viewportHeight) 
+    {
+            return;
+    }
+    
+}
 function render() {
 
 	if (enable_phong) {
@@ -615,29 +620,9 @@ function render() {
                 
                 if (can_draw_activity_zones){
                     draw_activity_zones();
-                    
-                    //gl.clearColor(0.0, 0.0, 0.0, 1.0);
-                    //gl.enable(gl.DEPTH_TEST);
-                    // draw activity zones
-                    //gl.enable (gl.BLEND); // enable transp
-                    //gl.disable (gl.CULL_FACE); // disable culling, so they can be dragged negatively too
-                    //g_zone_shader.use (gl);
-                    //gl.enableVertexAttribArray (0);
-//                    zone_vp_vbo_idx = gl.createBuffer ();
-//                    gl.bindBuffer (gl.ARRAY_BUFFER, zone_vp_vbo_idx);
-//                    var zone_points = [
-//                        1000,0.1,0,
-//                        0,0.1,0,
-//                        0,0.1,1000,
-//                        0,0.1,1000,
-//                        1000,0.1,1000,
-//                        1000,0.1,0
-//                    ];
-//                    gl.bufferData (gl.ARRAY_BUFFER, new Float32Array (zone_points), gl.STATIC_DRAW);
-//                    gl.bindBuffer (gl.ARRAY_BUFFER, zone_vp_vbo_idx); // switch to this vertex buffer
-//                    gl.vertexAttribPointer (0, 3, gl.FLOAT, false, 0, 0); // use its data for zeroth shader attribute
-//                    gl.drawArrays (gl.TRIANGLES, 0, 6); // draw the geometry
-                    
+                    draw_current_path();
+                    draw_path();
+                 
                 }
 	}
 	
@@ -731,24 +716,74 @@ function init_zones () {
     zone_V_loc = gl.getUniformLocation (zone_shader, "V");
         
 }
+
+function init_paths() {
+    
+    //createTestZone();
+    path_shader = load_shaders (path_vs_url, path_fs_url);
+    path_P_loc = gl.getUniformLocation (path_shader, "P");
+    path_V_loc = gl.getUniformLocation (path_shader, "V");
+        
+}
 function delete_zone(){
     
     //alert(zone_activity_array.length);
-    
-    for(var i = 0;  i< zone_activity_array.length; i++){
+    var exists = false;
+    for(var i = 1;  i< zone_activity_array.length; i++){
         
         if(zone_activity_array[i].id==current_activity_zone.id){
-            //alert('Popping! ' + zone_activity_array[i].id + " - Length:" +zone_activity_array.length);
+            console.log("DELETING ZONE: " + current_activity_zone.id + " at position: " + i)
+            console.log("Array length (before splice)" + zone_activity_array.length);
             zone_activity_array.splice(i,1);
             delete_zone_sparql(current_activity_zone.id);
-            current_activity_zone = new Zone('Activity', 12345, 1,1,1,  1,1,1);
-            //alert('Popped!' + zone_activity_array.length);
+            current_activity_zone = new Zone('Activity', 0, 0,0,0,  0,0,0);
+            console.log("Array length (after splice)" + zone_activity_array.length);
+            exists = true;
+            zone_selected = false;
         }
   
     }
+    if(exists == false)
+    {
+        alert("No Zone with that i.d. exists (you must select a zone)")
+    }
+    
+    //This is temporary to fix bug...should be improved!!!
+    //query_zones(exists);
     
 //    alert("Number of Zone Points: " + zone_points.length);
 }
+
+function save_path(){
+    var r=confirm("Do you wish to save this path?");
+    if (r==true)
+    {
+        sparql_update_path();
+        var temp_path_node; 
+        for(var i = 0; i < current_path_node_array; i++)
+        {
+            temp_path_node = new PathNode();
+            temp_path_node.id = current_path_node_array[i].id;
+            temp_path_node.p1X = current_path_node_array[i].p1X;
+            temp_path_node.p1Y= current_path_node_array[i].p1Y;
+            temp_path_node.p1Z = current_path_node_array[i].p1Z;
+            path_node_array.push(temp_path_node);        
+        }
+        alert(path_node_array.length);
+    }//END OF IF
+    else
+    {
+        return; //End function
+    }//END OF ELSE
+    
+    can_create_path = false;
+    current_path_node_array = new Array();
+    previous_path_node = new PathNode();
+    current_path_node = new PathNode();
+
+
+}
+
 function save_zone(){
     
     var temp_zone = new Zone(current_activity_zone.type, current_activity_zone.id, current_activity_zone.p1X, current_activity_zone.p1Y, current_activity_zone.p1Z, current_activity_zone.p2X, current_activity_zone.p2Y, current_activity_zone.p2Z);
@@ -764,84 +799,7 @@ function save_zone(){
     
 //    alert("Number of Zone Points: " + zone_points.length);
 }
-function draw_activity_zones(){
-    
-//        zone_activity_array[0].p1X = -1000;
-//        zone_activity_array[0].p1Y= -1000;
-//        zone_activity_array[0].p2X = 1000;
-//        zone_activity_array[0].p2Y = 1000;      
 
-    var zone_points = [
-        current_activity_zone.p1X,0.1,current_activity_zone.p1Y,
-        current_activity_zone.p2X,0.1,current_activity_zone.p1Y,
-        current_activity_zone.p2X,0.1,current_activity_zone.p2Y,
-        current_activity_zone.p1X,0.1,current_activity_zone.p1Y,
-        current_activity_zone.p2X,0.1,current_activity_zone.p2Y,
-        current_activity_zone.p1X,0.1,current_activity_zone.p2Y
-    ];
-    //console.log(zone_activity_array.length);
-    //var temp_zone = clone.zone_activity_array[0];
-    var set_z = 0.1;
-    for(var i = 18;  i< zone_activity_array.length*18; i=i+18){
-        a_z_count = i/18;
-        zone_points[i] = zone_activity_array[a_z_count].p1X;
-        zone_points[i+1] = set_z;
-        zone_points[i+2] = zone_activity_array[a_z_count].p1Y;
-        
-        zone_points[i+3] = zone_activity_array[a_z_count].p2X;
-        zone_points[i+4] = set_z;
-        zone_points[i+5] = zone_activity_array[a_z_count].p1Y;
-        
-        zone_points[i+6] = zone_activity_array[a_z_count].p2X;
-        zone_points[i+7] = set_z;
-        zone_points[i+8] = zone_activity_array[a_z_count].p2Y;
-        
-        zone_points[i+9] = zone_activity_array[a_z_count].p1X;
-        zone_points[i+10] = set_z
-        zone_points[i+11] = zone_activity_array[a_z_count].p1Y;
-        
-        zone_points[i+12] = zone_activity_array[a_z_count].p2X;
-        zone_points[i+13] = set_z
-        zone_points[i+14] = zone_activity_array[a_z_count].p2Y;
-        
-        zone_points[i+15] = zone_activity_array[a_z_count].p1X;
-        zone_points[i+16] = set_z
-        zone_points[i+17] = zone_activity_array[a_z_count].p2Y;
-    }
-//    console.log(zone_points[18]);
-    //console.log(zone_points.length);
-//        console.log(zone_activity_array[0].getInfo());
-//        var zone_points = [
-//            -1000,0.1,-1000,
-//            -1000,0.1,1000,
-//            1000,0.1,-1000,
-//            1000,0.1,-1000,
-//            -1000,0.1,1000,
-//            1000,0.1,1000
-//        ];
-        zone_vp_vbo = create_vbo(zone_points);
-	zone_v_count = zone_points.length/3;
-        
-    	gl.disable (gl.CULL_FACE); // enable culling
-    	gl.useProgram (zone_shader);
-	
-	gl.enableVertexAttribArray (0);
-	gl.disableVertexAttribArray (1);
-	
-	gl.bindBuffer (gl.ARRAY_BUFFER, zone_vp_vbo);
-	gl.vertexAttribPointer (0, 3, gl.FLOAT, false, 0, 0);
-	//@todo-for each zone...
-	// render one zone for the minute
-	//gl.uniformMatrix4fv (zone_M_loc, false, transpose_mat4 (zone_a_M));
-	gl.uniformMatrix4fv (zone_V_loc, false, transpose_mat4 (g_cam.mViewMat));
-	gl.uniformMatrix4fv (zone_P_loc, false, transpose_mat4 (g_cam.mProjMat));
-
-        //gl.uniform4f (zone_colour_loc, 0.2, 0.2, 0.2, 1.0);
-        gl.drawArrays (gl.TRIANGLES, 0, zone_v_count);
-
-	gl.enable (gl.CULL_FACE); // enable culling
-
-}
 Object.prototype.clone = function() {
   var newObj = (this instanceof Array) ? [] : {};
   for (i in this) {
@@ -869,113 +827,165 @@ function update () {
 		fps_accum = 0.0;
 		document.getElementById('para_fps').innerHTML = fps.toFixed(2);
 	}
-        
+        //NEED TO UPDATE THIS SO THAT FORM CAN BE EDITED
         set_zone_form_values();
 	// compute time steps
         //console.log();
-	while (g_step_time_accum > step_size) {
+	while (g_step_time_accum > step_size) 
+        {
             
+            g_step_time_accum -= step_size;
+            var camMove = [0, 0, 0];
+            var camspeed = 20.0;
+            // keys listed by code: http://stackoverflow.com/questions/1465374/javascript-event-keycode-constants
 
-                
-		g_step_time_accum -= step_size;
-		var camMove = [0, 0, 0];
-		var camspeed = 20.0;
-		// keys listed by code: http://stackoverflow.com/questions/1465374/javascript-event-keycode-constants
+            if (currentlyPressedKeys[90] === true) // z
+            { 
+                    can_create_zone = true;                     
+            }
+            else 
+            {
+                can_create_zone = false;
+            }
+            if (currentlyPressedKeys[88] === true) // x
+            { 
+                    can_select_zone = true;
+            }
+            else 
+            {
+                can_select_zone = false;
+            }
+            if (currentlyPressedKeys[67] === true) //c
+            { 
+                if(zone_selected === true)
+                {
+                    can_create_path = true;
+//                    console.log("SETTING FIRST NODE AS ORIGIN OF ZONE");
+                    previous_path_node.p1X = midpoint(current_activity_zone.p1X, current_activity_zone.p2X);
+                    previous_path_node.p1Y = midpoint(current_activity_zone.p1Y, current_activity_zone.p2Y);
+                    previous_path_node.p1Z = midpoint(current_activity_zone.p1Z, current_activity_zone.p2Z);
+                    if(current_path_node_array.length===0)
+                    {
+                        console.log("PATH NODE ARRAY WAS EMPTY");
+                        current_path_node_array.push(previous_path_node);
+                        current_path_node_array.push(current_path_node);
+                    }
+                }
+                else
+                {
+                    alert("You must select a start zone");
+                    currentlyPressedKeys[67] = false;
 
-        	if (currentlyPressedKeys[90] == true) { // w
-			can_create_zone = true;                     
-		}
-                else {
-                    can_create_zone = false;
+                    //update_path();
                 }
-                if (currentlyPressedKeys[67] == true) { // w
-			can_select_zone = true;
-		}
-                else {
-                    can_select_zone = false;
-                }
+            }
+
+            else 
+            {
+  
+            }
 //                if (currentlyPressedKeys[88] == true) { // w
 //
 //                    save_zone();
 //  
 //                }
-                if (currentlyPressedKeys[87] == true) { // w
-			camMove[2] = -1.0 * camspeed * step_size;
-			g_cam.moveBy (camMove);
-			updateMove = true;
-		}
-		if (currentlyPressedKeys[83] == true) { // s
-			camMove[2] = 1.0 * camspeed * step_size;
-			g_cam.moveBy (camMove);
-			updateMove = true;
-		}
-		if (currentlyPressedKeys[65] == true) { // a
-			camMove[0] = -1.0 * camspeed * step_size;
-			g_cam.moveBy (camMove);
-			updateMove = true;
-		}
-		if (currentlyPressedKeys[68] == true) { // d
-			camMove[0] = 1.0 * camspeed * step_size;
-			g_cam.moveBy (camMove);
-			updateMove = true;
-		}
-		if (currentlyPressedKeys[69] == true) { // d
-			camMove[1] = -1.0 * camspeed * step_size;
-			g_cam.moveBy (camMove);
-			updateMove = true;
-		}
-		if (currentlyPressedKeys[81] == true) { // d
-			camMove[1] = 1.0 * camspeed * step_size;
-			g_cam.moveBy (camMove);
-			updateMove = true;
-		}
-		if (updateMove) {
-			// update view and projection matrices in each shader programme
-			
-			gl.useProgram (phong_shader);
-			gl.uniformMatrix4fv (phong_view_mat_loc, false, transpose_mat4 (g_cam.mViewMat));
-			gl.uniformMatrix4fv (phong_proj_mat_loc, false, transpose_mat4 (g_cam.mProjMat));
-			
-			gl.useProgram (normals_shader);
-			gl.uniformMatrix4fv (view_mat_loc, false, transpose_mat4 (g_cam.mViewMat));
-			gl.uniformMatrix4fv (proj_mat_loc, false, transpose_mat4 (g_cam.mProjMat));
-			
-			gl.useProgram (ssao_shader);
-			gl.uniformMatrix4fv (ssao_inv_proj_mat_loc, false, transpose_mat4 ( inverse_mat4 (g_cam.mProjMat)));
-			
-			gl.useProgram (depth_shader);
-			gl.uniformMatrix4fv (depth_view_mat_loc, false, transpose_mat4 (g_cam.mViewMat));
-			gl.uniformMatrix4fv (depth_proj_mat_loc, false, transpose_mat4 (g_cam.mProjMat));
-			
-			// update html with cam pos
-			document.getElementById ('para_cam_pos').innerHTML =
-				"campos = " + g_cam.mWC_Pos[0].toFixed(2) + ", "
-				+ g_cam.mWC_Pos[1].toFixed(2) + ", " + g_cam.mWC_Pos[2].toFixed(2);
-			updateMove = false;
-		}
-                   
-                // show dragging-out of zone with mouse is still held
-                if (g_zone_is_being_built) {
-                //if(true){
-                    // recursively get location within parent(s)
-                    var ray = get_mouse_ray_wor (g_mouse_x, g_mouse_y);
-                    //alert(ray);
-                    // plane intersection
-                    if (ray_plane (ray, g_cam.mWC_Pos, [0, 1, 0], 0)) {
-                      //var m = scale_mat4 (identity_mat4 (), add_vec3 ([0,0.1,0], sub_vec3 (intersection_point_wor, g_zone_pos)));
-                      //m = mult_mat4_mat4 (g_zone_model_mat, m);
-                      //g_zone_shader.use (gl);
-                            //g_zone_shader.setUniformMat4ByLocation (gl, zone_model_mat_loc, transpose_mat4 (m));
-                    }
-                    
-//                    current_activity_zone.p2X = intersection_point_wor[0];
-//                    current_activity_zone.p2Y = intersection_point_wor[2];
-//                    current_activity_zone.p2Z = intersection_point_wor[1];
-                    current_activity_zone.p2X = intersection_point_wor_x;
-                    current_activity_zone.p2Y = intersection_point_wor_y;
-                    current_activity_zone.p2Z = intersection_point_wor_z;
-                    
+            if (currentlyPressedKeys[87] == true) 
+            { // w
+                camMove[2] = -1.0 * camspeed * step_size;
+                g_cam.moveBy (camMove);
+                updateMove = true;
+            }
+            if (currentlyPressedKeys[83] == true) 
+            { // s
+                camMove[2] = 1.0 * camspeed * step_size;
+                g_cam.moveBy (camMove);
+                updateMove = true;
+            }
+            if (currentlyPressedKeys[65] == true) 
+            { // a
+                    camMove[0] = -1.0 * camspeed * step_size;
+                    g_cam.moveBy (camMove);
+                    updateMove = true;
+            }
+            if (currentlyPressedKeys[68] == true) 
+            { // d
+                    camMove[0] = 1.0 * camspeed * step_size;
+                    g_cam.moveBy (camMove);
+                    updateMove = true;
+            }
+            if (currentlyPressedKeys[69] == true) 
+            { // d
+                    camMove[1] = -1.0 * camspeed * step_size;
+                    g_cam.moveBy (camMove);
+                    updateMove = true;
+            }
+            if (currentlyPressedKeys[81] == true) 
+            { // d
+                    camMove[1] = 1.0 * camspeed * step_size;
+                    g_cam.moveBy (camMove);
+                    updateMove = true;
+            }
+            if (updateMove) 
+            {
+                    // update view and projection matrices in each shader programme
+
+                    gl.useProgram (phong_shader);
+                    gl.uniformMatrix4fv (phong_view_mat_loc, false, transpose_mat4 (g_cam.mViewMat));
+                    gl.uniformMatrix4fv (phong_proj_mat_loc, false, transpose_mat4 (g_cam.mProjMat));
+
+                    gl.useProgram (normals_shader);
+                    gl.uniformMatrix4fv (view_mat_loc, false, transpose_mat4 (g_cam.mViewMat));
+                    gl.uniformMatrix4fv (proj_mat_loc, false, transpose_mat4 (g_cam.mProjMat));
+
+                    gl.useProgram (ssao_shader);
+                    gl.uniformMatrix4fv (ssao_inv_proj_mat_loc, false, transpose_mat4 ( inverse_mat4 (g_cam.mProjMat)));
+
+                    gl.useProgram (depth_shader);
+                    gl.uniformMatrix4fv (depth_view_mat_loc, false, transpose_mat4 (g_cam.mViewMat));
+                    gl.uniformMatrix4fv (depth_proj_mat_loc, false, transpose_mat4 (g_cam.mProjMat));
+
+                    // update html with cam pos
+                    document.getElementById ('para_cam_pos').innerHTML =
+                            "campos = " + g_cam.mWC_Pos[0].toFixed(2) + ", "
+                            + g_cam.mWC_Pos[1].toFixed(2) + ", " + g_cam.mWC_Pos[2].toFixed(2);
+                    updateMove = false;
+            }
+
+            // show dragging-out of zone with mouse is still held
+            if (g_zone_is_being_built) {
+            //if(true){
+                // recursively get location within parent(s)
+                var ray = get_mouse_ray_wor (g_mouse_x, g_mouse_y);
+
+                if (ray_plane (ray, g_cam.mWC_Pos, [0, 1, 0], 0)) {
+
                 }
+
+                current_activity_zone.p2X = intersection_point_wor_x;
+                current_activity_zone.p2Y = intersection_point_wor_y;
+                current_activity_zone.p2Z = intersection_point_wor_z;
+
+            }
+
+            if (can_create_path) 
+            {
+
+                    var ray = get_mouse_ray_wor (g_mouse_x, g_mouse_y);
+
+                    if (ray_plane (ray, g_cam.mWC_Pos, [0, 1, 0], 0)) 
+                    {
+
+                    }
+//                    console.log("SETTING CURRENT PATH NODE AS MOUSE POSITION");
+//                    console.log("X = " + intersection_point_wor_x);
+//                    console.log("Previous path X = " + previous_path_node.p1X); 
+                    current_path_node.p1X = intersection_point_wor_x;
+                    current_path_node.p1Y = intersection_point_wor_y;
+                    current_path_node.p1Z = intersection_point_wor_z;
+
+//                    }
+            }
+
      
 	}
 	
@@ -1024,6 +1034,12 @@ function guid() {
          s4() + '' + s4() + s4() + s4();
 }
 
+function midpoint(p1, p2)
+{
+//    console.log("P1: " + p1);
+//    console.log("P1 Float "+ parseFloat(p1));
+    return (parseFloat(p1) + parseFloat(p2))/2;
+}
 function main () {
 	if (!init ()) {
 		console.error ("error initialising");

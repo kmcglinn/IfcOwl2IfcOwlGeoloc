@@ -27,22 +27,23 @@
 var zone_id, zone_type, zone_volume_x1, zone_volume_y1, zone_volume_z1, zone_volume_x2, zone_volume_y2, zone_volume_z2;
 
 
-function query_zones(){
+function query_zones(/*exists*/){
 
+//    if(exists == true)
+//    {
+        var r=confirm("Warning: If you click OK to load zones, all unsaved zones will be lost");
+        if (r==true)
+        {
+            zone_activity_array = new Array(); //Reset Array of zones, and re-populate with those saved in ontology 
+            current_activity_zone = new Zone('Activity', 0, 0,0,0,  0,0,0); //Create an empty zone for the current zone
+            zone_activity_array.push(current_activity_zone); //The first object in the array stores a reference to the (current) zone which is currently being drawn.
 
-    var r=confirm("Warning: If you click OK to load zones, all unsaved zones will be lost");
-    if (r==true)
-    {
-        zone_activity_array = new Array(); //Reset Array of zones, and re-populate with those saved in ontology 
-        current_activity_zone = new Zone('Activity', 12345, 1,1,1,  1,1,1); //Create an empty zone for the current zone
-        zone_activity_array.push(current_activity_zone); //The first object in the array stores a reference to the (current) zone which is currently being drawn.
-
-    }//END OF IF
-    else
-    {
-        return; //End function
-    }//END OF ELSE
-
+        }//END OF IF
+        else
+        {
+            return; //End function
+        }//END OF ELSE
+//    }
     var query = "SELECT ?zone_id ?zone_type ?zone_volume ?x1 ?y1 ?z1 ?x2 ?y2 ?z2 "+
         "WHERE{"+
         "?zone  <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#Zone>;"+
@@ -220,3 +221,13 @@ function delete_zone_sparql(zone_id){
 
 }//END OF FUNCTION
 
+
+
+
+
+function sparql_update_path(){
+
+
+
+
+}//END OF FUNCTION
