@@ -1,13 +1,7 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+
+/*
+ * @Kris Code - Controls display of zone form values
  */
-
-
-//function toggleVisibility(newSection) {
-//    $(".section").not("#" + newSection).hide();
-//    $("#" + newSection).show();
-//}
 
 
 function toggleVisibility(divid) {
@@ -23,4 +17,16 @@ function toggleVisibility(divid) {
 }
 
 
-
+function set_zone_form_values(){
+    
+    document.forms["zone_form"]["zone_id_name"].value = current_activity_zone.id;
+    
+    document.forms["zone_form"]["zone_x1"].value = current_activity_zone.p1X;
+    document.forms["zone_form"]["zone_y1"].value = current_activity_zone.p1Y;
+    document.forms["zone_form"]["zone_z1"].value = current_activity_zone.p1Z;
+    
+    document.forms["zone_form"]["zone_x2"].value = current_activity_zone.p2X;
+    document.forms["zone_form"]["zone_y2"].value = current_activity_zone.p2Y;
+    document.forms["zone_form"]["zone_z2"].value = current_activity_zone.p2Z;
+    
+}

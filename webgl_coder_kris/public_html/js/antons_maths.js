@@ -355,3 +355,30 @@ function perspective (fovy, aspect, near, far) {
 	m[14] = -1.0;
 	return m;
 }
+
+
+/*
+ * @Kris Code - Generates randon UUID (this needs to be improved)
+ */
+function s4() {
+  return Math.floor((1 + Math.random()) * 0x10000)
+             .toString(16)
+             .substring(1);
+};
+
+//function guid() {
+//  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+//         s4() + '-' + s4() + s4() + s4();
+//}
+
+function guid() {
+  return s4() + s4() + '' + s4() + '' + s4() + '' +
+         s4() + '' + s4() + s4() + s4();
+}
+
+function midpoint(p1, p2)
+{
+//    console.log("P1: " + p1);
+//    console.log("P1 Float "+ parseFloat(p1));
+    return (parseFloat(p1) + parseFloat(p2))/2;
+}

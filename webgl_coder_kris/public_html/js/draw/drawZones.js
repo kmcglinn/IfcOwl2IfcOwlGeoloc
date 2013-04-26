@@ -72,34 +72,41 @@ function draw_current_path(){
     var path_width = "1"
 
     current_path_node_points = new Array();
+    //console.log(path_node_array.length);
+    var array_length = 0;
+    for(var j = 0;  j< path_node_array.length; j++){
+        //console.log("path_node_array at position: " + j + " has length: "+ path_node_array[j].length);
+        for(var i = 0;  i< (path_node_array[j].length-1)*18; i=i+18){
+            p_n_count = i/18;
+            current_path_node_points[array_length + i] = path_node_array[j][p_n_count].p1X;
+            current_path_node_points[array_length + i+1] = set_z;
+            current_path_node_points[array_length + i+2] = path_node_array[j][p_n_count].p1Y;
 
-    for(var i = 0;  i< (current_path_node_array.length-1)*18; i=i+18){
-        p_n_count = i/18;
-        current_path_node_points[i] = current_path_node_array[p_n_count].p1X;
-        current_path_node_points[i+1] = set_z;
-        current_path_node_points[i+2] = current_path_node_array[p_n_count].p1Y;
-        
-        current_path_node_points[i+3] = current_path_node_array[p_n_count].p1X;
-        current_path_node_points[i+4] = path_width;
-        current_path_node_points[i+5] = current_path_node_array[p_n_count].p1Y;
-        
-        current_path_node_points[i+6] = current_path_node_array[p_n_count+1].p1X;
-        current_path_node_points[i+7] = path_width;
-        current_path_node_points[i+8] = current_path_node_array[p_n_count+1].p1Y;
-        
-        current_path_node_points[i+9] = current_path_node_array[p_n_count].p1X;
-        current_path_node_points[i+10] = set_z;
-        current_path_node_points[i+11] = current_path_node_array[p_n_count].p1Y;
-        
-        current_path_node_points[i+12] = current_path_node_array[p_n_count].p1X;
-        current_path_node_points[i+13] = set_z;
-        current_path_node_points[i+14] = current_path_node_array[p_n_count+1].p1Y;
-        
-        current_path_node_points[i+15] = current_path_node_array[p_n_count].p1X;
-        current_path_node_points[i+16] = path_width;
-        current_path_node_points[i+17] = current_path_node_array[p_n_count+1].p1Y;
+            current_path_node_points[array_length + i+3] = path_node_array[j][p_n_count].p1X;
+            current_path_node_points[array_length + i+4] = path_width;
+            current_path_node_points[array_length + i+5] = path_node_array[j][p_n_count].p1Y;
+
+            current_path_node_points[array_length + i+6] = path_node_array[j][p_n_count+1].p1X;
+            current_path_node_points[array_length + i+7] = path_width;
+            current_path_node_points[array_length + i+8] = path_node_array[j][p_n_count+1].p1Y;
+
+            current_path_node_points[array_length + i+9] = path_node_array[j][p_n_count].p1X;
+            current_path_node_points[array_length + i+10] = set_z;
+            current_path_node_points[array_length + i+11] = path_node_array[j][p_n_count].p1Y;
+
+            current_path_node_points[array_length + i+12] = path_node_array[j][p_n_count].p1X;
+            current_path_node_points[array_length + i+13] = set_z;
+            current_path_node_points[array_length + i+14] = path_node_array[j][p_n_count+1].p1Y;
+
+            current_path_node_points[array_length + i+15] = path_node_array[j][p_n_count].p1X;
+            current_path_node_points[array_length + i+16] = path_width;
+            current_path_node_points[array_length + i+17] = path_node_array[j][p_n_count+1].p1Y;
+        }
+        array_length = current_path_node_points.length;
     }
- 
+//    if(path_node_array.length!=0){
+//        console.log(path_node_array[path_node_array.length-1][path_node_array[path_node_array.length-1].length-1].p1X);
+//    }
     //The last node on the array is alway the current node (when creating paths) otherwise
         path_vp_vbo = create_vbo(current_path_node_points);
 	path_v_count = current_path_node_points.length/3;

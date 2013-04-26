@@ -8,7 +8,7 @@ function Camera (fov_deg, aspect, nearClip, farClip, wc_pos, direction) {
 	this.mDirection = direction;
 	this.mCurrentYaw_deg = 0;
 	this.mCurrentPitch_deg = 0;
-	// vec3 is a bit unnatural and doesn't like to be mixed some im using arrays explicitly
+	// vec3 is a bit unnatural and doesn't like to be mixed, so i am using arrays explicitly
 	var targ = [0, 0, 0];
 	targ[0] = wc_pos[0] + direction[0];
 	targ[1] = wc_pos[1] + direction[1];
