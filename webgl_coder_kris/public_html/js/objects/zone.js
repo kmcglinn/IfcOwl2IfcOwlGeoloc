@@ -70,7 +70,7 @@ function save_path()
         temp_path_node_array = current_path_node_array;
         
         path_node_array[path_node_array.length-1] = temp_path_node_array;
-        
+//        current_path_node_array = new Array();
         path_node_array.push(current_path_node_array);
         
         console.log("path_node_array length: "+path_node_array.length);

@@ -362,7 +362,7 @@ function init () {
                 {
                     get_mouse_coords(event);
                     get_mouse_ray_wor (mouse_x, mouse_y);
-                    current_path_node_array[current_path_node_array.length-1] = new PathNode(current_path_node.id, current_path_node.p1X, current_path_node.p1Y, current_path_node.p1Z);
+                    current_path_node_array[current_path_node_array.length-1] = new PathNode(current_path_node.id, current_path_node.p1X, current_path_node.p1Y, current_path_node.p1Z);                   
                     current_path_node_array.push(current_path_node);
                     console.log("CURRENT PATH NODE ARRAY LENGTH" + current_path_node_array.length);
 

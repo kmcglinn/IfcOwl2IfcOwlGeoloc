@@ -66,52 +66,51 @@ function draw_activity_zones(){
 
 }
 
-function draw_current_path(){
+function draw_path(){
 
     var set_z = 0;
     var path_width = 1.0;
 
-    current_path_node_points = new Array();
+    path_node_points = new Array();
     //console.log(path_node_array.length);
-    var array_length = 0;
+    //var array_length = 0;
     for(var j = 0;  j< path_node_array.length; j++){
         //console.log("path_node_array at position: " + j + " has length: "+ path_node_array[j].length);
         for(var i = 0;  i< (path_node_array[j].length - 1)*18; i=i+18){
             p_n_count = i/18;
             // a
-            current_path_node_points.push (path_node_array[j][p_n_count].p1X);
-            current_path_node_points.push (set_z); // bottom
-            current_path_node_points.push (path_node_array[j][p_n_count].p1Y);
+            path_node_points.push (path_node_array[j][p_n_count].p1X);
+            path_node_points.push (set_z); // bottom
+            path_node_points.push (path_node_array[j][p_n_count].p1Y);
             // b.just vertically up 1m from a
-            current_path_node_points.push (path_node_array[j][p_n_count].p1X);
-            current_path_node_points.push (path_width); // top
-            current_path_node_points.push (path_node_array[j][p_n_count].p1Y);
+            path_node_points.push (path_node_array[j][p_n_count].p1X);
+            path_node_points.push (path_width); // top
+            path_node_points.push (path_node_array[j][p_n_count].p1Y);
             // c 
-            current_path_node_points.push (path_node_array[j][p_n_count + 1].p1X);
-            current_path_node_points.push (path_width); // top
-            current_path_node_points.push (path_node_array[j][p_n_count + 1].p1Y);
+            path_node_points.push (path_node_array[j][p_n_count + 1].p1X);
+            path_node_points.push (path_width); // top
+            path_node_points.push (path_node_array[j][p_n_count + 1].p1Y);
             // d is just c again
-            current_path_node_points.push (path_node_array[j][p_n_count + 1].p1X);
-            current_path_node_points.push (path_width); // top
-            current_path_node_points.push (path_node_array[j][p_n_count + 1].p1Y);
+            path_node_points.push (path_node_array[j][p_n_count + 1].p1X);
+            path_node_points.push (path_width); // top
+            path_node_points.push (path_node_array[j][p_n_count + 1].p1Y);
             // e is a new vertex, just vertically down from d
-            current_path_node_points.push (path_node_array[j][p_n_count + 1].p1X);
-            current_path_node_points.push (set_z); // top
-            current_path_node_points.push (path_node_array[j][p_n_count + 1].p1Y);
+            path_node_points.push (path_node_array[j][p_n_count + 1].p1X);
+            path_node_points.push (set_z); // top
+            path_node_points.push (path_node_array[j][p_n_count + 1].p1Y);
             // f is just a again
-						current_path_node_points.push (path_node_array[j][p_n_count].p1X);
-            current_path_node_points.push (set_z); // bottom
-            current_path_node_points.push (path_node_array[j][p_n_count].p1Y);
+            path_node_points.push (path_node_array[j][p_n_count].p1X);
+            path_node_points.push (set_z); // bottom
+            path_node_points.push (path_node_array[j][p_n_count].p1Y);
         }
-        array_length = current_path_node_points.length;
+        //array_length = path_node_points.length;
     }
 //    if(path_node_array.length!=0){
 //        console.log(path_node_array[path_node_array.length-1][path_node_array[path_node_array.length-1].length-1].p1X);
 //    }
     //The last node on the array is alway the current node (when creating paths) otherwise
-        path_vp_vbo = create_vbo(current_path_node_points);
-        
-	path_v_count = current_path_node_points.length/3;
+        path_vp_vbo = create_vbo(path_node_points);
+	path_v_count = path_node_points.length/3;
         
     	gl.disable (gl.CULL_FACE); // enable culling
     	gl.useProgram (path_shader);
@@ -134,43 +133,43 @@ function draw_current_path(){
 
 }
 
-function draw_path(){
+function draw_current_path(){
 
-    var set_z = 0;
-    var path_width = "1"
+    current_path_node_points = new Array();
+    var set_z = 0.0;
+    var path_width = 1.0;
 
-    //current_path_node_points = new Array();
-
-    for(var i = 0;  i< (path_node_array.length-1)*18; i=i+18){
+    for(var i = 0;  i< (current_path_node_array.length-1)*18; i=i+18){
         p_n_count = i/18;
-        path_node_points[i] = path_node_array[p_n_count].p1X;
-        path_node_points[i+1] = set_z;
-        path_node_points[i+2] = path_node_array[p_n_count].p1Y;
-        
-        path_node_points[i+3] = path_node_array[p_n_count].p1X;
-        path_node_points[i+4] = path_width;
-        path_node_points[i+5] = path_node_array[p_n_count].p1Y;
-        
-        path_node_points[i+6] = path_node_array[p_n_count+1].p1X;
-        path_node_points[i+7] = path_width;
-        path_node_points[i+8] = path_node_array[p_n_count+1].p1Y;
-        
-        path_node_points[i+9] = path_node_array[p_n_count].p1X;
-        path_node_points[i+10] = set_z;
-        path_node_points[i+11] = path_node_array[p_n_count].p1Y;
-        
-        path_node_points[i+12] = path_node_array[p_n_count].p1X;
-        path_node_points[i+13] = set_z;
-        path_node_points[i+14] = path_node_array[p_n_count+1].p1Y;
-        
-        path_node_points[i+15] = path_node_array[p_n_count].p1X;
-        path_node_points[i+16] = path_width;
-        path_node_points[i+17] = path_node_array[p_n_count+1].p1Y;
+        current_path_node_points.push (current_path_node_array[p_n_count].p1X);
+        current_path_node_points.push (set_z); // bottom
+        current_path_node_points.push (current_path_node_array[p_n_count].p1Y);
+        console.log(current_path_node_points[0]);
+        // b.just vertically up 1m from a
+        current_path_node_points.push (current_path_node_array[p_n_count].p1X);
+        current_path_node_points.push (path_width); // top
+        current_path_node_points.push (current_path_node_array[p_n_count].p1Y);
+        // c 
+        current_path_node_points.push (current_path_node_array[p_n_count + 1].p1X);
+        current_path_node_points.push (path_width); // top
+        current_path_node_points.push (current_path_node_array[p_n_count + 1].p1Y);
+        // d is just c again
+        current_path_node_points.push (current_path_node_array[p_n_count + 1].p1X);
+        current_path_node_points.push (path_width); // top
+        current_path_node_points.push (current_path_node_array[p_n_count + 1].p1Y);
+        // e is a new vertex, just vertically down from d
+        current_path_node_points.push (current_path_node_array[p_n_count + 1].p1X);
+        current_path_node_points.push (set_z); // top
+        current_path_node_points.push (current_path_node_array[p_n_count + 1].p1Y);
+        // f is just a again
+        current_path_node_points.push (current_path_node_array[p_n_count].p1X);
+        current_path_node_points.push (set_z); // bottom
+        current_path_node_points.push (current_path_node_array[p_n_count].p1Y);
     }
  
     //The last node on the array is alway the current node (when creating paths) otherwise
-        path_vp_vbo = create_vbo(path_node_points);
-	path_v_count = path_node_points.length/3;
+        path_vp_vbo = create_vbo(current_path_node_points);
+	path_v_count = current_path_node_points.length/3;
         
     	gl.disable (gl.CULL_FACE); // enable culling
     	gl.useProgram (path_shader);

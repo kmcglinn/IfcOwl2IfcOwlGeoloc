@@ -237,7 +237,7 @@ function render() {
                 if (can_draw_activity_zones){
                     draw_activity_zones();
                     draw_current_path();
-                    //draw_path();
+                    draw_path();
                  
                 }
 	}
