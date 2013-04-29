@@ -69,38 +69,39 @@ function draw_activity_zones(){
 function draw_current_path(){
 
     var set_z = 0;
-    var path_width = "1"
+    var path_width = 1.0;
 
     current_path_node_points = new Array();
     //console.log(path_node_array.length);
     var array_length = 0;
     for(var j = 0;  j< path_node_array.length; j++){
         //console.log("path_node_array at position: " + j + " has length: "+ path_node_array[j].length);
-        for(var i = 0;  i< (path_node_array[j].length-1)*18; i=i+18){
+        for(var i = 0;  i< (path_node_array[j].length - 1)*18; i=i+18){
             p_n_count = i/18;
-            current_path_node_points[array_length + i] = path_node_array[j][p_n_count].p1X;
-            current_path_node_points[array_length + i+1] = set_z;
-            current_path_node_points[array_length + i+2] = path_node_array[j][p_n_count].p1Y;
-
-            current_path_node_points[array_length + i+3] = path_node_array[j][p_n_count].p1X;
-            current_path_node_points[array_length + i+4] = path_width;
-            current_path_node_points[array_length + i+5] = path_node_array[j][p_n_count].p1Y;
-
-            current_path_node_points[array_length + i+6] = path_node_array[j][p_n_count+1].p1X;
-            current_path_node_points[array_length + i+7] = path_width;
-            current_path_node_points[array_length + i+8] = path_node_array[j][p_n_count+1].p1Y;
-
-            current_path_node_points[array_length + i+9] = path_node_array[j][p_n_count].p1X;
-            current_path_node_points[array_length + i+10] = set_z;
-            current_path_node_points[array_length + i+11] = path_node_array[j][p_n_count].p1Y;
-
-            current_path_node_points[array_length + i+12] = path_node_array[j][p_n_count].p1X;
-            current_path_node_points[array_length + i+13] = set_z;
-            current_path_node_points[array_length + i+14] = path_node_array[j][p_n_count+1].p1Y;
-
-            current_path_node_points[array_length + i+15] = path_node_array[j][p_n_count].p1X;
-            current_path_node_points[array_length + i+16] = path_width;
-            current_path_node_points[array_length + i+17] = path_node_array[j][p_n_count+1].p1Y;
+            // a
+            current_path_node_points.push (path_node_array[j][p_n_count].p1X);
+            current_path_node_points.push (set_z); // bottom
+            current_path_node_points.push (path_node_array[j][p_n_count].p1Y);
+            // b.just vertically up 1m from a
+            current_path_node_points.push (path_node_array[j][p_n_count].p1X);
+            current_path_node_points.push (path_width); // top
+            current_path_node_points.push (path_node_array[j][p_n_count].p1Y);
+            // c 
+            current_path_node_points.push (path_node_array[j][p_n_count + 1].p1X);
+            current_path_node_points.push (path_width); // top
+            current_path_node_points.push (path_node_array[j][p_n_count + 1].p1Y);
+            // d is just c again
+            current_path_node_points.push (path_node_array[j][p_n_count + 1].p1X);
+            current_path_node_points.push (path_width); // top
+            current_path_node_points.push (path_node_array[j][p_n_count + 1].p1Y);
+            // e is a new vertex, just vertically down from d
+            current_path_node_points.push (path_node_array[j][p_n_count + 1].p1X);
+            current_path_node_points.push (set_z); // top
+            current_path_node_points.push (path_node_array[j][p_n_count + 1].p1Y);
+            // f is just a again
+						current_path_node_points.push (path_node_array[j][p_n_count].p1X);
+            current_path_node_points.push (set_z); // bottom
+            current_path_node_points.push (path_node_array[j][p_n_count].p1Y);
         }
         array_length = current_path_node_points.length;
     }
@@ -109,6 +110,7 @@ function draw_current_path(){
 //    }
     //The last node on the array is alway the current node (when creating paths) otherwise
         path_vp_vbo = create_vbo(current_path_node_points);
+        
 	path_v_count = current_path_node_points.length/3;
         
     	gl.disable (gl.CULL_FACE); // enable culling
