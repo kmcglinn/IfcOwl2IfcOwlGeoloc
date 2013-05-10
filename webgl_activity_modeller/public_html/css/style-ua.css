@@ -1,0 +1,108 @@
+body{
+	background-color:#102F5B;
+	border-style: solid;
+	border-width: 0px;
+	align: center;
+	padding: 0px 0px 0px 0px
+}
+
+#container{
+	width: 1050px;
+	height: 100%;
+	margin: 0px auto;
+	padding: 0px 10px 0px 10px;
+	border-style: solid;
+	border-width: 3px;
+	border-color: #0000FF;
+	background-color:white
+}
+
+
+#topRow{
+	width: 960px;
+	height: 80px;
+	padding: 0px 0px 0px 0px;
+	border-style: solid;
+	border-width: 0px;
+	background-color: white
+}
+
+#topLeft {
+	width: 400px;
+	height: 200px;
+	padding: 0px 0px 0px 0px;
+	border-style: solid;
+	border-width: 0px;
+	background-color: white
+}
+
+#title{
+	width: 960px;
+	height: 80px;
+	border-style: solid;
+	border-width: 0px;
+	background-color: white
+}
+
+#midRow1, #midRow2{
+	width: 100%;
+	height: 100%;
+	border-style: solid;
+	border-width: 0px;
+	background-color:white
+}
+#canvas{
+	width: 500px;
+	height: 300px;
+	float: left;
+	border-width: 1px;
+	border-style: solid;
+	background-color:white
+}
+#uiControls{
+
+	width: 380px;
+	height: 0px;
+	float: right;
+	padding-left: 10px;
+	border-width: 0px;
+	border-style: solid;
+	background-color:white
+	
+}
+
+#bottomRow{
+
+	width: 960px;
+	height: 500px;
+	border-style: solid;
+	border-width: 0px;
+	margin-top: 10px;
+	background-color:white
+	
+}
+
+#userActivities{
+
+	width: 960px;
+	height: 100px;
+	border-style: solid;
+	border-width: 0px;
+	background-color:white
+	
+}
+
+#sensorConfig{
+
+	width: 0px;
+	height: 100%;
+	float: left;
+	border-width: 0px;
+	border-style: solid;
+	background-color:white
+	
+}
+
+
+
+
