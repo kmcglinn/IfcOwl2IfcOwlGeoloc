@@ -5,8 +5,8 @@
 //var zone_id_handsontable = "";
 var user_id_handsontable_data = [
             ["001"],
-            ["01"],
-            [""],/*
+            ["01"]/*,
+            [""],
             ["11"],
             ["2012"]*/
         ];
@@ -1109,17 +1109,35 @@ $(function () {
             handsontableID.loadData(user_id_handsontable_data);		
 
         });
-        $("button[name='path_activity_button_div']").click(function () {
+        $("button[name='path_activity_add_button_div']").click(function () {
+            
+            handsontable4.clear();
+            var pos3, pos5; 
+            if(entrance_set===true)
+            {
+                pos3 = tempJSONObj[0][3];
+            }
+            else pos3 = current_activity_zone.id;
+            
+            if(exit_set===true)
+            {
+                pos5 = tempJSONObj[0][5];
+            }
+            else pos5 = path_exit_id;
             
             parseIDJson(handsontableID.getData());
             var tempJSONObj = handsontable4.getData();       
             work_place_handsontable_data = [
-            [""+tempJSONObj[0][1]+"", ""+tempJSONObj[0][2]+"", ""+tempJSONObj[0][3]+"", ""+tempJSONObj[0][4]+"", ""+tempJSONObj[0][5]+"", ""+tempJSONObj[0][6]+""],
-            [""+roomName+""],
-            [""+current_activity_zone.id+""]
+                [""+tempJSONObj[0][0]+"", ""+tempJSONObj[0][1]+"", ""+pos3+"", ""+tempJSONObj[0][3]+"", ""+pos5+"", ""+tempJSONObj[0][5]+""],
+                [""+tempJSONObj[1][0]+"", ""+tempJSONObj[1][1]+"", ""+pos3+"", ""+tempJSONObj[1][3]+"", ""+pos5+"", ""+tempJSONObj[1][5]+""],
+                [""+tempJSONObj[2][0]+"", ""+tempJSONObj[2][1]+"", ""+pos3+"", ""+tempJSONObj[2][3]+"", ""+pos5+"", ""+tempJSONObj[2][5]+""],
+                [""+tempJSONObj[3][0]+"", ""+tempJSONObj[3][1]+"", ""+pos3+"", ""+tempJSONObj[3][3]+"", ""+pos5+"", ""+tempJSONObj[3][5]+""],
+                [""+tempJSONObj[4][0]+"", ""+tempJSONObj[4][1]+"", ""+pos3+"", ""+tempJSONObj[4][3]+"", ""+pos5+"", ""+tempJSONObj[4][5]+""],
+                [""+tempJSONObj[5][0]+"", ""+tempJSONObj[5][1]+"", ""+pos3+"", ""+tempJSONObj[5][3]+"", ""+pos5+"", ""+tempJSONObj[5][5]+""],
+                [""+tempJSONObj[6][0]+"", ""+tempJSONObj[6][1]+"", ""+pos3+"", ""+tempJSONObj[6][3]+"", ""+pos5+"", ""+tempJSONObj[6][5]+""]
             ];
             //alert(user_id_handsontable_data.toString());
-            handsontableID.loadData(user_id_handsontable_data);		
+            handsontable4.loadData(work_place_handsontable_data);		
 
         });
       //End Breaks

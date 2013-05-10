@@ -155,6 +155,7 @@ var zone_selected = false; //this is set to true when a zone has been selected (
 var path_connected = false; //this is set when a path is being created and the mouse goes over an existing path so that it selects the zones origin.
 var can_save_path = false; //this is set when the path is connected to a zone aso that you san save the path
 var can_view_path_id = false; //This is so that the current path id div is displayed on the page. 
+var entrance_set, exit_set = false;
 
 var g_zone_is_being_built = false; //
 var zone_points = new Array(); //stores all the vertices of the zones

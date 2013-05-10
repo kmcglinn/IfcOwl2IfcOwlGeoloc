@@ -70,10 +70,12 @@ function update () {
                 if(path_node_array.length===0)
                 {
                     path_node_array.push(current_path_node_array);
+                    
                 }
                 if(zone_selected === true)
                 {
                     can_create_path = true;
+                    path_exit_id = "undefined";
 //                    console.log("SETTING FIRST NODE AS ORIGIN OF ZONE");
                     previous_path_node = new PathNode();
                     previous_path_node.p1X = midpoint(current_activity_zone.p1X, current_activity_zone.p2X);

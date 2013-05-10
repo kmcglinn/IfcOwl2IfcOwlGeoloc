@@ -95,6 +95,25 @@ function set_zone_form_values(){
     
 }
 
+function set_entrance(){
+    
+    if(entrance_set === false)
+    {
+        entrance_set = true;
+    }
+    else entrance_set = false;
+    
+}
+
+function set_exit(){
+    
+        if(exit_set === false)
+    {
+        exit_set = true;
+    }
+    else exit_set = false;
+}
+
 function update_zone_id_handsontables(){
     
     zone_id_handsontable = "Ooooh!";
@@ -105,8 +124,8 @@ function check_activity_path_entrance_exit()
 {
     
     document.write("</br><form name=\"path_form\">\
-            Entrace Zone: <input type=\"text\" id=\"path_entrance_id_form\"><input id = \"activity_ea_checkbox_id_1\" type=\"checkbox\" class=\"adri\" onclick=\"set_activity_day(1);\"></br>"+
-            "Exit Zone:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"text\" id=\"path_exit_id_form\"><input id = \"activity_ea_checkbox_id_2\" type=\"checkbox\" class=\"adri\" onclick=\"set_activity_day(3);\"></form>");
+            Entrace Zone: <input type=\"text\" id=\"path_entrance_id_form\"><input id = \"activity_ea_checkbox_id_1\" type=\"checkbox\" class=\"adri\" onclick=\"set_entrance();\"></br>"+
+            "Exit Zone:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"text\" id=\"path_exit_id_form\"><input id = \"activity_ea_checkbox_id_2\" type=\"checkbox\" class=\"adri\" onclick=\"set_exit();\"></form>");
 }
 function radio_activity_day()
 {
