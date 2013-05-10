@@ -117,9 +117,9 @@
                         
                         <div id="zone_x1_y1_z1">
                             Zone Point A: </br>
-                        X- <input type="text" name="zone_x1" class="coord">
-                        Y- <input type="text" name="zone_y1" class="coord">
-                        Z- <input type="text" name="zone_z1" class="coord">
+                            X- <input type="text" name="zone_x1" class="coord">
+                            Y- <input type="text" name="zone_y1" class="coord">
+                            Z- <input type="text" name="zone_z1" class="coord">
                         </div>
                                                 
                         <div id="zone_x2_y2_z2">
@@ -146,12 +146,16 @@
                             Activity Type:  
                             <script type="text/javascript">
                                 drop_down_activities();
+                                check_activity_path_entrance_exit();
                             </script>
                         </div>
                         <div id="path_activity_day_div">
                             <script type="text/javascript">
                                 radio_activity_day();
                             </script>
+                        </div>
+                        <div id="path_activity_button_div">
+                            <button onclick="update_path_activity_id_handsontables()" name="update_path_activity_zone_id">Update Activity Zone</button>
                         </div>
                     </form>
 

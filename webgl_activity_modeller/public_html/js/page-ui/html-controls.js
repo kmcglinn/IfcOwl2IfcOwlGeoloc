@@ -90,6 +90,9 @@ function set_zone_form_values(){
         document.forms["path_form"]["path_id_name"].value = current_path_node_array[0].id;
     }
     
+    document.forms["path_form"]["path_entrance_id_form"].value = current_activity_zone.id;
+    document.forms["path_form"]["path_exit_id_form"].value = path_exit_id;  
+    
 }
 
 function update_zone_id_handsontables(){
@@ -98,16 +101,29 @@ function update_zone_id_handsontables(){
 //    alert(zone_id_handsontable);
     
 }
-function radio_activity_day(){
+function check_activity_path_entrance_exit()
+{
     
-        document.write("<input id = \"activity_day_radio_id_1\" type=\"checkbox\" class=\"adri\" value=\"image\" onclick=\"set_activity_day(1);\">Monday"+
-                "<input id = \"activity_day_radio_id_2\" type=\"checkbox\" class=\"adri\" value=\"image\" onclick=\"set_activity_day(2);\">Tuesday"+
-                "<input id = \"activity_day_radio_id_3\" type=\"checkbox\" class=\"adri\" value=\"image\" onclick=\"set_activity_day(3);\">Wednesday"+
-                "<input id = \"activity_day_radio_id_4\" type=\"checkbox\" class=\"adri\" value=\"image\" onclick=\"set_activity_day(4);\">Thursday"+
-                "<input id = \"activity_day_radio_id_5\" type=\"checkbox\" class=\"adri\" value=\"image\" onclick=\"set_activity_day(5);\">Friday"+
-                "<input id = \"activity_day_radio_id_6\" type=\"checkbox\" class=\"adri\" value=\"image\" onclick=\"set_activity_day(6);\">Saturday"+
-                "<input id = \"activity_day_radio_id_7\" type=\"checkbox\" class=\"adri\" value=\"image\" onclick=\"set_activity_day(7);\">Sunday");
+    document.write("</br><form name=\"path_form\">\
+            Entrace Zone: <input type=\"text\" id=\"path_entrance_id_form\"><input id = \"activity_ea_checkbox_id_1\" type=\"checkbox\" class=\"adri\" onclick=\"set_activity_day(1);\"></br>"+
+            "Exit Zone:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"text\" id=\"path_exit_id_form\"><input id = \"activity_ea_checkbox_id_2\" type=\"checkbox\" class=\"adri\" onclick=\"set_activity_day(3);\"></form>");
 }
+function radio_activity_day()
+{
+    
+    document.write("\
+            <div id=\"radio_activity_day_left\">\n\
+            <input id = \"activity_day_radio_id_1\" type=\"checkbox\" class=\"adri\" onclick=\"set_activity_day(1);\">Monday</br>"+
+            "<input id = \"activity_day_radio_id_3\" type=\"checkbox\" class=\"adri\" onclick=\"set_activity_day(3);\">Wednesday</br>"+
+            "<input id = \"activity_day_radio_id_5\" type=\"checkbox\" class=\"adri\" onclick=\"set_activity_day(5);\">Friday</br>"+
+            "<input id = \"activity_day_radio_id_7\" type=\"checkbox\" class=\"adri\" onclick=\"set_activity_day(7);\">Sunday"+
+            "</div>\n\
+            <div id=\"radio_activity_day_right\">"+
+            "<input id = \"activity_day_radio_id_2\" type=\"checkbox\" class=\"adri\" onclick=\"set_activity_day(2);\">Tuesday</br>"+
+            "<input id = \"activity_day_radio_id_4\" type=\"checkbox\" class=\"adri\" onclick=\"set_activity_day(4);\">Thursday</br>"+
+            "<input id = \"activity_day_radio_id_6\" type=\"checkbox\" class=\"adri\" onclick=\"set_activity_day(6);\">Saturday</div>");
+}
+
 function set_activity_day(day){
     
     activity_day = day;

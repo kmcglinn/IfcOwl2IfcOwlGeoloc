@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
+var path_exit_id = "undefined";
 function update () {
 	// timer
 	var time = (new Date).getTime ();
@@ -232,6 +232,7 @@ function update () {
                         current_path_node.p1X = midpoint(zone_activity_array[apos].p1X, zone_activity_array[apos].p2X);
                         current_path_node.p1Y = midpoint(zone_activity_array[apos].p1Y, zone_activity_array[apos].p2Y);
                         current_path_node.p1Z = midpoint(zone_activity_array[apos].p1Z, zone_activity_array[apos].p2Z);
+                        path_exit_id = zone_activity_array[apos].id;
                         path_connected = false;
                         
                             

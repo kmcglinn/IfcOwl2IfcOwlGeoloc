@@ -119,6 +119,36 @@ Contains left - WebGL/Image and right - information display*/
     float: left;
     padding-left:10px
 }
+#path_activity_type_div{  
+    width: 250px;
+    float: left;
+    padding-left:10px;
+}
+#path_activity_day_div{     
+    float: left;
+    padding-left:10px;
+    /*border-style:solid;*/
+}
+#radio_activity_day_left{     
+    float: left;
+    /*height: 200px;*/
+    /*border: 1px solid;*/
+}
+#radio_activity_day_right{     
+    float: left;
+    /*height: 200px;*/
+    /*border: 1px solid;*/
+}
+#path_activity_button{     
+    float: left;
+    padding-left:10px;
+}
+#path_entrance_id_form{
+    width:90px;
+}
+#path_exit_id_form{
+    width:90px;
+}
 #webg-img-radio{
     float: left;
     padding-left:20px

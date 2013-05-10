@@ -10,6 +10,8 @@ var user_id_handsontable_data = [
             ["11"],
             ["2012"]*/
         ];
+        
+var work_place_handsontable_data;
 
 $(function () {
    
@@ -1097,8 +1099,22 @@ $(function () {
         $("button[name='update_activity_zone_id']").click(function () {
             
             parseIDJson(handsontableID.getData());
+            var tempJSONObj = handsontableID.getData();
             user_id_handsontable_data = [
-            [""+userID+""],
+            [""+tempJSONObj[0][0]+""],
+            [""+tempJSONObj[1][0]+""],
+            [""+current_activity_zone.id+""]
+            ];
+            alert(user_id_handsontable_data.toString());
+            handsontableID.loadData(user_id_handsontable_data);		
+
+        });
+        $("button[name='path_activity_button_div']").click(function () {
+            
+            parseIDJson(handsontableID.getData());
+            var tempJSONObj = handsontable4.getData();       
+            work_place_handsontable_data = [
+            [""+tempJSONObj[0][1]+"", ""+tempJSONObj[0][2]+"", ""+tempJSONObj[0][3]+"", ""+tempJSONObj[0][4]+"", ""+tempJSONObj[0][5]+"", ""+tempJSONObj[0][6]+""],
             [""+roomName+""],
             [""+current_activity_zone.id+""]
             ];
