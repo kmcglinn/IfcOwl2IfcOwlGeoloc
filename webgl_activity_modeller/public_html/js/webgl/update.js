@@ -32,20 +32,22 @@ function update () {
             var camspeed = 20.0;
             // keys listed by code: http://stackoverflow.com/questions/1465374/javascript-event-keycode-constants
 
-            if (currentlyPressedKeys[79] === true) // z
-            { 
-                //Camera rotation needs to be developed!!!
-//                camMove[1] = camMove[1]+1;
-//                g_cam.deltaYaw(camMove);
-//                updateMove = true;
+            // T key to pitch down
+            if (currentlyPressedKeys[84] === true) { 
+							g_cam.change_attitude (-20.0, seconds);  
+						// G key to pitch up    	
+            } else if (currentlyPressedKeys[71] === true) { 
+							g_cam.change_attitude (20.0, seconds);     
             }
-            if (currentlyPressedKeys[76] === true) // z
-            { 
-                //Camera rotation needs to be developed!!!
-//                camMove[1] = camMove[1]-1;
-//                g_cam.deltaYaw(camMove);       
-//                updateMove = true;
+            
+            // F key to yaw left
+            if (currentlyPressedKeys[70] === true) { 
+							g_cam.change_heading (40.0, seconds);  
+						// H key to yaw right    	
+            } else if (currentlyPressedKeys[72] === true) { 
+							g_cam.change_heading (-40.0, seconds);     
             }
+            
             if (currentlyPressedKeys[90] === true) // z
             { 
                     can_create_zone = true;                     
@@ -116,35 +118,35 @@ function update () {
             if (currentlyPressedKeys[87] == true) 
             { // w
                 camMove[2] = -1.0 * camspeed * step_size;
-                g_cam.moveBy (camMove);
+                g_cam.move_cam_relative_forward_by (camMove);
                 updateMove = true;
             }
             if (currentlyPressedKeys[83] == true) 
             { // s
                 camMove[2] = 1.0 * camspeed * step_size;
-                g_cam.moveBy (camMove);
+                g_cam.move_cam_relative_forward_by (camMove);
                 updateMove = true;
             }
             if (currentlyPressedKeys[65] == true) 
             { // a
                     camMove[0] = -1.0 * camspeed * step_size;
-                    g_cam.moveBy (camMove);
+                    g_cam.move_cam_relative_sideways_by (camMove);
                     updateMove = true;
             }
             if (currentlyPressedKeys[68] == true) 
             { // d
                     camMove[0] = 1.0 * camspeed * step_size;
-                    g_cam.moveBy (camMove);
+                    g_cam.move_cam_relative_sideways_by (camMove);
                     updateMove = true;
             }
             if (currentlyPressedKeys[69] == true) 
-            { // d
+            { // q
                     camMove[1] = -1.0 * camspeed * step_size;
                     g_cam.moveBy (camMove);
                     updateMove = true;
             }
             if (currentlyPressedKeys[81] == true) 
-            { // d
+            { // r
                     camMove[1] = 1.0 * camspeed * step_size;
                     g_cam.moveBy (camMove);
                     updateMove = true;

@@ -24,7 +24,7 @@ function init () {
 	
 	gl.clearColor (0.0, 0.0, 0.0, 1.0);
 	
-	camera_pos = [-49.44, 75.60, 55.52];
+	camera_pos = [-49.44, 35.60, 55.52];
 	g_cam = new Camera (45.0, g_canvas.width / g_canvas.height, 0.1, 100.0, camera_pos, [0, -2, -1]);
 	
 	// SCREEN SPACE QUAD
