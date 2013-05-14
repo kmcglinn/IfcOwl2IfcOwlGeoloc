@@ -49,7 +49,6 @@ function Camera (fov_deg, aspect, nearClip, farClip, wc_pos, direction) {
 		pos[0] = -wc_dist[2] * this.m_forward[0] + this.mWC_Pos[0];
 		pos[1] = -wc_dist[2] * this.m_forward[1] + this.mWC_Pos[1];
 		pos[2] = -wc_dist[2] * this.m_forward[2] + this.mWC_Pos[2];
-		console.log (this.mWC_Pos);
 		this.setPos (pos);
 	}
 	
