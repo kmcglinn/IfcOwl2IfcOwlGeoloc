@@ -355,5 +355,62 @@ function perspective (fovy, aspect, near, far) {
 	m[14] = -1.0;
 	return m;
 }
+function quat (degrees, axis) {
+	var rad = degrees * 0.0174533;
+	return [
+		Math.cos (rad * 0.5),
+		Math.sin (rad * 0.5) * axis[0],
+		Math.sin (rad * 0.5) * axis[1],
+		Math.sin (rad * 0.5) * axis[2]
+	];
+}
 
+function quat_to_mat4 (q) {
+	var w = q[0];
+	var x = q[1];
+	var y = q[2];
+	var z = q[3];
+	var m = zero_mat4 ();
+	// row 1
+	m[0] = 1 - 2 * y * y - 2 * z * z;
+	m[1] = 2 * x * y + 2 * w * z;
+	m[2] = 2 * x * z - 2 * w * y;
+	// row 2
+	m[4] = 2 * x * y - 2 * w * z;
+	m[5] = 1 - 2 * x * x - 2 * z * z;
+	m[6] = 2 * y * z + 2 * w * x;
+	// row 3
+	m[8] = 2 * x * z + 2 * w * y;
+	m[9] = 2 * y * z - 2 * w * x;
+	m[10] = 1 - 2 * x * x - 2 * y * y;
+	// row 4
+	m[15] = 1;
+	return m;
+}
 
+function normalise_quat (q) {
+	var w = q[0];
+	var x = q[1];
+	var y = q[2];
+	var z = q[3];
+	var sum = w * w + x * x + y * y + z * z;
+	if (sum != 1) {
+		var length = Math.sqrt (sum);
+		var r = new Array ();
+		r[0] = w / length;
+		r[1] = x / length;
+		r[2] = y / length;
+		r[3] = z / length;
+		return r; 
+	}
+	return q;
+}
+
+function mult_q_q (q, r) {
+	var t = new Array ();
+	t[0] = r[0] * q[0] - r[1] * q[1] - r[2] * q[2] - r[3] * q[3];
+	t[1] = r[0] * q[1] + r[1] * q[0] - r[2] * q[3] - r[3] * q[2];
+	t[2] = r[0] * q[2] + r[1] * q[3] - r[2] * q[0] - r[3] * q[1];
+	t[3] = r[0] * q[3] - r[1] * q[2] - r[2] * q[1] - r[3] * q[0];
+	return t;
+}

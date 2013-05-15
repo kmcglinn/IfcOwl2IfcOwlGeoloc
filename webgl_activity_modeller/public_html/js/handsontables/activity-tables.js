@@ -1031,7 +1031,7 @@ $(function () {
                   source: function () {
                     return ["14:00", "15:00", "16:00", "17:00", "18:00"]
                   },
-                  strict: false //only accept predefined values (from array above)
+                  strict: true //only accept predefined values (from array above)
                 }
         ],
           contextMenu: true
@@ -1112,31 +1112,85 @@ $(function () {
         $("button[name='path_activity_add_button_div']").click(function () {
             
             handsontable4.clear();
-            var pos3, pos5; 
-            if(entrance_set===true)
-            {
-                pos3 = tempJSONObj[0][3];
-            }
-            else pos3 = current_activity_zone.id;
+            var pos3 = new Array();
+            var pos4 = new Array();
+            var pos5 = new Array();
+            var pos6 = new Array();
             
-            if(exit_set===true)
-            {
-                pos5 = tempJSONObj[0][5];
-            }
-            else pos5 = path_exit_id;
-            
+            var tempJSONObj = handsontable4.getData();
+//            alert(tempJSONObj);
             parseIDJson(handsontableID.getData());
-            var tempJSONObj = handsontable4.getData();       
-            work_place_handsontable_data = [
-                [""+tempJSONObj[0][0]+"", ""+tempJSONObj[0][1]+"", ""+pos3+"", ""+tempJSONObj[0][3]+"", ""+pos5+"", ""+tempJSONObj[0][5]+""],
-                [""+tempJSONObj[1][0]+"", ""+tempJSONObj[1][1]+"", ""+pos3+"", ""+tempJSONObj[1][3]+"", ""+pos5+"", ""+tempJSONObj[1][5]+""],
-                [""+tempJSONObj[2][0]+"", ""+tempJSONObj[2][1]+"", ""+pos3+"", ""+tempJSONObj[2][3]+"", ""+pos5+"", ""+tempJSONObj[2][5]+""],
-                [""+tempJSONObj[3][0]+"", ""+tempJSONObj[3][1]+"", ""+pos3+"", ""+tempJSONObj[3][3]+"", ""+pos5+"", ""+tempJSONObj[3][5]+""],
-                [""+tempJSONObj[4][0]+"", ""+tempJSONObj[4][1]+"", ""+pos3+"", ""+tempJSONObj[4][3]+"", ""+pos5+"", ""+tempJSONObj[4][5]+""],
-                [""+tempJSONObj[5][0]+"", ""+tempJSONObj[5][1]+"", ""+pos3+"", ""+tempJSONObj[5][3]+"", ""+pos5+"", ""+tempJSONObj[5][5]+""],
-                [""+tempJSONObj[6][0]+"", ""+tempJSONObj[6][1]+"", ""+pos3+"", ""+tempJSONObj[6][3]+"", ""+pos5+"", ""+tempJSONObj[6][5]+""]
+//            console.log("Before");    
+//            if(current_path_node_array.length===0)
+//            {
+//                console.log("Before1"); 
+                for(var i=0; i<7;i++)
+                {
+                    console.log("A"+activity_day[i]);
+                    console.log("E"+entrance_set);
+                    pos3.push(undefined);
+                    pos4.push(undefined);
+                    //console.log(pos3[i]);
+                    if((activity_day[i]===true)&&(entrance_set===true))
+                    {
+                        pos3[i] = document.getElementById('path_entrance_id_form').value;//previous_path_node.id;    
+                        pos4[i] = document.getElementById('path_id_form').value;
+                        console.log(pos3[i]);
+                        console.log(pos4[i]);
+                    }
+                    else  
+                    {
+                        pos3[i] = tempJSONObj[i][2];
+                        pos4[i] = tempJSONObj[i][3];
+//                        console.log(pos3[i]);
+                    }
+                }
+                    
+//            } 
+//            if(current_path_node_array.length===0)
+//            {
+//                console.log("Before1"); 
+                for(var i=0; i<7;i++)
+                {
+//                    console.log(activity_day[i]);
+                    pos5.push(undefined);
+                    pos6.push(undefined);
+                    //console.log(pos3[i]);
+                    if((activity_day[i]===true)&&(exit_set===true))
+                    {
+                        pos5[i] = document.getElementById('path_entrance_id_form').value;//previous_path_node.id;    
+                        pos6[i] = document.getElementById('path_id_form').value;
+                        console.log(pos5[i]);
+                        console.log(pos6[i]);
+                        
+//                        console.log(pos3[i]);
+                    }
+                    else
+                    {
+                        pos5[i] = tempJSONObj[i][4];
+                        pos6[i] = tempJSONObj[i][5];
+//                        console.log(pos3[i]);
+                    }
+                }
+                    
+//            }
+//            for(var j = 0 ; j++; j<7){
+//                
+//                if(tempJSONObj[j][0]==="null"){
+//                    tempJSONObj[j][0]="test";
+//                }
+//                
+//            }
+                work_place_handsontable_data = [
+                [""+tempJSONObj[0][0]+"", ""+tempJSONObj[0][1]+"", ""+pos3[0]+"", ""+pos4[0]+"", ""+pos5[0]+"", ""+pos6[0]+""],
+                [""+tempJSONObj[1][0]+"", ""+tempJSONObj[1][1]+"", ""+pos3[1]+"", ""+pos4[1]+"", ""+pos5[1]+"", ""+pos6[1]+""],
+                [""+tempJSONObj[2][0]+"", ""+tempJSONObj[2][1]+"", ""+pos3[2]+"", ""+pos4[2]+"", ""+pos5[2]+"", ""+pos6[2]+""],
+                [""+tempJSONObj[3][0]+"", ""+tempJSONObj[3][1]+"", ""+pos3[3]+"", ""+pos4[3]+"", ""+pos5[3]+"", ""+pos6[3]+""],
+                [""+tempJSONObj[4][0]+"", ""+tempJSONObj[4][1]+"", ""+pos3[4]+"", ""+pos4[4]+"", ""+pos5[4]+"", ""+pos6[4]+""],
+                [""+tempJSONObj[5][0]+"", ""+tempJSONObj[5][1]+"", ""+pos3[5]+"", ""+pos4[5]+"", ""+pos5[5]+"", ""+pos6[5]+""],
+                [""+tempJSONObj[6][0]+"", ""+tempJSONObj[6][1]+"", ""+pos3[6]+"", ""+pos4[6]+"", ""+pos5[6]+"", ""+pos6[6]+""]
             ];
-            //alert(user_id_handsontable_data.toString());
+            //alert(work_place_handsontable_data);
             handsontable4.loadData(work_place_handsontable_data);		
 
         });
@@ -1194,4 +1248,141 @@ $(function () {
 //
 //  //parseDayScheduleJson(handsontable4.getData());
 //
-//}
+//}//             alert("After");
+//            if(current_path_node_array.length===0)
+//            {
+//                if((activity_day===1)&&(entrance_set===true))                       
+//                {
+//                    pos13 = previous_path_node.id;
+//                }
+//                else if((activity_day===1)&&(entrance_set===false))    
+//                {
+//                    pos12 = tempJSONObj[0][2];
+//                    pos13 = tempJSONObj[0][3];
+//                }
+//                if((activity_day===2)&&(entrance_set===true))                       
+//                {
+//                    pos23 = previous_path_node.id;
+//                }
+//                else if((activity_day===2)&&(entrance_set===false))    
+//                {
+//                    pos22 = tempJSONObj[1][2];
+//                    pos23 = tempJSONObj[1][3];
+//                }
+//                if((activity_day===3)&&(entrance_set===true))                       
+//                {
+//                    pos33 = previous_path_node.id;
+//                }
+//                else if((activity_day===3)&&(entrance_set===false))    
+//                {
+//                    pos32 = tempJSONObj[2][2];
+//                    pos33 = tempJSONObj[2][3];
+//                }
+//                if((activity_day===4)&&(entrance_set===true))                       
+//                {
+//                    pos43 = previous_path_node.id;
+//                }
+//                else if((activity_day===4)&&(entrance_set===false))    
+//                {
+//                    pos42 = tempJSONObj[3][2];
+//                    pos43 = tempJSONObj[3][3];
+//                }
+//                if((activity_day===5)&&(entrance_set===true))                       
+//                {
+//                    pos53 = previous_path_node.id;
+//                }
+//                else if((activity_day===5)&&(entrance_set===false))    
+//                {
+//                    pos52 = tempJSONObj[4][2];
+//                    pos53 = tempJSONObj[4][3];
+//                }
+//                if((activity_day===6)&&(entrance_set===true))                       
+//                {
+//                    pos63 = previous_path_node.id;
+//                }
+//                else if((activity_day===6)&&(entrance_set===false))    
+//                {
+//                    pos62 = tempJSONObj[5][2];
+//                    pos63 = tempJSONObj[5][3];
+//                }
+//                if((activity_day===7)&&(entrance_set===true))                       
+//                {
+//                    pos73 = previous_path_node.id;
+//                }
+//                else if((activity_day===7)&&(entrance_set===false))    
+//                {
+//                    pos72 = tempJSONObj[6][2];
+//                    pos73 = tempJSONObj[6][3];
+//                }
+//            }
+//            else 
+//                if((activity_day===1)&&(entrance_set===true))                           
+//                {
+//                    pos13 = current_path_node_array[0].id;
+//                    pos12 = current_activity_zone.id;
+//                }
+//                if((activity_day===2)&&(entrance_set===true))                            
+//                {
+//                    pos23 = current_path_node_array[0].id;
+//                    pos22 = current_activity_zone.id;
+//                }
+//                if((activity_day===3)&&(entrance_set===true))                           
+//                {
+//                    pos33 = current_path_node_array[0].id;
+//                    pos32 = current_activity_zone.id;
+//                }
+//                if((activity_day===4)&&(entrance_set===true))                            
+//                {
+//                    pos43 = current_path_node_array[0].id;
+//                    pos42 = current_activity_zone.id;
+//                }
+//                if((activity_day===5)&&(entrance_set===true))                            
+//                {
+//                    pos53 = current_path_node_array[0].id;
+//                    pos52 = current_activity_zone.id;
+//                }
+//                if((activity_day===6)&&(entrance_set===true))                           
+//                {
+//                    pos63 = current_path_node_array[0].id;
+//                    pos62 = current_activity_zone.id;
+//                }
+//                if((activity_day===7)&&(entrance_set===true))                           
+//                {
+//                    pos73 = previous_path_node.id;
+//                    pos72 = current_activity_zone.id;
+//                }                         
+            
+            
+    
+
+            
+            
+//            if(exit_set===false)
+//            {
+//                pos4 = tempJSONObj[0][4];
+//                pos5 = tempJSONObj[0][5];
+//            }
+//            else 
+//            {
+//                pos4 = path_exit_id;
+//                if(current_path_node_array.length===0){
+//                    pos5 = previous_path_node.id;
+//                    
+//                }
+//                else pos5 = current_path_node_array[0].id;
+//                
+//            }
+//            
+//            if(activity_day===1){
+//                
+//            }
+              
+//            work_place_handsontable_data = [
+//                [""+tempJSONObj[0][0]+"", ""+tempJSONObj[0][1]+"", ""+pos12+"", ""+pos13+"", ""+pos14+"", ""+pos15+""],
+//                [""+tempJSONObj[1][0]+"", ""+tempJSONObj[1][1]+"", ""+pos22+"", ""+pos23+"", ""+pos24+"", ""+pos25+""],
+//                [""+tempJSONObj[2][0]+"", ""+tempJSONObj[2][1]+"", ""+pos32+"", ""+pos33+"", ""+pos34+"", ""+pos35+""],
+//                [""+tempJSONObj[3][0]+"", ""+tempJSONObj[3][1]+"", ""+pos42+"", ""+pos43+"", ""+pos44+"", ""+pos45+""],
+//                [""+tempJSONObj[4][0]+"", ""+tempJSONObj[4][1]+"", ""+pos52+"", ""+pos53+"", ""+pos54+"", ""+pos55+""],
+//                [""+tempJSONObj[5][0]+"", ""+tempJSONObj[5][1]+"", ""+pos62+"", ""+pos63+"", ""+pos64+"", ""+pos65+""],
+//                [""+tempJSONObj[6][0]+"", ""+tempJSONObj[6][1]+"", ""+pos72+"", ""+pos73+"", ""+pos74+"", ""+pos75+""]
+//            ];

@@ -866,7 +866,7 @@ function parseLunchScheduleJson(jsonObj) {
 
 function parseDayScheduleJson(jsonObj) {
 
-    alert(JSON.stringify(jsonObj));
+//    alert(JSON.stringify(jsonObj));
 
     startDate = $("#year").val()+"-"+$("#month").val()+"-"+$("#day").val();
     var day = parseInt($("#day").val());
@@ -918,7 +918,7 @@ function parseDayScheduleJson(jsonObj) {
                 enPath = jsonObj[i][3];
                 exit = jsonObj[i][4];
                 exPath = jsonObj[i][5];
-                //alert(entrance + " : " + enPath + " : " + officeName);
+                alert(entrance + " : " + enPath + " : " + officeName);
                 var pathTo = checkPathFrom(entrance, enPath, officeName); //bobbb
                 var pathFrom = checkPathTo(officeName, exPath, exit);
                 //alert(startDate);
@@ -1015,7 +1015,7 @@ function parseBreaksJson(jsonObj, addDay)
             //rPath = jsonObj[i][5];
 //            alert(type);
 //            alert(path);
-//            alert(returnPath);
+
             var pathTo = checkPathTo(officeName, path, destination); 
             
             var pathFrom = checkPathFrom(destination, returnPath, officeName);

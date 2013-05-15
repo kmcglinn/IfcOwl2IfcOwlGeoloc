@@ -4,8 +4,10 @@
  */
 //var gl_canvas_width = 450;
 //var gl_canvas_height = 600;
-var activity_day;
-
+var activity_day = new Array();
+for(var i = 0; i<7; i++){
+    activity_day.push(false);
+}
   $(function() {
     $( "#tabs" ).tabs();
   });
@@ -96,18 +98,18 @@ function set_zone_form_values(){
 }
 
 function set_entrance(){
-    
+//    alert(entrance_set);
     if(entrance_set === false)
     {
         entrance_set = true;
     }
     else entrance_set = false;
-    
+//    alert(entrance_set);
 }
 
 function set_exit(){
     
-        if(exit_set === false)
+    if(exit_set === false)
     {
         exit_set = true;
     }
@@ -144,9 +146,18 @@ function radio_activity_day()
 }
 
 function set_activity_day(day){
-    
-    activity_day = day;
-    
+//    //alert(day);
+//    if(day===1)
+//    {
+        if(activity_day[day-1]===false)
+        {
+            activity_day[day-1] = true;
+//            alert(day);
+        }
+        else
+            activity_day[day-1] = false;
+//    }
+//    alert(activity_day[day-1]);
 }
 function drop_down_activities(){
     
