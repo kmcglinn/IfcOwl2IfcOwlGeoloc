@@ -132,13 +132,13 @@ function update () {
             if (currentlyPressedKeys[65] === true) 
             { // a
                     camMove[0] = -1.0 * camspeed * step_size;
-                    g_cam.move_cam_relative_forward_by (camMove);
+                    g_cam.move_cam_relative_sideways_by (camMove);
                     updateMove = true;
             }
             if (currentlyPressedKeys[68] === true) 
             { // d
                     camMove[0] = 1.0 * camspeed * step_size;
-                    g_cam.move_cam_relative_forward_by (camMove);
+                    g_cam.move_cam_relative_sideways_by (camMove);
                     updateMove = true;
             }
             if (currentlyPressedKeys[69] === true) 

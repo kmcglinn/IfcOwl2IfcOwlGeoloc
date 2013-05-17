@@ -37,6 +37,7 @@
 
 <!-- load data objects -->
 <script src="js/objects/zone.js"></script>
+<script src="js/objects/path.js"></script>
 
 <!-- draws different objects -->
 <script src="js/draw/drawZones.js"></script>
@@ -52,6 +53,7 @@
 <!-- for querying the ontology -->
 <script src="js/sparql/query.js"></script>
 <script src="js/sparql/zone_query.js"></script>
+<script src="js/sparql/path_query.js"></script>
 <script src="js/sparql/office_user_activities_sparql.js"></script>
 
 <!--Some simple maths functions -->
@@ -69,13 +71,8 @@
 <link rel="stylesheet" type="text/css" href="css/style-ua.css">
 
 <link rel="stylesheet" href="css/jquery/jquery-ui-kris.css" />
-<!--<script src="http://code.jquery.com/jquery-1.9.1.js"></script>-->
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-<!--<link rel="stylesheet" href="/resources/demos/style.css" />-->
-<!--<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.21.custom.css" rel="stylesheet" />
 
-<link rel="stylesheet" media="screen" href="css/jquery/jQuery-contextMenu/jquery.contextMenu.css">
-<link rel="stylesheet" media="screen" href="css/jquery/jquery.handsontable.css">-->
 </head>
 
 <body onload="main ()">
@@ -155,7 +152,8 @@
                             </script>
                         </div>
                         <div id="path_activity_button_div">
-                            <button onclick="" name="path_activity_save_button_div">Update Activity Zone</button>
+                            <button onclick="save_path_query()" name="path_activity_save_button_div">Save Path</button>
+                            <button onclick="delete_path()" name="path_activity_delete_button_div">Update Activity Zone</button>
                             <button onclick="" name="path_activity_add_button_div">Update Activity Zone</button>
                         </div>
                     </form>

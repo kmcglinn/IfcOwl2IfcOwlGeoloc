@@ -5,18 +5,9 @@ function Camera (fov_deg, aspect, nearClip, farClip, wc_pos, direction) {
 	this.mNearClip = nearClip;
 	this.mFarClip = farClip;
 	this.mWC_Pos = wc_pos;
-//	this.mDirection = direction;
 	this.mCurrentYaw_deg = 0;
 	this.mCurrentPitch_deg = 0;
-	// vec3 is a bit unnatural and doesn't like to be mixed, so i am using arrays explicitly
-//	var targ = [0, 0, 0];
-//	targ[0] = wc_pos[0] + direction[0];
-//	targ[1] = wc_pos[1] + direction[1];
-//	targ[2] = wc_pos[2] + direction[2];
-//	/* ISOMETRIC CAM */
-//	this.mViewMat = look_at (wc_pos, targ, [0, 2, -1]);
-	/* BIRDS EYE CAM */
-	//this.mViewMat = look_at (this.mWC_Pos, [wc_pos[0], wc_pos[1] - 1, wc_pos[2]], [0, 0, -1]);
+
         this.m_heading = 0.0; // yaw to heading
 	this.m_attitude = 45.0; // pitch to attitude
 	this.m_inv_T = inverse_mat4 (
@@ -35,15 +26,8 @@ function Camera (fov_deg, aspect, nearClip, farClip, wc_pos, direction) {
 	this.mProjMat = perspective (this.mFOV_deg, this.mAspect, this.mNearClip, this.mFarClip);
 	
 	this.setPos = function (wc_pos) {
-//		this.mWC_Pos = wc_pos;
-//		var targ = [0, 0, 0];
-//		targ[0] = wc_pos[0] + this.mDirection[0];
-//		targ[1] = wc_pos[1] + this.mDirection[1];
-//		targ[2] = wc_pos[2] + this.mDirection[2];
-//		/* ISOMETRIC CAM */
-//		this.mViewMat = look_at (this.mWC_Pos, targ, [0, 2, -1]);
-		/* BIRDS EYE CAM */
-		//this.mViewMat = look_at (this.mWC_Pos, [wc_pos[0], wc_pos[1] - 1, wc_pos[2]], [0, 0, -1]);
+		this.mWC_Pos = wc_pos;
+
                 if (this.mWC_Pos[1] < 0) {
 			this.mWC_Pos[1] = 0;
 		}
