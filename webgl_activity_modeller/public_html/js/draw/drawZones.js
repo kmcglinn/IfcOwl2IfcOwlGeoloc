@@ -201,10 +201,25 @@ function draw_floor(){
 }
 
 function draw_walls(){
+		/* ANTON ADDED THIS IN FOR THE CRAIC
+		 - call this somewhere in init() to set your background colour or it will
+		 default to black
+		*/
+		gl.clearColor (1.0, 0.0, 0.5, 1.0);
+		
+		/* ANTON ADDED THIS - you need to clear the buffer between drawing
+		passes that was why it was flickering/not displaying
+		*/
+    gl.clear (gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     
-    gl.enable(gl.BLEND);
+    /* ANTON you can re-enable this but it isn't very computationally efficient
+    but mostly it didnt look good with the pink ;-) depth testing is a built-in
+    optimisation that you should use for most things except when they really
+    need to be transparent */
+   // gl.enable(gl.BLEND);
+   // gl.disable(gl.DEPTH_TEST);
+   
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
-    gl.disable(gl.DEPTH_TEST);
     
     gl.useProgram (wall_shader);
 	
