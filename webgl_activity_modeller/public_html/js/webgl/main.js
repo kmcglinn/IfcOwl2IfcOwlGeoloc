@@ -150,8 +150,10 @@ var blur_phong_texture_loc;
  */
 var can_create_zone = false; //This must be set to true to draw a new zone.
 var can_select_zone = false; //This is set when 
+var can_select_path = false;
 var can_create_path = false; //This is set to true when a zone has been selected and the key (c) has been pressed
 var zone_selected = false; //this is set to true when a zone has been selected (pressing xand clicking)
+var path_selected = false;
 var path_connected = false; //this is set when a path is being created and the mouse goes over an existing path so that it selects the zones origin.
 var can_save_path = false; //this is set when the path is connected to a zone aso that you san save the path
 var can_view_path_id = false; //This is so that the current path id div is displayed on the page. 
@@ -169,10 +171,11 @@ var current_activity_zone = new Zone('Activity', 0, 0,0,0,  0,0,0); //Create an 
 zone_activity_array.push(current_activity_zone); //The first object in the array stores a reference to the (current) zone which is currently being drawn.
 
 var current_path_node_array = new Array();
+var current_path_node = new PathNode();
 var path_node_array = new Array();
 
 var previous_path_node = new PathNode();
-var current_path_node = new PathNode();
+
 
 /*
  * 
@@ -214,7 +217,7 @@ Zone.prototype.getInfo = function(){
 }
 function PathNode(id, p1X, p1Y, p1Z, has_activity_node_id){
     
-    this.id = id;
+    this.path_id = id;
     this.p1X = p1X;
     this.p1Y = p1Y;
     this.p1Z = p1Z;

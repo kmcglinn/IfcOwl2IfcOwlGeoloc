@@ -46,7 +46,7 @@ function toggleVisibility(divid) {
         document.getElementById("zone_viewer_div").style.display = "block";
         document.getElementById("forum_image").style.display = "none";
         document.getElementById("webg-size-radio").style.display = "block";
-        document.getElementById("path_viewer_div").style.display = "none";
+        document.getElementById("path_viewer_div").style.display = "block";
         if(can_view_path_id===true)
         {
             document.getElementById("path_viewer_div").style.display = "block";
@@ -89,10 +89,10 @@ function set_zone_form_values(){
     document.forms["zone_form"]["zone_z2"].value = current_activity_zone.p2Z;
     if(can_view_path_id===true)
     {
-        document.forms["path_form"]["path_id_name"].value = current_path_node_array[0].id;
+        document.forms["path_form"]["path_id_name"].value = current_path_node_array[0].path_id;
     }
     
-    document.forms["path_form"]["path_entrance_id_form"].value = current_activity_zone.id;
+    document.forms["path_form"]["path_entrance_id_form"].value = path_entry_id;
     document.forms["path_form"]["path_exit_id_form"].value = path_exit_id;  
     
 }

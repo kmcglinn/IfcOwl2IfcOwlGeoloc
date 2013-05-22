@@ -2,7 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-var path_exit_id = "undefined";
+var path_exit_id = "";
+var path_entry_id = "";
 function update () {
 	// timer
 	var time = (new Date).getTime ();
@@ -61,6 +62,7 @@ function update () {
             if (currentlyPressedKeys[88] === true) // x
             { 
                     can_select_zone = true;
+                    can_select_path = true;
 //                    console.log("SIZE OF ZONE ARRAY: " + zone_activity_array.length);
 //                    console.log("ARRAY[0] ID: " + zone_activity_array[0].id);
 //                    console.log("ARRAY[1] ID: " + zone_activity_array[1].id);
@@ -76,18 +78,20 @@ function update () {
                     path_node_array.push(current_path_node_array);
                     
                 }
+                
                 if(zone_selected === true)
                 {
                     can_create_path = true;
                     path_exit_id = "undefined";
+                    path_entry_id = current_activity_zone.id;
 //                    console.log("SETTING FIRST NODE AS ORIGIN OF ZONE");
                     previous_path_node = new PathNode();
                     previous_path_node.p1X = midpoint(current_activity_zone.p1X, current_activity_zone.p2X);
                     previous_path_node.p1Y = midpoint(current_activity_zone.p1Y, current_activity_zone.p2Y);
                     previous_path_node.p1Z = midpoint(current_activity_zone.p1Z, current_activity_zone.p2Z);
                     previous_path_node.has_activity_node_id = current_activity_zone.id;
-                    previous_path_node.id = create_simple_guid();                  
-                    document.getElementById("path_viewer_div").style.display = "block";
+                    previous_path_node.path_id = create_simple_guid();                  
+                    //document.getElementById("path_viewer_div").style.display = "block";
                     if(current_path_node_array.length===0)
                     {
                         console.log("PATH NODE ARRAY WAS EMPTY");
@@ -213,6 +217,8 @@ function update () {
 
                             path_connected = true;
                             can_save_path = true;
+                            can_select_zone = false;
+                            zone_selected = false;
                             //console.log(path_connected);
                             apos = i;
 
@@ -225,6 +231,8 @@ function update () {
                         current_path_node.p1X = intersection_point_wor_x;
                         current_path_node.p1Y = intersection_point_wor_y;
                         current_path_node.p1Z = intersection_point_wor_z;
+                        current_path_node.path_id = create_simple_guid();
+                        
                         can_save_path = false;
 //                        if(path_node_array)
 //                        {
@@ -238,8 +246,12 @@ function update () {
                         current_path_node.p1X = midpoint(zone_activity_array[apos].p1X, zone_activity_array[apos].p2X);
                         current_path_node.p1Y = midpoint(zone_activity_array[apos].p1Y, zone_activity_array[apos].p2Y);
                         current_path_node.p1Z = midpoint(zone_activity_array[apos].p1Z, zone_activity_array[apos].p2Z);
+                        current_path_node.path_id = create_simple_guid(); //
+                        //current_path_node.has_activity_node_id = zone_activity_array[apos].id;
+                        //
                         path_exit_id = zone_activity_array[apos].id;
                         path_connected = false;
+                        
                         
                             
                         //console.log(path_connected);

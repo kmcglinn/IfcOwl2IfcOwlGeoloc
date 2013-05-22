@@ -3,6 +3,21 @@
  * and open the template in the editor.
  */
 
+function PathNode(id, p1X, p1Y, p1Z, has_activity_node_id){
+    
+    this.path_id = id;
+    this.p1X = p1X;
+    this.p1Y = p1Y;
+    this.p1Z = p1Z;
+    this.has_activity_node_id = has_activity_node_id;
+        
+}
+
+PathNode.prototype.getInfo = function(){
+    
+        return 'Zone type: ' + this.type + '. Zone id: ' + this.id + 'Position 1 x, y, z: ' + this.p1X + ' : ' + this.p1Y + ' : ' + this.p1Z ;
+        
+}
 
 function init_paths() {
     
@@ -17,12 +32,14 @@ function save_path()
     var r=confirm("Do you wish to save this path?");
     if (r==true)
     {
-        can_view_path_id = false;;
-        sparql_update_path(); //currently does nothing
-        var temp_path_node_array = new Array();
-        temp_path_node_array = current_path_node_array;
+        can_view_path_id = false; //once a path is saved, deselect all paths (so can_view_path_id is set to false)
+        sparql_save_path(); //saves path to ontology
+        var temp_path_node_array = new Array(); //create new array (so copy is not by reference)
+        current_path_node_array[current_path_node_array.length-1].has_activity_node_id = document.getElementById("path_exit_id_form").value; //set the last node in the array with the end activity zone id
+        alert(current_path_node_array[current_path_node_array.length-1].has_activity_node_id);
+        temp_path_node_array = current_path_node_array; //copy the current path node array to new array
         
-        path_node_array[path_node_array.length-1] = temp_path_node_array;
+        path_node_array[path_node_array.length-1] = temp_path_node_array; 
 //        current_path_node_array = new Array();
         path_node_array.push(current_path_node_array);
         
@@ -39,7 +56,7 @@ function save_path()
 //        for(var i = 0; i < current_path_node_array; i++)
 //        {
 //            temp_path_node = new PathNode();
-//            temp_path_node.id = current_path_node_array[i].id;
+//            temp_path_node.id = current_path_node_array[i].path_id;
 //            temp_path_node.p1X = current_path_node_array[i].p1X;
 //            temp_path_node.p1Y= current_path_node_array[i].p1Y;
 //            temp_path_node.p1Z = current_path_node_array[i].p1Z;

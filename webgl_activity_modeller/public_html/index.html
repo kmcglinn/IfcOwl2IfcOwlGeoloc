@@ -38,6 +38,7 @@
 <!-- load data objects -->
 <script src="js/objects/zone.js"></script>
 <script src="js/objects/path.js"></script>
+<script src="js/objects/polygon.js"></script>
 
 <!-- draws different objects -->
 <script src="js/draw/drawZones.js"></script>
@@ -152,9 +153,9 @@
                             </script>
                         </div>
                         <div id="path_activity_button_div">
-                            <button onclick="save_path_query()" name="path_activity_save_button_div">Save Path</button>
-                            <button onclick="delete_path()" name="path_activity_delete_button_div">Update Activity Zone</button>
-                            <button onclick="" name="path_activity_add_button_div">Update Activity Zone</button>
+                            <button onclick="sparql_delete_path()" name="path_activity_delete_button_div">Delete Path</button>
+                            <button onclick="sparql_load_path(); query_zones()" name="path_activity_save_button_div">Load Path</button>
+                            <button onclick="" name="path_activity_add_button_div">Add Path to Activity</button>
                         </div>
                     </form>
 

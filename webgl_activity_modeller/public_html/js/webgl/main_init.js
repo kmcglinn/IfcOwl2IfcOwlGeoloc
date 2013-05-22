@@ -216,7 +216,7 @@ function init () {
                 //alert("Mouse down...MOUSE DOWN!")
                 
 		// if mouse held don't keep restarting this
-                if(can_select_zone){
+                if(can_select_zone||can_select_path){
                     
                     get_mouse_coords(event);
 
@@ -247,7 +247,58 @@ function init () {
                             //alert('zone_deselected()');
                         }
                     }
+                    console.log("LENGTH: " + path_node_array.length);
+                    for(var i = 0; i<path_node_array.length;i++)
+                    {
+//                        console.log("LENGTH: " + path_node_array[i].length);
+                        for(var j = 0; j<path_node_array[i].length-2;j++)
+                        {
+                        
+                            var polygon = new Polygon();
+                            var point = new Point(path_node_array[i][j].p1X, path_node_array[i][j].p1Y-1);
+                            polygon.add(point);
+                            var point = new Point(path_node_array[i][j].p1X, path_node_array[i][j].p1Y+1);
+                            polygon.add(point);
+                            var point = new Point(path_node_array[i][j+1].p1X, path_node_array[i][j+1].p1Y+1);
+                            polygon.add(point);
+                            var point = new Point(path_node_array[i][j+1].p1X, path_node_array[i][j+1].p1Y-1);
+                            polygon.add(point);
+                            point = new Point(intersection_point_wor_x, intersection_point_wor_y);
+//                            console.log(point.x);
+//                            console.log(polygon.points.length);
+//                            console.log("POS: " + j);
+//                            console.log(path_node_array[i][j].id);
+//                            console.log(path_node_array[i][j].p1X);
+//                            console.log(path_node_array[i][j].p1Y);
+//                            console.log(path_node_array[i][j+1].id);
+//                            console.log(path_node_array[i][j+1].p1X);
+//                            console.log(path_node_array[i][j+1].p1Y);
+                            //console.log(current_path_node_array.id);
+                            
+                            if((polygon.pointInPoly(point)))
+                            {
+                                if(current_path_node_array.length===0)
+                                {
+                                    console.log('Path Selected!!!');
+                                    current_path_node_array = path_node_array[i];
+                                    path_selected = true;
+                                    can_view_path_id = true;
+                                }
+                                else if(current_path_node_array[0].path_id!==path_node_array[i][0].path_id)
+                                {
+                                    console.log('Path Selected 222!!!');
+                                    current_path_node_array = path_node_array[i];
+                                    path_selected = true;
+                                    can_view_path_id = true;
+                                }
 
+                            } 
+                            else                     
+                            {
+//                                console.log('No Path Selected!!!');
+                            }
+                        }
+                    }
                 }
                 if(can_create_zone){
                     
@@ -364,7 +415,7 @@ function init () {
                 {
                     get_mouse_coords(event);
                     get_mouse_ray_wor (mouse_x, mouse_y);
-                    current_path_node_array[current_path_node_array.length-1] = new PathNode(current_path_node.id, current_path_node.p1X, current_path_node.p1Y, current_path_node.p1Z);                   
+                    current_path_node_array[current_path_node_array.length-1] = new PathNode(current_path_node.path_id, current_path_node.p1X, current_path_node.p1Y, current_path_node.p1Z);                   
                     current_path_node_array.push(current_path_node);
                     console.log("CURRENT PATH NODE ARRAY LENGTH" + current_path_node_array.length);
 
@@ -373,7 +424,7 @@ function init () {
                 {         
                     //state_booleans();
                     //alert(currentlyPressedKeys[67]);
-                    current_path_node_array[current_path_node_array.length-1] = new PathNode(current_path_node.id, current_path_node.p1X, current_path_node.p1Y, current_path_node.p1Z);
+                    current_path_node_array[current_path_node_array.length-1] = new PathNode(current_path_node.path_id, current_path_node.p1X, current_path_node.p1Y, current_path_node.p1Z);
                     save_path();
                     //can_create_path = false;
                     

@@ -205,7 +205,7 @@ function delete_zone_sparql(zone_id){
     query = "DELETE WHERE{"+
         "?zone  <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#Zone>;"+
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasGuid> \""+zone_id+"\"."+
-       "}"   
+       "}";  
     
     var result_object = sparql_update (query);
     console.log(JSON.stringify(result_object));
@@ -213,7 +213,7 @@ function delete_zone_sparql(zone_id){
     query = "DELETE WHERE{"+
         "?zone  <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#Volume>;"+
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasGuid> \"Volume"+zone_id+"\"."+
-    "}"   
+    "}";
     
     result_object = sparql_update (query);
     console.log(JSON.stringify(result_object));
