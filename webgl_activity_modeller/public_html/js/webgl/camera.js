@@ -54,10 +54,13 @@ function Camera (fov_deg, aspect, nearClip, farClip, wc_pos, direction) {
 //		pos[1] = wc_dist * this.mDirection[1] + this.mWC_Pos[1];
 //		pos[2] = wc_dist * this.mDirection[2] + this.mWC_Pos[2];
 		//alert("new pos: " + pos[0] + ", " + pos[1] + ", " + pos[2])
-		pos[0] = -wc_dist[2] * this.m_forward[0] + this.mWC_Pos[0];
-		pos[1] = -wc_dist[2] * this.m_forward[1] + this.mWC_Pos[1];
-		pos[2] = -wc_dist[2] * this.m_forward[2] + this.mWC_Pos[2];
-		console.log (this.mWC_Pos);
+		
+		/* mod so only uses x and z but not y components of fwd vector */
+		var dir = normalise_vec3 ([this.m_forward[0], 0.0, this.m_forward[2]]);
+		
+		pos[0] = -wc_dist[2] * dir[0] + this.mWC_Pos[0];
+		pos[1] = this.mWC_Pos[1]; //-wc_dist[2] * this.m_forward[1] + this.mWC_Pos[1];
+		pos[2] = -wc_dist[2] * dir[2] + this.mWC_Pos[2];
 		this.setPos (pos);
 	}
 	
