@@ -159,6 +159,7 @@ var can_save_path = false; //this is set when the path is connected to a zone as
 var can_view_path_id = false; //This is so that the current path id div is displayed on the page. 
 var entrance_set = false;
 var exit_set = false;
+var set_start_path_id = false;
 
 var g_zone_is_being_built = false; //
 var zone_points = new Array(); //stores all the vertices of the zones

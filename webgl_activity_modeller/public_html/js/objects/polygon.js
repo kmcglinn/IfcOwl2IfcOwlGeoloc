@@ -31,7 +31,7 @@ function Polygon(){
         if (p.x < this.x_min || p.x > this.x_max || p.y < this.y_min || p.y > this.y_max){
             return false;
         }
-        console.log(this.points.length);
+//        console.log(this.points.length);
         //if necessary use the line crossing algorithm
         for(var i=0; i<this.points.length; i++)
         {

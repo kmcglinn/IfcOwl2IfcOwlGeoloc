@@ -22,7 +22,7 @@ function init () {
 	gl.enable (gl.CULL_FACE); // enable culling
 	gl.blendFunc (gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); // 1 minus alpha is what we want
 	
-	gl.clearColor (0.0, 0.0, 0.0, 1.0);
+	gl.clearColor (1.0, 1.0, 1.0, 1.0);
 	
 	camera_pos = [-49.44, 35.60, 55.52];
 	g_cam = new Camera (45.0, g_canvas.width / g_canvas.height, 0.1, 100.0, camera_pos, [0, -2, -1]);
@@ -247,7 +247,7 @@ function init () {
                             //alert('zone_deselected()');
                         }
                     }
-                    console.log("LENGTH: " + path_node_array.length);
+//                    console.log("LENGTH: " + path_node_array.length);
                     for(var i = 0; i<path_node_array.length;i++)
                     {
 //                        console.log("LENGTH: " + path_node_array[i].length);
@@ -255,13 +255,13 @@ function init () {
                         {
                         
                             var polygon = new Polygon();
-                            var point = new Point(path_node_array[i][j].p1X, path_node_array[i][j].p1Y-1);
+                            var point = new Point(path_node_array[i][j].p1X, path_node_array[i][j].p1Y-2);
                             polygon.add(point);
-                            var point = new Point(path_node_array[i][j].p1X, path_node_array[i][j].p1Y+1);
+                            var point = new Point(path_node_array[i][j].p1X, path_node_array[i][j].p1Y+2);
                             polygon.add(point);
-                            var point = new Point(path_node_array[i][j+1].p1X, path_node_array[i][j+1].p1Y+1);
+                            var point = new Point(path_node_array[i][j+1].p1X, path_node_array[i][j+1].p1Y+2);
                             polygon.add(point);
-                            var point = new Point(path_node_array[i][j+1].p1X, path_node_array[i][j+1].p1Y-1);
+                            var point = new Point(path_node_array[i][j+1].p1X, path_node_array[i][j+1].p1Y-2);
                             polygon.add(point);
                             point = new Point(intersection_point_wor_x, intersection_point_wor_y);
 //                            console.log(point.x);

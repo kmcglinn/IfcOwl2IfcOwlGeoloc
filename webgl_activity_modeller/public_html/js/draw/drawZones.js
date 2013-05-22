@@ -8,10 +8,10 @@ function populate_path_node_points(){
     var path_width = 1.0;
 
     path_node_points = new Array();
-    //console.log(path_node_array.length);
+    console.log("path_node_array length is: " + path_node_array.length);
     //var array_length = 0;
     for(var j = 0;  j< path_node_array.length; j++){
-        //console.log("path_node_array at position: " + j + " has length: "+ path_node_array[j].length);
+        console.log("path_node_array at position: " + j + " has length: "+ path_node_array[j].length);
         for(var i = 0;  i< (path_node_array[j].length - 1)*18; i=i+18){
             p_n_count = i/18;
             // a
@@ -97,7 +97,7 @@ function draw_activity_zones(){
     
         gl.enable(gl.BLEND);
         
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+//        gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
         
             gl.disable(gl.DEPTH_TEST);
             gl.useProgram (zone_shader);
@@ -138,7 +138,7 @@ function draw_path(){
 
         gl.enable(gl.BLEND);
 
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+//        gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
 
             gl.disable(gl.DEPTH_TEST);
 
@@ -174,7 +174,7 @@ function draw_floor(){
 
         gl.enable(gl.BLEND);
 
-        gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+//        gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
 
             gl.disable(gl.DEPTH_TEST);
         
@@ -209,7 +209,7 @@ function draw_walls(){
      - call this somewhere in init() to set your background colour or it will
      default to black
     */
-    gl.clearColor (1.0, 0.0, 0.5, 1.0);
+//    gl.clearColor (1.0, 0.0, 0.5, 1.0);
 
     /* ANTON ADDED THIS - you need to clear the buffer between drawing
     passes that was why it was flickering/not displaying

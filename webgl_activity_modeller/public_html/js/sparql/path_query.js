@@ -36,7 +36,7 @@ function sparql_save_path(){
 //    console.log(JSON.stringify(result_object));
     
     for(var i = 1; i<current_path_node_array.length-1; i++){
-        console.log(current_path_node_array.length);
+//        console.log(current_path_node_array.length);
         query = "INSERT DATA{ <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathNode"+current_path_node_array[i].path_id+">"+
             "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>" +
             "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathNode>; "+
@@ -70,7 +70,7 @@ function sparql_save_path(){
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#isEndPath>\"true\"; "+
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasGuid> \"" + current_path_node_array[current_path_node_array.length-1].path_id +"\";"+        
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasNextPath> <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathEnd>;"+
-        "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasPlacement> <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#Placement" + current_path_node_array[current_path_node_array.length-1].id +">;"+      
+        "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasPlacement> <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#Placement" + current_path_node_array[current_path_node_array.length-1].path_id +">;"+      
         "}";
 
 //    console.log(query);
@@ -137,7 +137,7 @@ function sparql_load_path(){
             current_path_node_array.push(current_path_node);
             count++;
             next_path_id = result_object.results.bindings[i].next_path_id.value;
-            //console.log("NEXT PATH: "+ result_object.results.bindings[i].hasNextPath.value);
+            
             if(next_path_id==="pathEnd"){
                 
                 bool = false;           
@@ -171,11 +171,11 @@ function sparql_load_path(){
                 count++;
                 current_path_node_array.push(current_path_node);
                 next_path_id = result_object_2.results.bindings[0].next_path_id.value;
-            
-                if(result_object_2.results.bindings[0].hasNextPath.value==="http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathEnd"){
-                
-                    bool = false;
-                
+                console.log("NEXT PATH ID: "+ next_path_id);
+                if(next_path_id==="pathEnd"){
+
+                    bool = false;           
+
                 }
                 
             }
@@ -200,16 +200,26 @@ function sparql_load_path(){
     }
     //Throwing in this code to make sure everything is reset (Needs to be cleaned up!!!)
     console.log("RESETING PATHS NODE ARRAYS");
-    path_connected = false;
-    can_create_path = false;
-    can_save_path = false;
-    zone_selected = false;
+    can_create_zone = false; //This must be set to true to draw a new zone.
+    can_select_zone = false; //This is set when 
+    can_select_path = false;
+    can_create_path = false; //This is set to true when a zone has been selected and the key (c) has been pressed
+    zone_selected = false; //this is set to true when a zone has been selected (pressing xand clicking)
     path_selected = false;
+    path_connected = false; //this is set when a path is being created and the mouse goes over an existing path so that it selects the zones origin.
+    can_save_path = false; //this is set when the path is connected to a zone aso that you san save the path
+    can_view_path_id = false; //This is so that the current path id div is displayed on the page. 
+    entrance_set = false;
+    exit_set = false;
+    set_start_path_id = false;
+
+    g_zone_is_being_built = false; //
+
     current_path_node_array = new Array();
     previous_path_node = new PathNode();
     current_path_node = new PathNode();
     currentlyPressedKeys[67] = false;
-    can_view_path_id = false;
+
     
 }
 /*Have to consider
@@ -245,7 +255,7 @@ function sparql_delete_path(){
         return; //End function
     }//END OF IF
     
-    var path_id = current_path_node_array[0].id;
+    var path_id = document.getElementById("path_id_form").value;// Not a great way to do this! current_path_node_array[0].path_id;
     
     var query = "SELECT ?path_id ?x1 ?y1 ?z1 ?hasNextPath ?next_path_id"+
         " WHERE{"+

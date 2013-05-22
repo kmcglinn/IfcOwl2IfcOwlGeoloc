@@ -36,9 +36,9 @@ function save_path()
         sparql_save_path(); //saves path to ontology
         var temp_path_node_array = new Array(); //create new array (so copy is not by reference)
         current_path_node_array[current_path_node_array.length-1].has_activity_node_id = document.getElementById("path_exit_id_form").value; //set the last node in the array with the end activity zone id
-        alert(current_path_node_array[current_path_node_array.length-1].has_activity_node_id);
+//        alert(current_path_node_array[current_path_node_array.length-1].has_activity_node_id);
         temp_path_node_array = current_path_node_array; //copy the current path node array to new array
-        
+        set_start_path_id = false;
         path_node_array[path_node_array.length-1] = temp_path_node_array; 
 //        current_path_node_array = new Array();
         path_node_array.push(current_path_node_array);

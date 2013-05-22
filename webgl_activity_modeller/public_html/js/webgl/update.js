@@ -70,6 +70,7 @@ function update () {
             else 
             {
                 can_select_zone = false;
+                can_select_path = false;
             }
             if (currentlyPressedKeys[67] === true) //c
             { 
@@ -83,8 +84,12 @@ function update () {
                 {
                     can_create_path = true;
                     path_exit_id = "undefined";
-                    path_entry_id = current_activity_zone.id;
-//                    console.log("SETTING FIRST NODE AS ORIGIN OF ZONE");
+                    if(set_start_path_id===false)
+                    {
+                        path_entry_id = current_activity_zone.id;
+                        set_start_path_id = true;
+                    }
+                    console.log("SETTING FIRST NODE AS ORIGIN OF ZONE current_path_node_array LENGTH: " + current_path_node_array.length);
                     previous_path_node = new PathNode();
                     previous_path_node.p1X = midpoint(current_activity_zone.p1X, current_activity_zone.p2X);
                     previous_path_node.p1Y = midpoint(current_activity_zone.p1Y, current_activity_zone.p2Y);
@@ -97,8 +102,8 @@ function update () {
                         console.log("PATH NODE ARRAY WAS EMPTY");
                         current_path_node_array.push(previous_path_node); //pointer to previous_path_node storing midpoint of first activity zone
                         current_path_node_array.push(current_path_node); //pointer to current_path_node which is updated below
-//                        console.log("current_path_node_array LENGTH: " + current_path_node_array.length);
-//                        console.log("current_path_node_array[0].id: " + current_path_node_array[0].id);
+                        console.log("current_path_node_array LENGTH: " + current_path_node_array.length);
+                        console.log("current_path_node_array[0].id: " + current_path_node_array[0].id);
                         
                         can_view_path_id = true;
                     }
@@ -217,8 +222,8 @@ function update () {
 
                             path_connected = true;
                             can_save_path = true;
-                            can_select_zone = false;
-                            zone_selected = false;
+//                            can_select_zone = false;
+//                            zone_selected = false;
                             //console.log(path_connected);
                             apos = i;
 
