@@ -304,6 +304,9 @@ function render_gui () {
   // only one texture is used, so just activate the zeroeth texture slot
   gl.activeTexture (gl.TEXTURE0);
   
+  gl.enableVertexAttribArray (g_panel_sp_vp_loc);
+  gl.enableVertexAttribArray (g_panel_sp_vt_loc);
+  
   // first panel (rotation in bottom-right)
   var mat = transpose_mat4 (translate_mat4 (
   	identity_mat4 (),
@@ -350,6 +353,9 @@ function render_gui () {
   gl.uniformMatrix4fv (g_panel_sp_model_mat_loc, false, mat);
   gl.bindTexture (gl.TEXTURE_2D, cam_gui_texd);
   gl.drawArrays (gl.TRIANGLES, 0, 6);
+  
+  gl.disableVertexAttribArray (g_panel_sp_vp_loc);
+  gl.disableVertexAttribArray (g_panel_sp_vt_loc);
   
   // set blending and depth testing back to sensible default values
   gl.disable (gl.BLEND);
