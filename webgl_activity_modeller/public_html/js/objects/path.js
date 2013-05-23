@@ -52,8 +52,9 @@ function save_path()
         first_path_node = new PathNode();
         current_path_node = new PathNode();
         currentlyPressedKeys[67] = false;
-        sparql_load_path();
-        sparql_load_path();
+        path_finished = false;
+        sparql_load_path(false);
+        sparql_load_path(false);
 //        for(var i = 0; i < current_path_node_array; i++)
 //        {
 //            temp_path_node = new PathNode();
@@ -75,8 +76,8 @@ function save_path()
         first_path_node = new PathNode();
         current_path_node = new PathNode();//return; //End function
         currentlyPressedKeys[67] = false;
-        sparql_load_path();
-        sparql_load_path();
+        sparql_load_path(false);
+        sparql_load_path(false);
     }//END OF ELSE
 //    state_booleans();
 }

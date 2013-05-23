@@ -160,6 +160,7 @@ var can_view_path_id = false; //This is so that the current path id div is displ
 var entrance_set = false;
 var exit_set = false;
 var set_start_path_id = false;
+var path_finished = false;
 
 var g_zone_is_being_built = false; //
 var zone_points = new Array(); //stores all the vertices of the zones

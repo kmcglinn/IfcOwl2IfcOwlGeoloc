@@ -93,13 +93,16 @@ function sparql_save_path(){
 }
 
 
-function sparql_load_path(){
+function sparql_load_path(prompt){
 
-    var r=confirm("Warning: If you click OK to load paths, all unsaved paths will be lost");
-    if (r===false)
+    if(prompt===true)
     {
-        return;
-    }//END OF IF
+        var r=confirm("Warning: If you click OK to load paths, all unsaved paths will be lost");
+        if (r===false)
+        {
+            return;
+        }//END OF IF
+    }
 
     var bool = true;
     path_node_array = new Array();
@@ -212,13 +215,11 @@ function sparql_load_path(){
     entrance_set = false;
     exit_set = false;
     set_start_path_id = false;
-
     g_zone_is_being_built = false; //
-
     current_path_node_array = new Array();
     first_path_node = new PathNode();
     current_path_node = new PathNode();
-    currentlyPressedKeys[67] = false;
+    //currentlyPressedKeys[67] = false;
 
     
 }
@@ -305,7 +306,7 @@ function sparql_delete_path(){
 
     }
     
-    sparql_load_path();
-    sparql_load_path();
+    sparql_load_path(false);
+    sparql_load_path(false);
 
 }//END OF FUNCTION

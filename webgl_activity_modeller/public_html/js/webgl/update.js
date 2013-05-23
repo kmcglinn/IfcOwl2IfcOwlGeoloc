@@ -74,6 +74,10 @@ function update () {
             }
             if (currentlyPressedKeys[67] === true) //c
             { 
+//                current_path_node_array = new PathNode();
+//                path_selected = false;
+//                can_view_path_id = false;
+//                
                 if(path_node_array.length===0)
                 {
                     console.log("PATH NODE ARRAY IS EMPTY. PUSHING CURRENT PATHNODE ARRAY ON PATHNODE ARRAY");
@@ -81,7 +85,7 @@ function update () {
                     
                 }
                 
-                if(zone_selected === true)
+                if((zone_selected === true)&&path_selected!==true)
                 {
                     console.log("SETTING CAN_CREATE_PATH to TRUE");
                     can_create_path = true;

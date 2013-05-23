@@ -240,6 +240,9 @@ function init () {
                             //alert('zone_selected()');
                             current_activity_zone = zone_activity_array[i];
                             zone_selected = true;
+                            current_path_node_array = new Array();
+                            path_selected = false;
+                            can_view_path_id = false;
     
                         } 
                         else                     
@@ -277,20 +280,23 @@ function init () {
                             
                             if((polygon.pointInPoly(point)))
                             {
+                                console.log(current_path_node_array.length);
                                 if(current_path_node_array.length===0)
                                 {
-                                    console.log('Path Selected!!!');
+//                                    console.log('Path Selected!!!');
                                     current_path_node_array = path_node_array[i];
                                     path_selected = true;
                                     can_view_path_id = true;
                                 }
                                 else if(current_path_node_array[0].path_id!==path_node_array[i][0].path_id)
                                 {
-                                    console.log('Path Selected 222!!!');
+//                                    console.log('Path Selected !!');
                                     current_path_node_array = path_node_array[i];
                                     path_selected = true;
                                     can_view_path_id = true;
                                 }
+                                current_activity_zone = new Array();
+                                zone_selected = false;
 
                             } 
                             else                     

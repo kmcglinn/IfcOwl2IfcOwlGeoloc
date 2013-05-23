@@ -35,7 +35,7 @@ function create_guid() {
          s4() + '' + s4() + s4() + s4();
 }
 function create_simple_guid() {
-  return s4() + s4();
+  return s4() + s4() + s4();
 }
 function midpoint(p1, p2)
 {
