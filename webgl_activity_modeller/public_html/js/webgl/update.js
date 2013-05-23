@@ -76,35 +76,43 @@ function update () {
             { 
                 if(path_node_array.length===0)
                 {
+                    console.log("PATH NODE ARRAY IS EMPTY. PUSHING CURRENT PATHNODE ARRAY ON PATHNODE ARRAY");
                     path_node_array.push(current_path_node_array);
                     
                 }
                 
                 if(zone_selected === true)
                 {
+                    console.log("SETTING CAN_CREATE_PATH to TRUE");
                     can_create_path = true;
+                    console.log("SETTING PATH_EXIT_ID to FALSE");
                     path_exit_id = "undefined";
+                    
                     if(set_start_path_id===false)
                     {
+                        console.log("SET_START_PATH_ID is FALSE, SETTING to TRUE, SETTING PATH_ENTRY_ID to CURRENT_ACTIVITY_ZONE.ID");
                         path_entry_id = current_activity_zone.id;
                         set_start_path_id = true;
                     }
+                    
                     console.log("SETTING FIRST NODE AS ORIGIN OF ZONE current_path_node_array LENGTH: " + current_path_node_array.length);
-                    previous_path_node = new PathNode();
-                    previous_path_node.p1X = midpoint(current_activity_zone.p1X, current_activity_zone.p2X);
-                    previous_path_node.p1Y = midpoint(current_activity_zone.p1Y, current_activity_zone.p2Y);
-                    previous_path_node.p1Z = midpoint(current_activity_zone.p1Z, current_activity_zone.p2Z);
-                    previous_path_node.has_activity_node_id = current_activity_zone.id;
-                    previous_path_node.path_id = create_simple_guid();                  
-                    //document.getElementById("path_viewer_div").style.display = "block";
+                    
+                    first_path_node = new PathNode();
+                    first_path_node.p1X = midpoint(current_activity_zone.p1X, current_activity_zone.p2X);
+                    first_path_node.p1Y = midpoint(current_activity_zone.p1Y, current_activity_zone.p2Y);
+                    first_path_node.p1Z = midpoint(current_activity_zone.p1Z, current_activity_zone.p2Z);
+                    first_path_node.has_activity_node_id = current_activity_zone.id;
+                    first_path_node.path_id = create_simple_guid();
+                    
                     if(current_path_node_array.length===0)
                     {
-                        console.log("PATH NODE ARRAY WAS EMPTY");
-                        current_path_node_array.push(previous_path_node); //pointer to previous_path_node storing midpoint of first activity zone
+                        console.log("CURRENT_PATH_NODE_ARRAY was EMPTY");
+                        current_path_node_array.push(first_path_node); //pointer to first_path_node storing midpoint of first activity zone
                         current_path_node_array.push(current_path_node); //pointer to current_path_node which is updated below
                         console.log("current_path_node_array LENGTH: " + current_path_node_array.length);
                         console.log("current_path_node_array[0].id: " + current_path_node_array[0].id);
                         
+                        console.log("SETTING CAN_VIEW_PATH_ID to TRUE");
                         can_view_path_id = true;
                     }
                 }

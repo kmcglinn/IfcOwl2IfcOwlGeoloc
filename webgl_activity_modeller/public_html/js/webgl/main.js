@@ -175,7 +175,7 @@ var current_path_node_array = new Array();
 var current_path_node = new PathNode();
 var path_node_array = new Array();
 
-var previous_path_node = new PathNode();
+var first_path_node = new PathNode();
 
 
 /*

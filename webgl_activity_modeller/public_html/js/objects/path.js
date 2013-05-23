@@ -49,10 +49,11 @@ function save_path()
         can_save_path = false;
         zone_selected = false;
         current_path_node_array = new Array();
-        previous_path_node = new PathNode();
+        first_path_node = new PathNode();
         current_path_node = new PathNode();
         currentlyPressedKeys[67] = false;
-        
+        sparql_load_path();
+        sparql_load_path();
 //        for(var i = 0; i < current_path_node_array; i++)
 //        {
 //            temp_path_node = new PathNode();
@@ -71,9 +72,11 @@ function save_path()
         can_save_path = false;
         zone_selected = false;
         current_path_node_array = new Array();
-        previous_path_node = new PathNode();
+        first_path_node = new PathNode();
         current_path_node = new PathNode();//return; //End function
         currentlyPressedKeys[67] = false;
+        sparql_load_path();
+        sparql_load_path();
     }//END OF ELSE
 //    state_booleans();
 }

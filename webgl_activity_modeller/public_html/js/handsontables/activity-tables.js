@@ -1133,7 +1133,7 @@ $(function () {
                     //console.log(pos3[i]);
                     if((activity_day[i]===true)&&(entrance_set===true))
                     {
-                        pos3[i] = document.getElementById('path_entrance_id_form').value;//previous_path_node.id;    
+                        pos3[i] = document.getElementById('path_entrance_id_form').value;//first_path_node.id;    
                         pos4[i] = document.getElementById('path_id_form').value;
                         console.log(pos3[i]);
                         console.log(pos4[i]);
@@ -1158,7 +1158,7 @@ $(function () {
                     //console.log(pos3[i]);
                     if((activity_day[i]===true)&&(exit_set===true))
                     {
-                        pos5[i] = document.getElementById('path_entrance_id_form').value;//previous_path_node.id;    
+                        pos5[i] = document.getElementById('path_entrance_id_form').value;//first_path_node.id;    
                         pos6[i] = document.getElementById('path_id_form').value;
                         console.log(pos5[i]);
                         console.log(pos6[i]);
@@ -1253,7 +1253,7 @@ $(function () {
 //            {
 //                if((activity_day===1)&&(entrance_set===true))                       
 //                {
-//                    pos13 = previous_path_node.id;
+//                    pos13 = first_path_node.id;
 //                }
 //                else if((activity_day===1)&&(entrance_set===false))    
 //                {
@@ -1262,7 +1262,7 @@ $(function () {
 //                }
 //                if((activity_day===2)&&(entrance_set===true))                       
 //                {
-//                    pos23 = previous_path_node.id;
+//                    pos23 = first_path_node.id;
 //                }
 //                else if((activity_day===2)&&(entrance_set===false))    
 //                {
@@ -1271,7 +1271,7 @@ $(function () {
 //                }
 //                if((activity_day===3)&&(entrance_set===true))                       
 //                {
-//                    pos33 = previous_path_node.id;
+//                    pos33 = first_path_node.id;
 //                }
 //                else if((activity_day===3)&&(entrance_set===false))    
 //                {
@@ -1280,7 +1280,7 @@ $(function () {
 //                }
 //                if((activity_day===4)&&(entrance_set===true))                       
 //                {
-//                    pos43 = previous_path_node.id;
+//                    pos43 = first_path_node.id;
 //                }
 //                else if((activity_day===4)&&(entrance_set===false))    
 //                {
@@ -1289,7 +1289,7 @@ $(function () {
 //                }
 //                if((activity_day===5)&&(entrance_set===true))                       
 //                {
-//                    pos53 = previous_path_node.id;
+//                    pos53 = first_path_node.id;
 //                }
 //                else if((activity_day===5)&&(entrance_set===false))    
 //                {
@@ -1298,7 +1298,7 @@ $(function () {
 //                }
 //                if((activity_day===6)&&(entrance_set===true))                       
 //                {
-//                    pos63 = previous_path_node.id;
+//                    pos63 = first_path_node.id;
 //                }
 //                else if((activity_day===6)&&(entrance_set===false))    
 //                {
@@ -1307,7 +1307,7 @@ $(function () {
 //                }
 //                if((activity_day===7)&&(entrance_set===true))                       
 //                {
-//                    pos73 = previous_path_node.id;
+//                    pos73 = first_path_node.id;
 //                }
 //                else if((activity_day===7)&&(entrance_set===false))    
 //                {
@@ -1348,7 +1348,7 @@ $(function () {
 //                }
 //                if((activity_day===7)&&(entrance_set===true))                           
 //                {
-//                    pos73 = previous_path_node.id;
+//                    pos73 = first_path_node.id;
 //                    pos72 = current_activity_zone.id;
 //                }                         
             
@@ -1366,7 +1366,7 @@ $(function () {
 //            {
 //                pos4 = path_exit_id;
 //                if(current_path_node_array.length===0){
-//                    pos5 = previous_path_node.id;
+//                    pos5 = first_path_node.id;
 //                    
 //                }
 //                else pos5 = current_path_node_array[0].id;

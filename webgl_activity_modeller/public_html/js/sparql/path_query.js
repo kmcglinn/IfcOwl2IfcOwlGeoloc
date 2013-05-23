@@ -103,7 +103,7 @@ function sparql_load_path(){
 
     var bool = true;
     path_node_array = new Array();
-    previous_path_node = new PathNode();
+    first_path_node = new PathNode();
     var next_path_id;
     //current_path_node = new PathNode();
     
@@ -216,7 +216,7 @@ function sparql_load_path(){
     g_zone_is_being_built = false; //
 
     current_path_node_array = new Array();
-    previous_path_node = new PathNode();
+    first_path_node = new PathNode();
     current_path_node = new PathNode();
     currentlyPressedKeys[67] = false;
 
@@ -306,6 +306,6 @@ function sparql_delete_path(){
     }
     
     sparql_load_path();
-
+    sparql_load_path();
 
 }//END OF FUNCTION
