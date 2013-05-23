@@ -352,6 +352,8 @@ function render() {
         
         //g_zone_shader.use (gl);
 	
+	render_gui ();	
+	
 	return true;
 }
 

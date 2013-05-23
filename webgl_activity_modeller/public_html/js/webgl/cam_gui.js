@@ -47,7 +47,7 @@ var g_panel_sp_vt_loc;
 // location of model matrix uniform in shader
 var g_panel_sp_model_mat_loc;
 // textures used for the gui panels
-var texa, texb, texc, texd;
+var cam_gui_texa, cam_gui_texb, cam_gui_texc, cam_gui_texd;
 
 // if the mouse button is held down or has been released
 var g_mouse_down = false;
@@ -135,13 +135,13 @@ function init_gui () {
 		1.0, 1.0,
 		1.0, 1.0,
 		1.0, 0.0,
-		0.0, 0.0,
+		0.0, 0.0
 	];
 	g_med_panel_vp_vbo = create_vbo (med_panel_vp);
 	g_med_panel_vt_vbo = create_vbo (med_panel_vt);
 	
 	// shader
-	g_panel_sp = load_shaders ("shaders/gui_vs.glsl", "shaders/gui_fs.glsl");
+	g_panel_sp = load_shaders ("js/webgl/shaders/gui_vs.glsl", "js/webgl/shaders/gui_fs.glsl");
 	g_panel_sp_vp_loc = gl.getAttribLocation (g_panel_sp, "vp");
 	g_panel_sp_vt_loc = gl.getAttribLocation (g_panel_sp, "vt");
 	g_panel_sp_model_mat_loc = gl.getUniformLocation (g_panel_sp, "model_mat");
@@ -153,33 +153,33 @@ function init_gui () {
 	var imgb = new Image ();
 	var imgc = new Image ();
 	var imgd = new Image ();
-	texa = gl.createTexture ();
-	texb = gl.createTexture ();
-	texc = gl.createTexture ();
-	texd = gl.createTexture ();
+	cam_gui_texa = gl.createTexture ();
+	cam_gui_texb = gl.createTexture ();
+	cam_gui_texc = gl.createTexture ();
+	cam_gui_texd = gl.createTexture ();
 	imga.onload = function () {
-		gl.bindTexture (gl.TEXTURE_2D, texa);
+		gl.bindTexture (gl.TEXTURE_2D, cam_gui_texa);
 		gl.texImage2D (gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imga);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 	}
 	imga.src = "img/rotate_gui.png";
 	imgb.onload = function () {
-		gl.bindTexture (gl.TEXTURE_2D, texb);
+		gl.bindTexture (gl.TEXTURE_2D, cam_gui_texb);
 		gl.texImage2D (gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imgb);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 	}
 	imgb.src = "img/move_gui.png";
 	imgc.onload = function () {
-		gl.bindTexture (gl.TEXTURE_2D, texc);
+		gl.bindTexture (gl.TEXTURE_2D, cam_gui_texc);
 		gl.texImage2D (gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imgc);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 	}
 	imgc.src = "img/height_gui.png";
 	imgd.onload = function () {
-		gl.bindTexture (gl.TEXTURE_2D, texd);
+		gl.bindTexture (gl.TEXTURE_2D, cam_gui_texd);
 		gl.texImage2D (gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imgd);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
@@ -310,7 +310,7 @@ function render_gui () {
   	[1.0 - 128 / g_canvas.width, -1.0 + 128 / g_canvas.height, 0.0]
   ));
   gl.uniformMatrix4fv (g_panel_sp_model_mat_loc, false, mat);
-  gl.bindTexture (gl.TEXTURE_2D, texa);
+  gl.bindTexture (gl.TEXTURE_2D, cam_gui_texa);
   gl.drawArrays (gl.TRIANGLES, 0, 6);
 
   // second panel (movement arrows)
@@ -319,7 +319,7 @@ function render_gui () {
   	[-1.0 + 192 / g_canvas.width, -1.0 + 128 / g_canvas.height, 0.0]
   ));
   gl.uniformMatrix4fv (g_panel_sp_model_mat_loc, false, mat);
-  gl.bindTexture (gl.TEXTURE_2D, texb);
+  gl.bindTexture (gl.TEXTURE_2D, cam_gui_texb);
   gl.drawArrays (gl.TRIANGLES, 0, 6);
   
   // third panel (height slider background)
@@ -331,7 +331,7 @@ function render_gui () {
   	[-1.0 + 32 / g_canvas.width, -1.0 + 256 / g_canvas.height, 0.0]
   ));
   gl.uniformMatrix4fv (g_panel_sp_model_mat_loc, false, mat);
-  gl.bindTexture (gl.TEXTURE_2D, texc);
+  gl.bindTexture (gl.TEXTURE_2D, cam_gui_texc);
   gl.drawArrays (gl.TRIANGLES, 0, 6);
   
   // 4th panel (height slider control knob)
@@ -348,7 +348,7 @@ function render_gui () {
   	]
   ));
   gl.uniformMatrix4fv (g_panel_sp_model_mat_loc, false, mat);
-  gl.bindTexture (gl.TEXTURE_2D, texd);
+  gl.bindTexture (gl.TEXTURE_2D, cam_gui_texd);
   gl.drawArrays (gl.TRIANGLES, 0, 6);
   
   // set blending and depth testing back to sensible default values

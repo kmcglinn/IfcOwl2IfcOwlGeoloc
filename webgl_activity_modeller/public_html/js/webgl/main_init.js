@@ -5,7 +5,6 @@
 
 function init () {
     
-
 //        alert(zone_activity_array[0].getInfo());
 
 	g_canvas = document.getElementById ("gl_canvas");
@@ -23,6 +22,9 @@ function init () {
 	gl.blendFunc (gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA); // 1 minus alpha is what we want
 	
 	gl.clearColor (1.0, 1.0, 1.0, 1.0);
+
+	// camera gui buttons	
+	init_gui ();
 	
 	camera_pos = [-49.44, 35.60, 55.52];
 	g_cam = new Camera (45.0, g_canvas.width / g_canvas.height, 0.1, 100.0, camera_pos, [0, -2, -1]);
@@ -213,6 +215,29 @@ function init () {
         
         	// add mouse clicks - but only when inside canvas area
 	g_canvas.onmousedown = function (event) {
+		// cam gui
+		g_mouse_down = true;
+	
+		var element = g_canvas;
+		var top = 0;
+		var left = 0;
+		while (element && element.tagName != 'BODY')	{
+				    top += element.offsetTop;
+				    left += element.offsetLeft;
+				    element = element.offsetParent;
+		}
+		// adjust for scrolling
+		left += window.pageXOffset;
+		top -= window.pageYOffset;
+		g_mouse_x = event.clientX - left;
+		g_mouse_y = (event.clientY - top);
+		// sometimes range is a few pixels too big
+		if (g_mouse_x >= g_canvas.width) {
+			return;
+		}
+		if (g_mouse_y >= g_canvas.height) {
+			return;
+		}
                 //alert("Mouse down...MOUSE DOWN!")
                 
 		// if mouse held don't keep restarting this
@@ -365,6 +390,31 @@ function init () {
         }
 
 	g_canvas.onmousemove = function (event) {
+		// cam gui
+		if (!g_mouse_down) {
+			return;
+		}
+		var element = g_canvas;
+		var top = 0;
+		var left = 0;
+		while (element && element.tagName != 'BODY') {
+			top += element.offsetTop;
+			left += element.offsetLeft;
+			element = element.offsetParent;
+		}
+		// adjust for scrolling
+		left += window.pageXOffset;
+		top -= window.pageYOffset;
+		g_mouse_x = event.clientX - left;
+		g_mouse_y = (event.clientY - top);
+		// sometimes range is a few pixels too big
+		if (g_mouse_x >= g_canvas.width) {
+			return;
+		}
+		if (g_mouse_y >= g_canvas.height) {
+			return;
+		}
+	
             if(can_create_zone||can_create_path){
                 
         	if (g_zone_is_being_built||can_create_path) {
@@ -395,6 +445,10 @@ function init () {
 	}
         // do at document level so if dragging and mouse goes out window, can still let go of box
 	document.onmouseup = function (event) {
+	
+						// for cam gui
+						g_mouse_down = false;
+						g_height_clicky_held_down = false;
             
             // note that the following are offset by the page - so the top-left pixel has value
             // of around 8,8. so next we will subtract document, window, etc. offset (grr...)

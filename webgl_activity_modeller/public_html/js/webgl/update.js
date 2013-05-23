@@ -31,24 +31,28 @@ function update () {
             g_step_time_accum -= step_size;
             var camMove = [0, 0, 0];
             var camspeed = 20.0;
+            
+            // camera gui buttons
+            updateMove = update_gui_clicks (step_size);
+            
             // keys listed by code: http://stackoverflow.com/questions/1465374/javascript-event-keycode-constants
 
             if (currentlyPressedKeys[84] === true) // T to pitch
             { 
-                g_cam.change_attitude (-20.0, seconds); 
+                g_cam.change_attitude (-20.0, step_size); 
             }
              else if (currentlyPressedKeys[71] === true)  //G to pitch Up
             { 
-                g_cam.change_attitude (20.0, seconds);
+                g_cam.change_attitude (20.0, step_size);
             }
             // F key to yaw left
             if (currentlyPressedKeys[70] === true)   
             {
-                g_cam.change_heading (40.0, seconds);  
+                g_cam.change_heading (40.0, step_size);  
 						// H key to yaw right    	
             } else if (currentlyPressedKeys[72] === true)      
             { 
-		g_cam.change_heading (-40.0, seconds);     
+		g_cam.change_heading (-40.0, step_size);     
             }
             if (currentlyPressedKeys[90] === true) // z
             { 
