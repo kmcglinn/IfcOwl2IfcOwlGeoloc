@@ -92,8 +92,8 @@ function set_zone_form_values(){
         document.forms["path_form"]["path_id_name"].value = current_path_node_array[0].path_id;
     }
     
-    document.forms["path_form"]["path_entrance_id_form"].value = path_entry_id;
-    document.forms["path_form"]["path_exit_id_form"].value = path_exit_id;  
+    document.forms["path_form"]["path_entrance_id_form"].value = path_entry_id; //current_path_node_array[0].activity_path_id; //?
+    document.forms["path_form"]["path_exit_id_form"].value = path_exit_id;  //current_path_node_array[length-1].activity_path_id;//
     
 }
 

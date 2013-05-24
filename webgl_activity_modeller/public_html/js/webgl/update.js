@@ -110,6 +110,7 @@ function update () {
                     first_path_node.p1Y = midpoint(current_activity_zone.p1Y, current_activity_zone.p2Y);
                     first_path_node.p1Z = midpoint(current_activity_zone.p1Z, current_activity_zone.p2Z);
                     first_path_node.has_activity_node_id = current_activity_zone.id;
+                    //alert(first_path_node.has_activity_node_id);
                     first_path_node.path_id = create_simple_guid();
                     
                     if(current_path_node_array.length===0)
@@ -253,6 +254,8 @@ function update () {
                         current_path_node.p1Y = intersection_point_wor_y;
                         current_path_node.p1Z = intersection_point_wor_z;
                         current_path_node.path_id = create_simple_guid();
+                        current_path_node.activity_path_id = current_activity_zone.id;
+                        console.log(current_path_node.activity_path_id);
                         
                         can_save_path = false;
 //                        if(path_node_array)
@@ -268,9 +271,10 @@ function update () {
                         current_path_node.p1Y = midpoint(zone_activity_array[apos].p1Y, zone_activity_array[apos].p2Y);
                         current_path_node.p1Z = midpoint(zone_activity_array[apos].p1Z, zone_activity_array[apos].p2Z);
                         current_path_node.path_id = create_simple_guid(); //
+                        current_path_node.activity_path_id = zone_activity_array[apos].id;
                         //current_path_node.has_activity_node_id = zone_activity_array[apos].id;
                         //
-                        path_exit_id = zone_activity_array[apos].id;
+                        path_exit_id = current_path_node.activity_path_id;                     
                         path_connected = false;
                         
                         

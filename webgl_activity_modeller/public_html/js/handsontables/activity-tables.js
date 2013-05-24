@@ -971,6 +971,8 @@ $(function () {
             startCols: 6,
             rowHeaders: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
             colHeaders: ["Start Time", "End Time", "Entrance", "Entrance-Path", "Exit", "Exit-Path"],
+            colWidths: [80, 80, 120, 120, 80, 120, 120],
+            manualColumnResize: true,
             autoComplete: [
                 {
                   match: function (row, col, data) {

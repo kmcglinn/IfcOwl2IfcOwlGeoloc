@@ -305,11 +305,14 @@ function init () {
                             
                             if((polygon.pointInPoly(point)))
                             {
-                                console.log(current_path_node_array.length);
+//                                console.log(current_path_node_array.length);
                                 if(current_path_node_array.length===0)
                                 {
 //                                    console.log('Path Selected!!!');
                                     current_path_node_array = path_node_array[i];
+                                    console.log(path_node_array[i][0].activity_zone_id);
+                                    path_exit_id = current_path_node_array[0].activity_zone_id;
+                                    path_entry_id = current_path_node_array[current_path_node_array.length-1].activity_zone_id;
                                     path_selected = true;
                                     can_view_path_id = true;
                                 }
@@ -317,6 +320,8 @@ function init () {
                                 {
 //                                    console.log('Path Selected !!');
                                     current_path_node_array = path_node_array[i];
+                                    path_exit_id = current_path_node_array[0].activity_zone_id;
+                                    path_entry_id = current_path_node_array[current_path_node_array.length-1].activity_zone_id;
                                     path_selected = true;
                                     can_view_path_id = true;
                                 }
@@ -391,9 +396,9 @@ function init () {
 
 	g_canvas.onmousemove = function (event) {
 		// cam gui
-		if (!g_mouse_down) {
-			return;
-		}
+//		if (!g_mouse_down) {
+//			return;
+//		}
 		var element = g_canvas;
 		var top = 0;
 		var left = 0;
@@ -475,7 +480,7 @@ function init () {
                 {
                     get_mouse_coords(event);
                     get_mouse_ray_wor (mouse_x, mouse_y);
-                    current_path_node_array[current_path_node_array.length-1] = new PathNode(current_path_node.path_id, current_path_node.p1X, current_path_node.p1Y, current_path_node.p1Z);                   
+                    current_path_node_array[current_path_node_array.length-1] = new PathNode(current_path_node.path_id, current_path_node.p1X, current_path_node.p1Y, current_path_node.p1Z, current_path_node.activity_path_id);                   
                     current_path_node_array.push(current_path_node);
                     console.log("CURRENT PATH NODE ARRAY LENGTH" + current_path_node_array.length);
 
@@ -484,7 +489,7 @@ function init () {
                 {         
                     //state_booleans();
                     //alert(currentlyPressedKeys[67]);
-                    current_path_node_array[current_path_node_array.length-1] = new PathNode(current_path_node.path_id, current_path_node.p1X, current_path_node.p1Y, current_path_node.p1Z);
+                    current_path_node_array[current_path_node_array.length-1] = new PathNode(current_path_node.path_id, current_path_node.p1X, current_path_node.p1Y, current_path_node.p1Z, current_path_node.activity_path_id);
                     save_path();
                     //can_create_path = false;
                     

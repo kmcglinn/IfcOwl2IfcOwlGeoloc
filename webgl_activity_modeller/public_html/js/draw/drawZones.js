@@ -246,7 +246,7 @@ function draw_current_path(){
     current_path_node_points = new Array();
     var set_z = 0.0;
     var path_width = 1.0;
-
+//    console.log(current_path_node_array.length);
     for(var i = 0;  i< (current_path_node_array.length-1)*18; i=i+18){
         p_n_count = i/18;
         current_path_node_points.push (current_path_node_array[p_n_count].p1X);

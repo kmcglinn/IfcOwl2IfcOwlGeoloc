@@ -11,7 +11,7 @@ function sparql_save_path(){
         "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>" +
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathNode>; "+
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#isStartPath>\"true\"; "+
-        "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasStartZone> \"" + current_activity_zone.id +"\";"+
+        "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasActivityZone> \"" + path_entry_id +"\";"+
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasGuid> \"" + current_path_node_array[0].path_id +"\";"+
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasNextPath> <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathNode" + current_path_node_array[1].path_id +">;"+
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasPlacement> <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#Placement" + current_path_node_array[0].path_id +">;"+      
@@ -40,7 +40,8 @@ function sparql_save_path(){
         query = "INSERT DATA{ <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathNode"+current_path_node_array[i].path_id+">"+
             "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>" +
             "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathNode>; "+
-            "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasGuid> \"" + current_path_node_array[i].path_id +"\";"+          
+            "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasGuid> \"" + current_path_node_array[i].path_id +"\";"+    
+            "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasActivityZone> \"" + current_path_node_array[i].activity_zone_id +"\";"+
             "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasNextPath> <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathNode" + current_path_node_array[i+1].path_id +">;"+
             "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasPlacement> <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#Placement" + current_path_node_array[i].path_id +">;"+      
             "}";
@@ -66,7 +67,8 @@ function sparql_save_path(){
     
     query = "INSERT DATA{ <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathNode"+current_path_node_array[current_path_node_array.length-1].path_id+">"+
         "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>" +
-        "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathNode>; "+       
+        "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathNode>; "+ 
+        "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasActivityZone> \"" + path_exit_id +"\";"+
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#isEndPath>\"true\"; "+
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasGuid> \"" + current_path_node_array[current_path_node_array.length-1].path_id +"\";"+        
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasNextPath> <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathEnd>;"+
@@ -110,11 +112,12 @@ function sparql_load_path(prompt){
     var next_path_id;
     //current_path_node = new PathNode();
     
-    var query = "SELECT ?path_id ?x1 ?y1 ?z1 ?hasNextPath ?next_path_id"+
+    var query = "SELECT ?path_id ?x1 ?y1 ?z1 ?hasNextPath ?next_path_id ?activity_zone_id"+
         " WHERE{"+
         "?path <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathNode>;"+
         "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasGuid> ?path_id."+
         "?path  <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#isStartPath>  \"true\"."+
+        "?path <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasActivityZone> ?activity_zone_id."+
         "?path <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasNextPath> ?hasNextPath."+
         "?hasNextPath <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasGuid> ?next_path_id."+
         "?path <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasPlacement> ?placement."+
@@ -136,6 +139,7 @@ function sparql_load_path(prompt){
             current_path_node.p1X = result_object.results.bindings[i].x1.value;
             current_path_node.p1Y = result_object.results.bindings[i].y1.value;
             current_path_node.p1Z = result_object.results.bindings[i].z1.value;
+            current_path_node.activity_zone_id = result_object.results.bindings[i].activity_zone_id.value;
             console.log("PUSHING START PATH NODE ONTO CURRENT PATH NODE ARRAY");
             current_path_node_array.push(current_path_node);
             count++;
@@ -148,14 +152,14 @@ function sparql_load_path(prompt){
             }
             
             while(bool)
-            {
-                
-                
-                query = "SELECT ?x1 ?y1 ?z1 ?hasNextPath ?next_path_id"+
+            {              
+              
+                query = "SELECT ?x1 ?y1 ?z1 ?hasNextPath ?next_path_id ?activity_zone_id"+
                     " WHERE{"+
                     "?path  <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#PathNode>;"+
                     "<http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasGuid> \""+next_path_id+"\"."+
                     "?path <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasNextPath> ?hasNextPath."+
+                    "?path <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasActivityZone> ?activity_zone_id."+
                     "?hasNextPath <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasGuid> ?next_path_id."+
                     "?path <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasPlacement> ?placement."+
                     "?placement <http://www.semanticweb.org/ontologies/2012/9/knoholem.owl#hasXCoord> ?x1."+
@@ -170,6 +174,7 @@ function sparql_load_path(prompt){
                 current_path_node.p1X = result_object_2.results.bindings[0].x1.value;
                 current_path_node.p1Y = result_object_2.results.bindings[0].y1.value;
                 current_path_node.p1Z = result_object_2.results.bindings[0].z1.value;
+                current_path_node.activity_zone_id = result_object_2.results.bindings[0].activity_zone_id.value;
                 console.log("PUSHING NEXT PATH NODE ONTO CURRENT PATH NODE ARRAY");
                 count++;
                 current_path_node_array.push(current_path_node);
