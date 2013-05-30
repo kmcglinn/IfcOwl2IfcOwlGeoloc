@@ -45,6 +45,7 @@ function save_path()
         
         console.log("path_node_array length: "+path_node_array.length);
         path_connected = false;
+        can_create_zone = false;
         can_create_path = false;
         can_save_path = false;
         zone_selected = false;
@@ -68,6 +69,7 @@ function save_path()
     }//END OF IF
     else
     {
+        can_create_zone = false;
         path_connected = false;
         can_create_path = false;
         can_save_path = false;
@@ -78,6 +80,8 @@ function save_path()
         currentlyPressedKeys[67] = false;
         sparql_load_path(false);
         sparql_load_path(false);
+        sparql_load_zones(false);
+        
     }//END OF ELSE
-//    state_booleans();
+    set_zone_form_values();
 }

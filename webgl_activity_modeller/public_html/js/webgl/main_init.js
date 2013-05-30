@@ -216,6 +216,7 @@ function init () {
         	// add mouse clicks - but only when inside canvas area
 	g_canvas.onmousedown = function (event) {
 		// cam gui
+                console.log("MOUSE DOWN");
 		g_mouse_down = true;
 	
 		var element = g_canvas;
@@ -241,16 +242,20 @@ function init () {
                 //alert("Mouse down...MOUSE DOWN!")
                 
 		// if mouse held don't keep restarting this
-                if(can_select_zone||can_select_path){
+                console.log("ON MOUSE DOWN::CAN SELECT : - " + can_select);
+                if(can_select)
+                {
                     
                     get_mouse_coords(event);
 
                     //alert('mouse down: ' + mouse_x + ', ' + mouse_y);
                     var ray = get_mouse_ray_wor (mouse_x, mouse_y);
                     // plane intersection
-                    if (ray_plane (ray, g_cam.mWC_Pos, [0, 1, 0], 0)) {
+                    if (ray_plane (ray, g_cam.mWC_Pos, [0, 1, 0], 0)) 
+                    {
                         //console.log ("ray hit");
-                    } else {
+                    } else 
+                    {
                         //console.log ("ray missed somehow");
                     }
                     
@@ -263,12 +268,16 @@ function init () {
                         {
                             // when in loop of several sensors; deslect previous and select new
                             //alert('zone_selected()');
+                            console.log("ON MOUSE DOWN::ZONE FOUND....SELECTING");
                             current_activity_zone = zone_activity_array[i];
                             zone_selected = true;
+                            console.log("ZONE SELECTED - " + zone_selected);
+//                            can_create_zone = false;
                             current_path_node_array = new Array();
                             path_selected = false;
                             can_view_path_id = false;
-    
+                            set_zone_form_values();
+                            
                         } 
                         else                     
                         {
@@ -292,41 +301,35 @@ function init () {
                             var point = new Point(path_node_array[i][j+1].p1X, path_node_array[i][j+1].p1Y-2);
                             polygon.add(point);
                             point = new Point(intersection_point_wor_x, intersection_point_wor_y);
-//                            console.log(point.x);
-//                            console.log(polygon.points.length);
-//                            console.log("POS: " + j);
-//                            console.log(path_node_array[i][j].id);
-//                            console.log(path_node_array[i][j].p1X);
-//                            console.log(path_node_array[i][j].p1Y);
-//                            console.log(path_node_array[i][j+1].id);
-//                            console.log(path_node_array[i][j+1].p1X);
-//                            console.log(path_node_array[i][j+1].p1Y);
-                            //console.log(current_path_node_array.id);
+
                             
                             if((polygon.pointInPoly(point)))
                             {
 //                                console.log(current_path_node_array.length);
                                 if(current_path_node_array.length===0)
                                 {
-//                                    console.log('Path Selected!!!');
+                                    console.log("ON MOUSE DOWN::PATH FOUND AND SELECTED");
                                     current_path_node_array = path_node_array[i];
                                     console.log(path_node_array[i][0].activity_zone_id);
                                     path_exit_id = current_path_node_array[0].activity_zone_id;
                                     path_entry_id = current_path_node_array[current_path_node_array.length-1].activity_zone_id;
                                     path_selected = true;
                                     can_view_path_id = true;
+                                    set_zone_form_values();
                                 }
                                 else if(current_path_node_array[0].path_id!==path_node_array[i][0].path_id)
                                 {
-//                                    console.log('Path Selected !!');
+                                    console.log("ON MOUSE DOWN::PATH FOUND AND SELECTED");
                                     current_path_node_array = path_node_array[i];
                                     path_exit_id = current_path_node_array[0].activity_zone_id;
                                     path_entry_id = current_path_node_array[current_path_node_array.length-1].activity_zone_id;
                                     path_selected = true;
                                     can_view_path_id = true;
+                                    set_zone_form_values();
                                 }
                                 current_activity_zone = new Array();
                                 zone_selected = false;
+                                console.log("ZONE SELECTED - " + zone_selected);
 
                             } 
                             else                     
@@ -336,8 +339,15 @@ function init () {
                         }
                     }
                 }
-                if(can_create_zone){
-                    
+                
+                /*
+                 * MOUSE DOWN - CREATING A ZONE
+                 */
+                console.log("ON MOUSE DOWN::CAN CREATE ZONE : - " + can_create_zone);
+                console.log("ON MOUSE DOWN::CAN SELECT : - " + can_select);
+                if(can_create_zone&&!can_select){
+                    console.log("ON MOUSE DOWN::IS ZONE BEING BUILT : - " + g_zone_is_being_built);
+                    current_activity_zone = new Zone('Activity', 0, 0,0,0,  0,0,0); //Create an empty zone for the current zone
                     if (g_zone_is_being_built) {
                             return;
                     }
@@ -366,7 +376,8 @@ function init () {
                     current_activity_zone.p2Z = intersection_point_wor_z;
 
                     g_zone_is_being_built = true;
-
+                    can_create_zone = false;
+                    console.log("ZONE CREATED");
                 }
 //                if(event.which===3)
 //                    
@@ -451,13 +462,13 @@ function init () {
         // do at document level so if dragging and mouse goes out window, can still let go of box
 	document.onmouseup = function (event) {
 	
-						// for cam gui
-						g_mouse_down = false;
-						g_height_clicky_held_down = false;
+            // for cam gui
+            g_mouse_down = false;
+            g_height_clicky_held_down = false;
             
             // note that the following are offset by the page - so the top-left pixel has value
             // of around 8,8. so next we will subtract document, window, etc. offset (grr...)
-            if(can_create_zone)
+            if(can_create_zone&&g_zone_is_being_built)
             {
                 // recursively get location within parent(s)
                 get_mouse_coords(event);
@@ -468,8 +479,10 @@ function init () {
                 current_activity_zone.p2X = intersection_point_wor_x;
                 current_activity_zone.p2Y = intersection_point_wor_y;
                 current_activity_zone.p2Z = intersection_point_wor_z;
-                g_zone_is_being_built = false;
-                zone_selected = true;
+                     
+                save_zone();
+                
+                
                 //alert(zone_activity_array[0].getInfo())
                 //console.log ("zone end = " + last_intersection_point);
             }

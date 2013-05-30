@@ -80,13 +80,13 @@ function set_zone_form_values(){
     
     document.forms["zone_form"]["zone_id_name"].value = current_activity_zone.id;
     
-    document.forms["zone_form"]["zone_x1"].value = current_activity_zone.p1X;
-    document.forms["zone_form"]["zone_y1"].value = current_activity_zone.p1Y;
-    document.forms["zone_form"]["zone_z1"].value = current_activity_zone.p1Z;
-    
-    document.forms["zone_form"]["zone_x2"].value = current_activity_zone.p2X;
-    document.forms["zone_form"]["zone_y2"].value = current_activity_zone.p2Y;
-    document.forms["zone_form"]["zone_z2"].value = current_activity_zone.p2Z;
+//    document.forms["zone_form"]["zone_x1"].value = current_activity_zone.p1X;
+//    document.forms["zone_form"]["zone_y1"].value = current_activity_zone.p1Y;
+//    document.forms["zone_form"]["zone_z1"].value = current_activity_zone.p1Z;
+//    
+//    document.forms["zone_form"]["zone_x2"].value = current_activity_zone.p2X;
+//    document.forms["zone_form"]["zone_y2"].value = current_activity_zone.p2Y;
+//    document.forms["zone_form"]["zone_z2"].value = current_activity_zone.p2Z;
     if(can_view_path_id===true)
     {
         document.forms["path_form"]["path_id_name"].value = current_path_node_array[0].path_id;
@@ -123,11 +123,18 @@ function update_zone_id_handsontables(){
     
 }
 function check_activity_path_entrance_exit()
-{
-    
-    document.write("</br><form name=\"path_form\">\
-            Entrace Zone: <input type=\"text\" id=\"path_entrance_id_form\"><input id = \"activity_ea_checkbox_id_1\" type=\"checkbox\" class=\"adri\" onclick=\"set_entrance();\"></br>"+
-            "Exit Zone:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"text\" id=\"path_exit_id_form\"><input id = \"activity_ea_checkbox_id_2\" type=\"checkbox\" class=\"adri\" onclick=\"set_exit();\"></form>");
+{   
+    document.write("\n\
+            <div id=\"e_a_text_div\">\n\
+                <div id=\"entrance_path_zone_id\">Path Entrace Zone:</div>\n\
+                <div id=\"exit_path_zone_id\">Path Exit Zone:</div>\n\
+            </div>\n\
+            <div id=\"e_a_form_checks_div\">\n\
+                <form name=\"path_form\">\n\
+                    <input type=\"text\" id=\"path_entrance_id_form\"><input id = \"activity_ea_checkbox_id_1\" type=\"checkbox\" class=\"adri\" onclick=\"set_entrance();\">\n\
+                    <input type=\"text\" id=\"path_exit_id_form\"><input id = \"activity_ea_checkbox_id_2\" type=\"checkbox\" class=\"adri\" onclick=\"set_exit();\">\n\
+                </form>\n\
+            </div>");
 }
 function radio_activity_day()
 {

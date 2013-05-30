@@ -99,15 +99,34 @@ Contains left - WebGL/Image and right - information display*/
 /*        border: 1px solid  */
 }
 #zone_viewer_div{
-    width: 300px;
+    width: 350px;
     height: 100%;      
     float: left;
     padding-left:20px;
-    display:none
+    display:none;
+    /*border: 1px solid;*/  
 }
+
 #zone_id_div{  
+    width: 350px;
     float: left;
-    padding-left:10px
+    padding-left:10px;
+    /*border: 1px solid;*/
+}
+#zone_id_text_div{
+    width: 80px;
+    /*border: 1px solid;*/
+    float: left;
+}
+#save_activity_id{  
+    float: left;
+}
+zone_id_form{
+    border: 1px solid;
+    /*width: 300px;*/
+}
+#delete_activity_id{
+    float: left;
 }
 #zone_x1_y1_z1{  
     float: left;
@@ -122,16 +141,37 @@ Contains left - WebGL/Image and right - information display*/
     height: 100%;      
     float: left;
     padding-left:20px;
-    display:none
+    
+    display:none;
+    /*border: 1px solid;*/  
 }
 #path_id_div{     
     float: left;
-    padding-left:10px
+    padding-left:10px;
+    /*padding-top:10px;*/
+    /*border: 1px solid;*/
 }
+#path_id_text_div{ 
+    float:left;
+    width: 80px;
+    /*border: 1px solid;*/
+}
+#path_activity_delete_button_div{
+    float: right;
+}
+/*#path_table_div{
+    margin-top: 70px;
+    height: 230px;
+    border: 3px solid;
+}*/
 #path_activity_type_div{  
-    width: 250px;
+    padding-top: 10px;
+    width: 280px;
     float: left;
     padding-left:10px;
+}
+#activity_type_dropdown_id{
+    float: right;
 }
 #path_activity_day_div{     
     float: left;
@@ -151,12 +191,60 @@ Contains left - WebGL/Image and right - information display*/
 #path_activity_button{     
     float: left;
     padding-left:10px;
+    /*padding-top:10px;*/
+/*    border: 1px solid;*/
+}
+#path_activity_e_a_div{
+
+    width:300px;
+    float:left;
+}
+#e_a_text_div{
+    padding: 10px;
+    width:120px;
+    float:left;
+    /*border: 1px solid;*/  
+}
+#entrance_path_zone_id{
+    width:120px;
+    /*float:left;*/
+    /*border: 1px solid;*/
+}
+#exit_path_zone_id{
+    padding-top:7px;
+    width:120px;
+    /*border: 1px solid;*/
+    /*float:left;*/
+}
+#e_a_form_checks_div{
+    padding-top: 10px;
+    width:150px;
+    float:right;
+    /*border: 1px solid;*/   
 }
 #path_entrance_id_form{
-    width:90px;
+    width:120px;
+    /*float: right;*/
+    /*border: 1px solid;*/
 }
+#activity_ea_checkbox_id_1{
+    /*float: right;*/
+    /*border: 1px solid;*/
+}
+
 #path_exit_id_form{
-    width:90px;
+    width:120px;
+    /*float: right;*/
+    /*border: 1px solid;*/
+}
+#activity_ea_checkbox_id_2{
+    /*float: right;*/
+    /*border: 1px solid;*/
+}
+#path_activity_button_div{
+    float: left;
+    padding-top: 10px;
+    /*border: 1px solid;*/
 }
 #webg-img-radio{
     float: left;

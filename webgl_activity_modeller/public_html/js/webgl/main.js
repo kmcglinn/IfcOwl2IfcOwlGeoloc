@@ -3,6 +3,8 @@
 var normals_vs_url = "js/webgl/shaders/basic_vs.glsl";
 var normals_fs_url = "js/webgl/shaders/basic_fs.glsl";
 var walls_xml_url = "cad_xml/smart_homes_cad.xml";
+//var walls_xml_url = "cad_xml/lloyd.xml";
+//var walls_xml_url = "cad_xml/ORI_FF.xml";
 var ssao_vs_url = "js/webgl/shaders/ssao_quad_vs.glsl";
 var ssao_fs_url = "js/webgl/shaders/ssao_quad_fs.glsl";
 var depth_vs_url = "js/webgl/shaders/depth_vs.glsl";
@@ -148,29 +150,32 @@ var blur_phong_texture_loc;
  * @Kris Code
  * Function to load in zones from ontology
  */
+var can_select = false;
+//Booleans related to creating, deleting and displaying zones
 var can_create_zone = false; //This must be set to true to draw a new zone.
 var can_select_zone = false; //This is set when 
-var can_select_path = false;
-var can_create_path = false; //This is set to true when a zone has been selected and the key (c) has been pressed
 var zone_selected = false; //this is set to true when a zone has been selected (pressing xand clicking)
+var g_zone_is_being_built = false; //
+var zone_points = new Array(); //stores all the vertices of the zones
+var zone_activity_array = new Array();
+var current_activity_zone = new Zone('Activity', 0, 0,0,0,  0,0,0); //Create an empty zone for the current zone
+zone_activity_array.push(current_activity_zone); //The first object in the array stores a reference to the (current) zone which is currently being drawn.
+
+//Booleans related to creating, deleting and displaying data about paths. 
+//var can_select_path = false;
+var can_create_path = false; //This is set to true when a zone has been selected and the key (c) has been pressed
 var path_selected = false;
 var path_connected = false; //this is set when a path is being created and the mouse goes over an existing path so that it selects the zones origin.
 var can_save_path = false; //this is set when the path is connected to a zone aso that you san save the path
 var can_view_path_id = false; //This is so that the current path id div is displayed on the page. 
-var entrance_set = false;
-var exit_set = false;
-var set_start_path_id = false;
-var path_finished = false;
-
-var g_zone_is_being_built = false; //
-var zone_points = new Array(); //stores all the vertices of the zones
 var current_path_node_points = new Array(); //stores all the vertices of the path nodes
 var path_node_points = new Array();
+var set_start_path_id = false;
+var path_finished = false;
+var entrance_set = false;
+var exit_set = false;
 
 
-var zone_activity_array = new Array();
-var current_activity_zone = new Zone('Activity', 0, 0,0,0,  0,0,0); //Create an empty zone for the current zone
-zone_activity_array.push(current_activity_zone); //The first object in the array stores a reference to the (current) zone which is currently being drawn.
 
 var current_path_node_array = new Array();
 var current_path_node = new PathNode();
@@ -403,7 +408,7 @@ function main () {
 function state_booleans(){
     
     console.log("can_create_zone: " + can_create_zone);
-    console.log("can_select_zone: " + can_select_zone);
+    console.log("can_select: " + can_select);
     console.log("can_create_path: " + can_create_path);
     console.log("zone_selected: " + zone_selected);
     console.log("path_connected: " + path_connected);

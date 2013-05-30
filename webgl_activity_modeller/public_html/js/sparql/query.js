@@ -4,13 +4,16 @@
  */
 
 
-//var end_point = "http://phaedrus.scss.tcd.ie/fuseki/ds/query"; //End point for queris
-//var end_point_update = "http://phaedrus.scss.tcd.ie/fuseki/ds/update"; //End point for updates
+//var end_point = "http://phaedrus.scss.tcd.ie:3030/fuseki/ds/query"; //End point for queris
+//var end_point_update = "http://phaedrus.scss.tcd.ie:3030/fuseki/ds/update"; //End point for updates
 //var end_point = "http://kdeg-vm-46.scss.tcd.ie:3031/ds/query";
 //var end_point_update = "http://kdeg-vm-46.scss.tcd.ie:3031/ds/update"; //End point for updates
 
-var end_point = "http://localhost:3030/ds/query";
-var end_point_update = "http://localhost:3030/ds/update"; 
+//var end_point = "http://localhost:3030/ds/query";
+//var end_point_update = "http://localhost:3030/ds/update"; 
+
+var end_point = "http://192.168.56.1:3030/ds/query";
+var end_point_update = "http://192.168.56.1:3030/ds/update"; 
 
 //var end_point = "http://localhost:3030/ds/query";
 function sparql_query (query_str) {

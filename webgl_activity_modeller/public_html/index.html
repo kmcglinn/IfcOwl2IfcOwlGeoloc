@@ -90,7 +90,7 @@
         <div id="mid-row">
             <div id="mid-row-left">
                 <div id="image">
-                    <img id = "forum_image" src="img/forum.png" width="500" height="280" />
+                    <img id = "forum_image" src="img/forum_2.png" width="500" height="280" />
                 </div>
                 <div id="glcanvas_div">
                     <canvas id="gl_canvas" width="600" height="450">JavaScript is disabled, or this browser does not support WebGL</canvas>
@@ -114,10 +114,12 @@
                     <h3>Zone Modeller</h3>
                     <form name="zone_form">
                         <div id="zone_id_div">
-                        Zone I.D.: <input type="text" name="zone_id_name" id="zone_id_form">
-                        </div>
-                        
-                        <div id="zone_x1_y1_z1">
+                            <div id="zone_id_text_div">Zone I.D.:</div><input type="text" name="zone_id_name" id="zone_id_form">
+                            <button onclick="delete_zone(); return false;" id="delete_activity_id" name="delete_activity">Delete Zone</button>
+                            <!--<button onclick="save_zone()" id="save_activity_id" name="save_activity">Save Zone</button>-->
+                            <button onclick="sparql_load_zones(true); return false;" id="load_activity_id" name="load_activity">Load all Zones </button>
+                        </div>                       
+<!--                        <div id="zone_x1_y1_z1">
                             Zone Point A: </br>
                             X- <input type="text" name="zone_x1" class="coord">
                             Y- <input type="text" name="zone_y1" class="coord">
@@ -129,12 +131,9 @@
                             X- <input type="text" name="zone_x2" class="coord">
                             Y- <input type="text" name="zone_y2" class="coord">
                             Z- <input type="text" name="zone_z2" class="coord">
-                        </div>
+                        </div>-->
                     </form>
 
-                    <button onclick="save_zone()" name="save_activity">Save Zone  </button>
-                    <button onclick="delete_zone()" name="delete_activity">Delete Zone</button>
-                    <button onclick="query_zones()" name="load_activity">Load Zones </button>
                 </div>
                 
                 <div id="path_viewer_div">  
@@ -142,24 +141,30 @@
                     <form name="path_form">
                         
                         <div id="path_id_div">
-                            Path I.D.: <input type="text" name="path_id_name" id="path_id_form">
+                            <div id="path_id_text_div">Path I.D.:</div><input type="text" name="path_id_name" id="path_id_form">
+                            <button onclick="sparql_delete_path(); return false;" name="path_activity_delete_button_div">Delete Path</button>         
+                            <button onclick="sparql_load_path(true); sparql_load_zones(false); return false;" name="path_activity_save_button_div">Load all Paths</button>
                         </div>
-                        <div id="path_activity_type_div">
-                            Activity Type:  
-                            <script type="text/javascript">
-                                drop_down_activities();
-                                check_activity_path_entrance_exit();
-                            </script>
-                        </div>
-                        <div id="path_activity_day_div">
-                            <script type="text/javascript">
-                                radio_activity_day();
-                            </script>
-                        </div>
-                        <div id="path_activity_button_div">
-                            <button onclick="sparql_delete_path()" name="path_activity_delete_button_div">Delete Path</button>
-                            <button onclick="sparql_load_path(true); query_zones()" name="path_activity_save_button_div">Load Path</button>
-                            <button onclick="" name="path_activity_add_button_div">Add Path to Activity</button>
+                        <div id="path_table_div">
+                            <div id="path_activity_type_div">
+                                Activity Type:  
+                                <script type="text/javascript">
+                                    drop_down_activities();
+                                </script>
+                            </div>
+                            <div id="path_activity_e_a_div">
+                                <script type="text/javascript">
+                                    check_activity_path_entrance_exit();
+                                </script>
+                            </div>
+                            <div id="path_activity_day_div">
+                                <script type="text/javascript">
+                                    radio_activity_day();
+                                </script>
+                            </div>
+                            <div id="path_activity_button_div">                          
+                                <button onclick="" name="path_activity_add_button_div">Add Path to Activity Table</button>
+                            </div>
                         </div>
                     </form>
 

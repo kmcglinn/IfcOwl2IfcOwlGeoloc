@@ -22,7 +22,7 @@ function update () {
 //		document.getElementById('para_fps').innerHTML = fps.toFixed(2);
 	}
         //NEED TO UPDATE THIS SO THAT FORM CAN BE EDITED
-        set_zone_form_values();
+        //set_zone_form_values();
 	// compute time steps
         //console.log();
 	while (g_step_time_accum > step_size) 
@@ -36,7 +36,20 @@ function update () {
             updateMove = update_gui_clicks (step_size);
             
             // keys listed by code: http://stackoverflow.com/questions/1465374/javascript-event-keycode-constants
-
+            if (currentlyPressedKeys[80] === true) // T to pitch
+            { 
+                console.log("zone_activity_array.length: " + zone_activity_array.length);
+                for(var i = 0;i<zone_activity_array.length;i++)
+                {
+                    console.log("zone_activity_array pos " + i + " has id " + zone_activity_array[i].id);
+                }
+                console.log("path_node_array.length: " + path_node_array.length);
+                for(var i = 0;i<path_node_array.length;i++)
+                {
+                    console.log("path_node_array pos " + i + " has first node id " + path_node_array[i][0].path_id);
+                }    
+                currentlyPressedKeys[80] = false;
+            }
             if (currentlyPressedKeys[84] === true) // T to pitch
             { 
                 g_cam.change_attitude (-20.0, step_size); 
@@ -54,74 +67,91 @@ function update () {
             { 
 		g_cam.change_heading (-40.0, step_size);     
             }
+//            console.log("currentlyPressedKeys[90]: "+ currentlyPressedKeys[90]);
             if (currentlyPressedKeys[90] === true) // z
-            { 
-                    can_create_zone = true;                     
+            {   
+
+                if(can_create_zone===false)
+                {   
+                    
+                    can_create_zone = true;
+
+                    console.log("Z PRESSED AND can_create_zone is false - SETTING can_create_zone to: "+can_create_zone);
+//                    currentlyPressedKeys[90] = false;
+                }
+
             }
             else 
             {
-                can_create_zone = false;
+                if(can_create_zone===true)
+                {   
+                    can_create_zone = false;
+                    console.log("Z NOT PRESSED AND can_create_zone is true - SETTING can_create_zone to: "+can_create_zone);
+                }
+//                currentlyPressedKeys[90] = false;
             }
-
             if (currentlyPressedKeys[88] === true) // x
             { 
-                    can_select_zone = true;
-                    can_select_path = true;
-//                    console.log("SIZE OF ZONE ARRAY: " + zone_activity_array.length);
-//                    console.log("ARRAY[0] ID: " + zone_activity_array[0].id);
-//                    console.log("ARRAY[1] ID: " + zone_activity_array[1].id);
+                if(can_select===false)
+                {                
+                    can_select = true;
+                    console.log("X PRESSED AND can_select is false - SETTING can_select to: "+can_select);
+                }
             }
             else 
             {
-                can_select_zone = false;
-                can_select_path = false;
+                if(can_select===true)
+                {   
+                    can_select = false;
+                    console.log("X NOT PRESSED AND can_select is true - SETTING can_select to: "+can_select);
+                }
             }
             if (currentlyPressedKeys[67] === true) //c
             { 
-//                current_path_node_array = new PathNode();
-//                path_selected = false;
-//                can_view_path_id = false;
-//                
+                console.log("C PRESSED AND path_node_array.length is : "+path_node_array.length);
                 if(path_node_array.length===0)
                 {
-                    console.log("PATH NODE ARRAY IS EMPTY. PUSHING CURRENT PATHNODE ARRAY ON PATHNODE ARRAY");
+                    console.log("C PRESSED AND PATH NODE ARRAY IS EMPTY. PUSHING current_path_node_array ONTO path_node_array");
                     path_node_array.push(current_path_node_array);
                     
                 }
-                
-                if((zone_selected === true)&&path_selected!==true)
+                console.log("C PRESSED AND zone_selected is: "+zone_selected);
+                console.log("C PRESSED AND path_selected is: "+path_selected);
+                if((zone_selected === true)&&(path_selected!==true))
                 {
-                    console.log("SETTING CAN_CREATE_PATH to TRUE");
+                    
+                    console.log("C PRESSED AND zone_selected IS TRUE AND path_selected IS FALSE- SETTING can_create_path to TRUE");
                     can_create_path = true;
-                    console.log("SETTING PATH_EXIT_ID to FALSE");
+                    console.log("SETTING path_exit_id to undefined UNTIL PATH IS CREATED");
                     path_exit_id = "undefined";
                     
+                    console.log("C PRESSED AND set_start_path_id is: "+set_start_path_id);
                     if(set_start_path_id===false)
                     {
-                        console.log("SET_START_PATH_ID is FALSE, SETTING to TRUE, SETTING PATH_ENTRY_ID to CURRENT_ACTIVITY_ZONE.ID");
+                        console.log("C PRESSED AND set_start_path_id is FALSE, SETTING to TRUE, SETTING path_entry_id to current_activity_zone.id");
                         path_entry_id = current_activity_zone.id;
                         set_start_path_id = true;
                     }
                     
-                    console.log("SETTING FIRST NODE AS ORIGIN OF ZONE current_path_node_array LENGTH: " + current_path_node_array.length);
+                    console.log("C PRESSED AND SETTING FIRST NODE AS ORIGIN OF ZONE current_path_node_array LENGTH: " + current_path_node_array.length);
                     
                     first_path_node = new PathNode();
                     first_path_node.p1X = midpoint(current_activity_zone.p1X, current_activity_zone.p2X);
                     first_path_node.p1Y = midpoint(current_activity_zone.p1Y, current_activity_zone.p2Y);
                     first_path_node.p1Z = midpoint(current_activity_zone.p1Z, current_activity_zone.p2Z);
                     first_path_node.has_activity_node_id = current_activity_zone.id;
-                    //alert(first_path_node.has_activity_node_id);
+                    //console.log(first_path_node.has_activity_node_id);
                     first_path_node.path_id = create_simple_guid();
                     
                     if(current_path_node_array.length===0)
                     {
-                        console.log("CURRENT_PATH_NODE_ARRAY was EMPTY");
+                        console.log("C PRESSED AND CURRENT_PATH_NODE_ARRAY was EMPTY");
                         current_path_node_array.push(first_path_node); //pointer to first_path_node storing midpoint of first activity zone
                         current_path_node_array.push(current_path_node); //pointer to current_path_node which is updated below
-                        console.log("current_path_node_array LENGTH: " + current_path_node_array.length);
-                        console.log("current_path_node_array[0].id: " + current_path_node_array[0].id);
+                        console.log("C PRESSED current_path_node_array LENGTH: " + current_path_node_array.length);
+                        console.log("C PRESSED current_path_node_array[0].id: " + current_path_node_array[0].id);
                         
-                        console.log("SETTING CAN_VIEW_PATH_ID to TRUE");
+                        console.log("C PRESSED SETTING CAN_VIEW_PATH_ID to TRUE");
                         can_view_path_id = true;
                     }
                 }
@@ -255,7 +285,7 @@ function update () {
                         current_path_node.p1Z = intersection_point_wor_z;
                         current_path_node.path_id = create_simple_guid();
                         current_path_node.activity_path_id = current_activity_zone.id;
-                        console.log(current_path_node.activity_path_id);
+//                        console.log(current_path_node.activity_path_id);
                         
                         can_save_path = false;
 //                        if(path_node_array)

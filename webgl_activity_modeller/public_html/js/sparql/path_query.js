@@ -209,8 +209,9 @@ function sparql_load_path(prompt){
     //Throwing in this code to make sure everything is reset (Needs to be cleaned up!!!)
     console.log("RESETING PATHS NODE ARRAYS");
     can_create_zone = false; //This must be set to true to draw a new zone.
-    can_select_zone = false; //This is set when 
-    can_select_path = false;
+    can_select = false;
+    //_zone = false; //This is set when 
+//    can_select_path = false;
     can_create_path = false; //This is set to true when a zone has been selected and the key (c) has been pressed
     zone_selected = false; //this is set to true when a zone has been selected (pressing xand clicking)
     path_selected = false;

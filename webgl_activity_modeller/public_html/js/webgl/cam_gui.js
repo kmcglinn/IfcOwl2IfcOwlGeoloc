@@ -226,13 +226,17 @@ function update_gui_clicks (seconds) {
 					updateMove = true;
 				
 				// back
-				} else if (g_mouse_y >= g_canvas.height - 48) {
+				} 
+                                
+                                else if ((g_mouse_y >= g_canvas.height - 48)&&(g_mouse_y < 450)) {
+
 					camMove[2] = 1.0 * camspeed * step_size;
 					g_cam.move_cam_relative_forward_by (camMove);
 					updateMove = true;
 				
 				// reset diamond thingy (placeholder)
-				} else {
+				} 
+                                else {
 				
 				}
 			
@@ -264,7 +268,8 @@ function update_gui_clicks (seconds) {
 					g_cam.change_attitude (40.0, seconds);
 					updateMove = true;
 				// pitch up
-				} else if (g_mouse_y >= g_canvas.height - 32) {
+				} 
+                                else if ((g_mouse_y >= g_canvas.height - 32)&&(g_mouse_y < 450)) {
 					g_cam.change_attitude (-40.0, seconds);
 					updateMove = true;
 				}
@@ -273,11 +278,14 @@ function update_gui_clicks (seconds) {
 			} else if (g_mouse_y >= g_canvas.height - 96 &&
 				g_mouse_y < g_canvas.height - 32) {
 				// yaw clock-wise
-				if (g_mouse_x < g_canvas.width - 96) {
+				if ((g_mouse_x < g_canvas.width - 96)) 
+                                {
 					g_cam.change_heading (40.0, seconds);
 					updateMove = true;
 				// we know for sure that yaw ccw is the last remaining part to click
-				} else {
+				} 
+                                else if ((g_mouse_x < g_canvas.width)) 
+                                {
 					g_cam.change_heading (-40.0, seconds);
 					updateMove = true;
 				}

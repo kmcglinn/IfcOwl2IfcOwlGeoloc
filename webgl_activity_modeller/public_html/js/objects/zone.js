@@ -71,18 +71,35 @@ function init_zones () {
 
 function save_zone(){
     
-    var temp_zone = new Zone(current_activity_zone.type, current_activity_zone.id, current_activity_zone.p1X, current_activity_zone.p1Y, current_activity_zone.p1Z, current_activity_zone.p2X, current_activity_zone.p2Y, current_activity_zone.p2Z);
-    zone_activity_array.push(temp_zone);
-    update_zone(temp_zone);
-    //alert(zone_activity_array.length);
-    
-    for(var i = 0;  i< zone_activity_array.length; i++){
+    var r=confirm("Warning: This will save the current zone to the database");
+    if (r===true)
+    {
         
-        //alert(zone_activity_array[i].getInfo());
-  
-    }
-    
-//    alert("Number of Zone Points: " + zone_points.length);
+        var temp_zone = new Zone(current_activity_zone.type, current_activity_zone.id, current_activity_zone.p1X, current_activity_zone.p1Y, current_activity_zone.p1Z, current_activity_zone.p2X, current_activity_zone.p2Y, current_activity_zone.p2Z);
+        zone_activity_array.push(temp_zone);
+        update_zone(temp_zone);
+        zone_selected = true;
+        console.log("ZONE SELECTED - " + zone_selected);
+        can_select = false; //_zone
+        can_create_zone = false;
+        currentlyPressedKeys[90] = false;
+        g_zone_is_being_built = false;
+        //current_activity_zone = new Zone('Activity', 0, 0,0,0,  0,0,0); //Create an empty zone for the current zone
+
+    }//END OF IF
+    else
+    {
+        current_activity_zone = new Zone('Activity', 0, 0,0,0,  0,0,0); //Create an empty zone for the current zone
+        zone_selected = true;
+        console.log("ZONE SELECTED - " + zone_selected);
+        can_select = false; //_zone
+        can_create_zone = false;
+        currentlyPressedKeys[90] = false;
+        g_zone_is_being_built = false;
+        return; //End function
+    }//END OF ELSE
+    set_zone_form_values();
+
 }
 
 
@@ -92,8 +109,8 @@ function delete_zone(){
     var exists = false;
     for(var i = 1;  i< zone_activity_array.length; i++){
         
-        if(zone_activity_array[i].id==current_activity_zone.id){
-            console.log("DELETING ZONE: " + current_activity_zone.id + " at position: " + i)
+        if(zone_activity_array[i].id===current_activity_zone.id){
+            console.log("DELETING ZONE: " + current_activity_zone.id + " at position: " + i);
             console.log("Array length (before splice)" + zone_activity_array.length);
             zone_activity_array.splice(i,1);
             delete_zone_sparql(current_activity_zone.id);
@@ -101,6 +118,7 @@ function delete_zone(){
             console.log("Array length (after splice)" + zone_activity_array.length);
             exists = true;
             zone_selected = false;
+            console.log("ZONE SELECTED - " + zone_selected);
         }
   
     }
@@ -108,7 +126,7 @@ function delete_zone(){
     {
         alert("No Zone with that i.d. exists (you must select a zone)")
     }
-    
+    set_zone_form_values();
     //This is temporary to fix bug...should be improved!!!
     //query_zones(exists);
     
