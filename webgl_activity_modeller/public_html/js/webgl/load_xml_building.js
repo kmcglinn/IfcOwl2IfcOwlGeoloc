@@ -118,6 +118,10 @@ var g_walls_vs_url = "shaders/basic_vs.glsl";
 var g_walls_fs_url = "shaders/basic_fs.glsl";
 var g_walls_xml_url = "cad_xml/smart_homes_cad.xml";
 
+// some arrays to hold per-vertex data
+var walls_vp_array = new Array ();
+var walls_vn_array = new Array ();
+
 var g_walls_point_count = 0;
 // index of the vertex points (vp) and vertex normals (vn) vertex buffer objects
 var g_walls_vp_vbo, g_walls_vn_vbo, g_walls_edge_vbo;
@@ -162,9 +166,9 @@ function create_walls_from_xml (url) {
 	xmlDoc = xmlhttp.responseXML;
 	var x = xmlDoc.getElementsByTagName ("wall");
 
-	// some arrays to hold per-vertex data
-	var walls_vp_array = new Array ();
-	var walls_vn_array = new Array ();
+//	// some arrays to hold per-vertex data
+//	var walls_vp_array = new Array ();
+//	var walls_vn_array = new Array ();
 	
 	var edge_array = new Array ();
 

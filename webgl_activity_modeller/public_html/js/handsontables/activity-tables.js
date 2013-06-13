@@ -1046,10 +1046,10 @@ $(function () {
 
         $("button[name='load']").click(function () {
         //$parent.find('button[name=load]').click(function () {
+            var d = new Date();
+            log_data = log_data + d.getTime()+ " - Activty Load Button Clicked\n";
 
-//            alert("Load_Working");
-            //alert($("#month").val());
-            parseIDJson(handsontableID.getData());
+            parse_ID_Json(handsontableID.getData());
             handsontable4.clear();
             handsontable2.clear();
 
@@ -1063,17 +1063,17 @@ $(function () {
 
             //handsontableMeetingMon.clear();
             //alert(queryStartEnd(handsontableID.getData()).data.toString());
-            handsontable4.loadData(queryStartEnd(handsontableID.getData()).data);
-            handsontable2.loadData(queryLunch(handsontableID.getData()).data);
-            
-            handsontableM.loadData(queryBreaks(handsontableID.getData(), 0).data);
-            handsontableTue.loadData(queryBreaks(handsontableID.getData(), 1).data);		
-            handsontableWed.loadData(queryBreaks(handsontableID.getData(), 2).data);
-            handsontableThurs.loadData(queryBreaks(handsontableID.getData(), 3).data);
-            handsontableFri.loadData(queryBreaks(handsontableID.getData(), 4).data);
-            handsontableSat.loadData(queryBreaks(handsontableID.getData(), 5).data);
-            handsontableSun.loadData(queryBreaks(handsontableID.getData(), 6).data);
-
+//            handsontable4.loadData(queryStartEnd(handsontableID.getData()).data);
+//            handsontable2.loadData(queryLunch(handsontableID.getData()).data);
+//            
+            handsontableM.loadData(queryBreaks($("#dayOptionsId").val()).data);
+//            handsontableTue.loadData(queryBreaks(handsontableID.getData(), 1).data);		
+//            handsontableWed.loadData(queryBreaks(handsontableID.getData(), 2).data);
+//            handsontableThurs.loadData(queryBreaks(handsontableID.getData(), 3).data);
+//            handsontableFri.loadData(queryBreaks(handsontableID.getData(), 4).data);
+//            handsontableSat.loadData(queryBreaks(handsontableID.getData(), 5).data);
+//            handsontableSun.loadData(queryBreaks(handsontableID.getData(), 6).data);
+//            send_log_data();
             //handsontableMeetingMon.loadData(queryMeetings(handsontableID.getData(), 0).data);
 
           //parseDayScheduleJson(handsontable4.getData());
@@ -1081,35 +1081,68 @@ $(function () {
         });
         $("button[name='save']").click(function () {
 //        $parent.find('button[name=save]').click(function () {
-            //alert(overwrite);
-            parseIDJson(handsontableID.getData());
-            parseDayScheduleJson(handsontable4.getData());                      
-            parseLunchScheduleJson(handsontable2.getData());                        
-            parseBreaksJson(handsontableM.getData(), 0);
-            parseBreaksJson(handsontableTue.getData(), 1);
-            parseBreaksJson(handsontableWed.getData(), 2);
-            parseBreaksJson(handsontableThurs.getData(), 3);
-            parseBreaksJson(handsontableFri.getData(), 4);
-            parseBreaksJson(handsontableSat.getData(), 5);
-            parseBreaksJson(handsontableSun.getData(), 6);
+            var d = new Date();
+            log_data = log_data + d.getTime()+ " - Save Load Button Clicked\n";
+            
+            
+            parse_ID_Json(handsontableID.getData());
+            
+//            parseDayScheduleJson(handsontable4.getData()); 
+//            handsontable4.clear();
+//            handsontable4.loadData(queryStartEnd(handsontableID.getData()).data);
+//            handsontable4.loadData(queryStartEnd(handsontableID.getData()).data);
+//
+//            parseLunchScheduleJson(handsontable2.getData());    
+//            handsontable2.loadData(queryLunch(handsontableID.getData()).data);
+//            handsontable2.loadData(queryLunch(handsontableID.getData()).data);
+            
+            parseBreaksJson(handsontableM.getData(), $("#dayOptionsId").val());
+//            parseBreaksJson(handsontableTue.getData(), 1);
+//            parseBreaksJson(handsontableWed.getData(), 2);
+//            parseBreaksJson(handsontableThurs.getData(), 3);
+//            parseBreaksJson(handsontableFri.getData(), 4);
+//            parseBreaksJson(handsontableSat.getData(), 5);
+//            parseBreaksJson(handsontableSun.getData(), 6);
+            
+            handsontableM.loadData(queryBreaks($("#dayOptionsId").val()).data);
+//            handsontableTue.loadData(queryBreaks(handsontableID.getData(), 1).data);		
+//            handsontableWed.loadData(queryBreaks(handsontableID.getData(), 2).data);
+//            handsontableThurs.loadData(queryBreaks(handsontableID.getData(), 3).data);
+//            handsontableFri.loadData(queryBreaks(handsontableID.getData(), 4).data);
+//            handsontableSat.loadData(queryBreaks(handsontableID.getData(), 5).data);
+//            handsontableSun.loadData(queryBreaks(handsontableID.getData(), 6).data);
+
+            
         //                        overwrite = false;
             //parseOtherBreaks(date, jsonObj)			
-
+//            send_log_data();
         });
+//        $("button[name='save']").click(function () {
+////        $parent.find('button[name=save]').click(function () {
+//            //alert(overwrite);
+//            parseIDJson(handsontableID.getData());
+//            parseDayScheduleJson(handsontable4.getData());                      
+//            parseLunchScheduleJson(handsontable2.getData());                        
+//            parseBreaksJson(handsontableM.getData(), 0);
+//            parseBreaksJson(handsontableTue.getData(), 1);
+//            parseBreaksJson(handsontableWed.getData(), 2);
+//            parseBreaksJson(handsontableThurs.getData(), 3);
+//            parseBreaksJson(handsontableFri.getData(), 4);
+//            parseBreaksJson(handsontableSat.getData(), 5);
+//            parseBreaksJson(handsontableSun.getData(), 6);
+//        //                        overwrite = false;
+//            //parseOtherBreaks(date, jsonObj)			
+//            send_log_data();
+//        });
 
-
-        $("button[name='update_activity_zone_id']").click(function () {
+        $("button[name='log_data']").click(function () {
+            var d = new Date();
+            log_data = log_data + d.getTime()+ " - Log Data Button Clicked\n";
+            log_data = log_data + d.getTime()+ " - Log Ends Here\n -------------------- \n";
             
             parseIDJson(handsontableID.getData());
-            var tempJSONObj = handsontableID.getData();
-            user_id_handsontable_data = [
-            [""+tempJSONObj[0][0]+""],
-            [""+tempJSONObj[1][0]+""],
-            [""+current_activity_zone.id+""]
-            ];
-            alert(user_id_handsontable_data.toString());
-            handsontableID.loadData(user_id_handsontable_data);		
-
+            retrieve_log_data();
+            
         });
         $("button[name='path_activity_add_button_div']").click(function () {
             

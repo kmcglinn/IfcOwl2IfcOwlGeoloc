@@ -51,6 +51,9 @@
 
 <script type="text/javascript" src="js/jquery/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="js/jquery/jquery-ui-1.8.21.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/datepicker.css"> 
+<link rel="stylesheet" type="text/css" href="css/normalize.css"> 
+<script type="text/javascript" src="js/jquery/jquery.datepick.js"></script>
 <script src="js/jquery/jquery.js"></script>
 <script src="js/jquery/jquery.form.js"></script>
 <script src="js/page-ui/html-controls.js"></script>
@@ -66,6 +69,8 @@
 
 <!--For creating and populating the tables-->
 <script src="js/handsontables/activity-tables.js"></script>  
+
+<script src="js/debug/debug_logger.js"></script>  
 
 
 <script src="js/jquery/jquery.min.js"></script>
@@ -90,7 +95,7 @@
         <div id="mid-row">
             <div id="mid-row-left">
                 <div id="image">
-                    <img id = "forum_image" src="img/forum_2.png" width="500" height="280" />
+                    <img id = "forum_image" src="img/forum_2.png" width="800" height="450" />
                 </div>
                 <div id="glcanvas_div">
                     <canvas id="gl_canvas" width="600" height="450">JavaScript is disabled, or this browser does not support WebGL</canvas>
@@ -183,8 +188,16 @@
                 <div id="dropdown-date">
 
                         <h3>Date Week Commencing</h3>
+                        <input type="text" id="datepicker" />
                         <script type="text/javascript">
-                            drop_down_dates();
+//                            drop_down_dates();
+                            $(function() {
+//                              $( "#datepicker" ).datepicker();
+                              var myDate = new Date();  
+                              var todays_date = (myDate.getMonth()+1) + '/' + myDate.getDate() + '/' + myDate.getFullYear();
+                                $("#datepicker").datepicker();
+                                $("#datepicker").val(todays_date);
+                            });
                         </script>
  
                 </div>
@@ -274,10 +287,13 @@
             <div id="bottom-row-right">
                 <div id="buttons">
                     <div id="activity_button_load">
-                        <button onclick="_gaq.push(['_trackEvent', 'button3', 'clicked'])" name="load">Load</button>Load activities.
+                        <button onclick="" name="load">Load</button>Load activities.
                     </div>
                     <div id="activity_button_save">
-                        <button onclick="_gaq.push(['_trackEvent', 'button3', 'clicked'])" name="save">Save</button>Save activities.
+                        <button onclick="" name="save">Save</button>Save activities.
+                    </div>
+                    <div id="button_log_data">
+                        <button onclick="" name="log_data">Log Data</button>
                     </div>
                 </div>
             </div>

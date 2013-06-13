@@ -42,7 +42,7 @@ function ray_plane (ray_direction, ray_origin, plane_normal, plane_offset) {
 	var denom = dot_vec3 (ray_direction, plane_normal);
 	// if zero this means plane is perpendicular to ray and will not hit. also would cause
 	// a divide-by-zero error
-	if (0.0 == denom) {
+	if (0.0 === denom) {
 		//console.log ("RAY MISSED - PERPENDICULAR TO PLANE");
 		return false;
 	}
@@ -61,10 +61,11 @@ function ray_plane (ray_direction, ray_origin, plane_normal, plane_offset) {
 	//console.log ("t = " + t);
 	//console.log ("ray orig = " + ray_origin);
 	//console.log ("ray direction = " + ray_direction);
-	intersection_point_wor = [
-	ray_origin[0] + ray_direction[0] * t,
-	ray_origin[1] + ray_direction[1] * t,
-	ray_origin[2] + ray_direction[2] * t
+	intersection_point_wor = 
+        [
+            ray_origin[0] + ray_direction[0] * t,
+            ray_origin[1] + ray_direction[1] * t,
+            ray_origin[2] + ray_direction[2] * t
 	];
         intersection_point_wor_x = ray_origin[0] + ray_direction[0] * t;
         intersection_point_wor_z = ray_origin[1] + ray_direction[1] * t;
@@ -85,3 +86,15 @@ function ray_sphere (ray_direction, ray_origin, sphere_origin, sphere_radius) {
 	return true;
 }
 
+function ray_intersects_triangle (p, d, v0, v1, v2)
+{
+    var e1 = new Array();
+    var e2 = new Array();
+    var h = new Array();
+    var s = new Array();
+    var q = new Array();
+    
+    var a, f, u, v;
+   
+    
+}

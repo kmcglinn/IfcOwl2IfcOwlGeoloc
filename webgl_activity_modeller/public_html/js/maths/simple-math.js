@@ -43,3 +43,16 @@ function midpoint(p1, p2)
 //    console.log("P1 Float "+ parseFloat(p1));
     return (parseFloat(p1) + parseFloat(p2))/2;
 }
+
+function calculate_day_of_month(month, year){
+ 
+//    var monthStart = new Date(year, month, 1);
+//    var monthEnd = new Date(year, month + 1, 1);
+//    var monthLength = (monthEnd - monthStart) / (1000 * 60 * 60 * 24);
+//    
+//    return monthLength;
+//    
+//}
+//function daysInMonth(month,year) {
+    return new Date(year, month, 0).getDate();
+}

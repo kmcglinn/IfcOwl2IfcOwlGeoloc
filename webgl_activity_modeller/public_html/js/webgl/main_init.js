@@ -240,9 +240,25 @@ function init () {
 			return;
 		}
                 //alert("Mouse down...MOUSE DOWN!")
-                
+                // if mouse held don't keep restarting this
+                console.log("ON MOUSE DOWN::CAN SELECT WALL: - " + can_select_wall);
+                if(can_select_wall)
+                {
+                    console.log("For loop started");
+                    var ray = get_mouse_ray_wor (mouse_x, mouse_y);
+                    for(var i = 0; i< walls_vp_array.length; i++){
+                        if (ray_plane (ray, g_cam.mWC_Pos, [0, 1, 0], 0)) 
+                        {
+                            //console.log ("ray hit");
+                        } else 
+                        {
+                            //console.log ("ray missed somehow");
+                        }
+                    }
+                    console.log("For loop ended");
+                }
 		// if mouse held don't keep restarting this
-                console.log("ON MOUSE DOWN::CAN SELECT : - " + can_select);
+                console.log("ON MOUSE DOWN::CAN SELECT ELEMENTS: - " + can_select);
                 if(can_select)
                 {
                     

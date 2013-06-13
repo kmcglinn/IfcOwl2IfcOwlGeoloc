@@ -36,6 +36,10 @@ function update () {
             updateMove = update_gui_clicks (step_size);
             
             // keys listed by code: http://stackoverflow.com/questions/1465374/javascript-event-keycode-constants
+            if (currentlyPressedKeys[77] === true) // T to pitch
+            {
+                can_select_wall = true;
+            }
             if (currentlyPressedKeys[80] === true) // T to pitch
             { 
                 console.log("zone_activity_array.length: " + zone_activity_array.length);

@@ -2,9 +2,10 @@
 
 var normals_vs_url = "js/webgl/shaders/basic_vs.glsl";
 var normals_fs_url = "js/webgl/shaders/basic_fs.glsl";
-var walls_xml_url = "cad_xml/smart_homes_cad.xml";
+//var walls_xml_url = "cad_xml/smart_homes_cad.xml";
 //var walls_xml_url = "cad_xml/lloyd.xml";
 //var walls_xml_url = "cad_xml/ORI_FF.xml";
+var walls_xml_url = "cad_xml/media-tic5.xml";
 var ssao_vs_url = "js/webgl/shaders/ssao_quad_vs.glsl";
 var ssao_fs_url = "js/webgl/shaders/ssao_quad_fs.glsl";
 var depth_vs_url = "js/webgl/shaders/depth_vs.glsl";
@@ -150,6 +151,8 @@ var blur_phong_texture_loc;
  * @Kris Code
  * Function to load in zones from ontology
  */
+var can_select_wall = false;
+
 var can_select = false;
 //Booleans related to creating, deleting and displaying zones
 var can_create_zone = false; //This must be set to true to draw a new zone.
