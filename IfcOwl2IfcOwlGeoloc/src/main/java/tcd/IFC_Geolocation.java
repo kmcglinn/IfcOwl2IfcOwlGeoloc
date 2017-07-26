@@ -140,7 +140,6 @@ public class IFC_Geolocation {
             {
 
                 wktLiteralID = wktLiteralID + iter.nextStatement().getLiteral().toString();
-//                System.out.println(wktLiteralID);
 
             }
             
@@ -162,20 +161,17 @@ public class IFC_Geolocation {
         longitude = longLatNegativeConvert(longitude);
         longitude.set(longitude.size()-1, (longitude.get(longitude.size()-1)+"."));
         String s2 = StringUtils.join(Lists.reverse(longitude), "");
-        //Have to swith long and lat for WKT
+        //Have to switch long and lat for WKT
         String wkt_point = "POINT ("+s2+" "+s1+")";
-//        Resource r_wktpoint = m.createResource(wkt_point);
-//        System.out.println(wkt_point);
-        //String datatype = ns_geo + "wktLiteral";
+
         
         RDFDatatype rtype = WktLiteral.wktLiteralType; 
         TypeMapper.getInstance().registerDatatype(rtype);     
         Literal l = m.createTypedLiteral(wkt_point, rtype);
         m.getResource(wktLiteralID).addProperty(geo_asWKT, l);
-//        
+
         iter = m.listStatements(m.getResource(wktLiteralID), geo_asWKT , (RDFNode) null ); 
-        
-        
+              
         while ( iter.hasNext() ) 
         {
             
@@ -192,21 +188,17 @@ public class IFC_Geolocation {
     //Author Kris McGlinn - This method changes the sign of the longitude or latitude values in a List
     private List longLatNegativeConvert(List l)
     {
-        //
         String s = (String)l.get(l.size()-1);
         int x = Integer.parseInt(s);
         if(x<0)
-        {
-            
+        {           
             for(int i = 0; i <l.size()-1; i++)
             {
                 s = (String)l.get(i);
                 l.set(i, s.substring(1));
                 
             }
-
-        }
-        
+        }        
         return l;
     }
     
@@ -238,13 +230,11 @@ public class IFC_Geolocation {
                         {
                             if(lat)
                             {
-//                                System.out.println("Lat value "+count+" is: " + stmt2.getObject());
                                 s = stmt2.getObject().toString().split("\\^\\^http");                               
                                 latitude.add(s[0]);
                                 
                             }
                             else {
-//                                System.out.println("Long value "+count+" is: " + stmt2.getObject());
                                 s = stmt2.getObject().toString().split("\\^\\^http");
                                 longitude.add(s[0]);
 
@@ -256,18 +246,14 @@ public class IFC_Geolocation {
             }
             else if(stmt1.getPredicate().equals(listHasNext))
             {
-//                System.out.println("Adding 1 to count: " + (count+1));
-                //count++;
                 moreInList = true;
                 traverseList(original, stmt1, lat);
-//                System.out.println("Has next item in list");
             }
 
         }
         
         if(!moreInList)
         {
-//            System.out.println("List is at end");
             stmt = null;
             return stmt;
         }
@@ -288,14 +274,12 @@ public class IFC_Geolocation {
 
         while ( iter.hasNext() ) {
             Statement stmt = iter.nextStatement();
-//            System.out.println( stmt);
             StmtIterator iter2 = m.listStatements( stmt.getSubject(), refLatitude_IfcSite, (RDFNode) null );
             ifcSiteResource = stmt.getSubject();
             while ( iter2.hasNext() ) 
             {
                 
                 stmt = iter2.nextStatement();    
-//                System.out.println( stmt);
                 traverseList(m, stmt, true);
                 
             }
@@ -312,7 +296,6 @@ public class IFC_Geolocation {
             {
                 
                 stmt = iter2.nextStatement();    
-
                 traverseList(m, stmt, false);
                 
             }
@@ -349,7 +332,6 @@ public class IFC_Geolocation {
         Model m = null;
         try {
             m = FileManager.get().loadModel(inputfile, "TTL");
-            //infmodel = ModelFactory.createRDFSModel(m);
             long size = m.size();
             System.out.println("Opened " + "TTL"
                             + " file at " + inputfile + " : triple count = " + size);
@@ -380,7 +362,7 @@ public class IFC_Geolocation {
         else
         {
           // creating the directory failed
-//              System.out.println("failed trying to create the directory");
+
         }
 
     }
