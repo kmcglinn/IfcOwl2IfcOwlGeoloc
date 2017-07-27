@@ -1,6 +1,6 @@
 # IfcOwl2IfcOwlGeoloc
 
-This is a Java Mavem project. Once you build the project, you can execute the code with the resulting JAR file.
+This is a Java Maven project. Once you build the project, you can execute the code with the resulting JAR file.
 
 On execution, without arguments, the code will look for the smallhouse.ttl file in the directory the JAR file is in. 
 Working correctly it will then generate a "smallhouse_geoloc.ttl" file. 
