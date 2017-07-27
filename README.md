@@ -2,6 +2,10 @@
 
 This is a Java Maven project. Once you build the project, you can execute the code with the resulting JAR file.
 
+The code takes as an input an IFC turtle file and will search for IfcSite RelLat and RelLong and convert this into a GeoSPARL hasGeometry relationship which stores the long and lat as a WktLiteral. 
+
+If you are working with IFC STEP files, you must use the converter developed by Pieter Pauwels - https://github.com/pipauwel/
+
 On execution, without arguments, the code will look for the smallhouse.ttl file in the directory the JAR file is in. 
 Working correctly it will then generate a "smallhouse_geoloc.ttl" file. 
 
