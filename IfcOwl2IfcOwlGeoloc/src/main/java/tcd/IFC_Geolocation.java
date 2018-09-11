@@ -25,6 +25,7 @@ import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
 import org.apache.jena.util.FileManager;
 import org.apache.jena.vocabulary.RDF;
+import static tcd.Coordinates.convertDe;
 
 /*
  * Copyright 2017 Kris McGlinn, Adapt Centre, Trinity College University, Dublin, Ireland 
@@ -155,12 +156,12 @@ public class IFC_Geolocation {
         Property geo_asWKT = m.createProperty( ns_geo + "asWKT" );
         
         
-        latitude = longLatNegativeConvert(latitude);
-        latitude.set(latitude.size()-1, (latitude.get(latitude.size()-1)+"."));
-        String s1 = StringUtils.join(Lists.reverse(latitude), "");
+        latitude = longLatNegativeConvert(latitude);   
         longitude = longLatNegativeConvert(longitude);
-        longitude.set(longitude.size()-1, (longitude.get(longitude.size()-1)+"."));
-        String s2 = StringUtils.join(Lists.reverse(longitude), "");
+        
+        double s1 = convertDe(latitude.get(3) + " " +  latitude.get(2) + " " + latitude.get(1) + "." + latitude.get(0));
+        double s2 = convertDe(longitude.get(3) + " " +  longitude.get(2) + " " + longitude.get(1) + "." + longitude.get(0));
+
         //Have to switch long and lat for WKT
         String wkt_point = "POINT ("+s2+" "+s1+")";
 

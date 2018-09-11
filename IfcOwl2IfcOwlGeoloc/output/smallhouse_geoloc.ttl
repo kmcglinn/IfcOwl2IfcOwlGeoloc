@@ -16453,7 +16453,7 @@ inst:IfcProductDefinitionShape_135
                 inst:IfcRepresentation_List_1740 .
 
 <urn:geom:pt:1Y9nGTxX90dwWkO9TbXfao>
-        geo:asWKT  "POINT (-71.335194702 42.2130344238)"^^geo:wktLiteral .
+        geo:asWKT  "POINT (-71.05977630611112 42.358428955)"^^geo:wktLiteral .
 
 inst:IfcLengthMeasure_List_2083
         a                 ifcowl:IfcLengthMeasure_List ;
